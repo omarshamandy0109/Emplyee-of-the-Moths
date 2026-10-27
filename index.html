@@ -353,8 +353,8 @@
   </footer>
 
   <script>
-    // الرابط الجديد الذي أرسلته
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZ9E1pcU8heiTyF-8kqzYfEneiglpAQnz7iBFWqB6hpPjvSjsfAx4axjXS4DeCwKIBLQ/exec";
+    // الرابط الجديد المُحدث من قِبلك
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNry_NopNXGhBBk87eCjmaBuOjoWe57IcUzEjMoV63vozq8AfZMIQWCIB43DYsCquGHA/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
     const SUB_ADMINS = [
@@ -590,7 +590,7 @@
       const nonGuestCandidates = defaultCandidates.filter(c => c.group === 'Non Guest Contact');
 
       if (guestCandidates.length === 0) {
-        guestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Guest Contact.</div>`;
+        guestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Guest Contact. قم بإضافتهم من لوحة الأدمن.</div>`;
       } else {
         guestCandidates.forEach(c => {
           const isSelected = selectedGuestId === c.id;
@@ -614,7 +614,7 @@
       }
 
       if (nonGuestCandidates.length === 0) {
-        nonGuestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Non Guest Contact.</div>`;
+        nonGuestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Non Guest Contact. قم بإضافتهم من لوحة الأدمن.</div>`;
       } else {
         nonGuestCandidates.forEach(c => {
           const isSelected = selectedNonGuestId === c.id;
