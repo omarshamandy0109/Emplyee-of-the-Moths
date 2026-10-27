@@ -70,7 +70,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex flex-wrap justify-between items-center gap-4">
         <div class="flex items-center space-x-3 space-x-reverse">
-          <!-- Logo Emblem -->
           <div class="p-2.5 bg-gradient-to-br from-gold-500 to-gold-700 rounded-2xl shadow-lg shadow-gold-500/20 flex flex-col items-center justify-center border border-gold-300/30">
             <div class="w-7 h-7 rounded-t-full border-2 border-white border-b-0 flex items-center justify-center pt-1">
               <div class="w-3 h-3 bg-white rounded-full"></div>
@@ -388,7 +387,7 @@
 
   <!-- PRINTABLE OFFICIAL REPORT MODAL VIEW -->
   <div id="reportModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-    <div class="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-10 shadow-2xl space-y-6 my-8 max-h-[90vh] overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-4xl w-full p-6 sm:p-10 shadow-2xl space-y-6 my-8 max-h-[90vh] overflow-y-auto">
       
       <!-- Report Header -->
       <div class="text-center border-b border-slate-200 pb-6 space-y-2">
@@ -403,9 +402,11 @@
       </div>
 
       <!-- Report Body Selection Type -->
-      <div class="no-print flex items-center justify-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200">
-        <button onclick="switchReportType('voting')" id="repBtnVoting" class="px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all">تقرير نتائج الأصوات</button>
+      <div class="no-print flex items-center justify-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200 flex-wrap">
+        <button onclick="switchReportType('voting')" id="repBtnVoting" class="px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all">تقرير نتائج الشهر الحالي</button>
         <button onclick="switchReportType('candidates')" id="repBtnCandidates" class="px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200">تقرير قائمة المرشحين</button>
+        <button onclick="switchReportType('yearly')" id="repBtnYearly" class="px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200">التقرير السنوي (أعلى الفائزين شهرياً)</button>
+        <button onclick="switchReportType('archive')" id="repBtnArchive" class="px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200">أرشيف الشهور السابقة</button>
       </div>
 
       <!-- Report Dynamic Content -->
@@ -437,15 +438,15 @@
   <!-- Other Modals -->
   <div id="newMonthModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
-      <h3 class="text-xl font-black text-slate-900">بدء شهر تصويت جديد</h3>
-      <p class="text-sm text-slate-500 font-semibold">سيتم حفظ الدورة الحالية وتصفير أصوات المدراء وفتح دورة جديدة بالكامل.</p>
+      <h3 class="text-xl font-black text-slate-900">بدء شهر تصويت جديد وأرشفة الشهر الحالي</h3>
+      <p class="text-sm text-slate-500 font-semibold">سيتم حفظ نتائج الشهر الحالي في الأرشيف التاريخي، وتصفير الأصوات وبدء دورة جديدة.</p>
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1.5">اسم الشهر والدورة الجديد</label>
         <input type="text" id="newMonthInput" placeholder="أدخل اسم الشهر الجديد (مثل: نوفمبر 2026)" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-base font-bold outline-none focus:ring-2 focus:ring-gold-500">
       </div>
       <div class="flex justify-end gap-3 pt-2">
         <button onclick="closeNewMonthModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
-        <button onclick="confirmStartNewMonth()" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-sm font-bold">تأكيد وبدء الدورة</button>
+        <button onclick="confirmStartNewMonth()" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-sm font-bold">أرشفة وبدء الدورة</button>
       </div>
     </div>
   </div>
@@ -512,7 +513,7 @@
 
   <!-- App Javascript Implementation Logic -->
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCEGGYwC-313PGW6s3YeXumS7bW5Gy-tW2eSt54BDIiayTuM9vC4Sap2-lCzJiqWWCtA/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgJfAwV4RdOo6eIQaDeMky-EPLb72U7Pk_SCPv0vWTuVzzsxS8ZYW3a9c2JWjz8C9f1g/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
     const SUB_ADMINS = [
@@ -527,6 +528,7 @@
     let chartInstance = null;
     let currentCycleMonth = "أكتوبر 2026";
     let isVotingOpen = true;
+    let monthlyArchive = []; // تخزين أرشيف الشهور السابقة والسنوية
 
     let initialManagers = [
       { id: '3030', name: 'Hossam Ephram Saba Malak', title: 'General Manager', isBlocked: false, hasVoted: false },
@@ -576,15 +578,20 @@
       const storedVotes = localStorage.getItem('app_votes');
       const storedMonth = localStorage.getItem('app_month');
       const storedVotingStatus = localStorage.getItem('app_voting_open');
+      const storedArchive = localStorage.getItem('app_monthly_archive');
 
       defaultManagers = storedMgrs ? JSON.parse(storedMgrs) : [...initialManagers];
       defaultCandidates = storedCands ? JSON.parse(storedCands) : [...initialCandidates];
       votesList = storedVotes ? JSON.parse(storedVotes) : [];
+      if (storedArchive) monthlyArchive = JSON.parse(storedArchive);
 
       if (storedMonth) {
         currentCycleMonth = storedMonth;
       }
-      document.getElementById('monthTextDisplay').textContent = "تصويت شهر " + currentCycleMonth;
+      const monthDisplay = document.getElementById('monthTextDisplay');
+      if (monthDisplay) {
+        monthDisplay.textContent = "تصويت شهر " + currentCycleMonth;
+      }
 
       if (storedVotingStatus !== null) {
         isVotingOpen = JSON.parse(storedVotingStatus);
@@ -598,12 +605,15 @@
       localStorage.setItem('app_votes', JSON.stringify(votesList));
       localStorage.setItem('app_month', currentCycleMonth);
       localStorage.setItem('app_voting_open', JSON.stringify(isVotingOpen));
+      localStorage.setItem('app_monthly_archive', JSON.stringify(monthlyArchive));
     }
 
     function updateVotingStatusUI() {
       const ind = document.getElementById('votingStatusIndicator');
       const txt = document.getElementById('votingStatusText');
       const btnTxt = document.getElementById('toggleVotingBtnText');
+      if (!ind || !txt) return;
+
       if (isVotingOpen) {
         ind.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
         txt.textContent = "التصويت مفتوح";
@@ -683,12 +693,16 @@
 
     function showLoginError(msg) {
       const errBox = document.getElementById('loginError');
-      document.getElementById('loginErrorText').textContent = msg;
-      errBox.classList.remove('hidden');
+      const errText = document.getElementById('loginErrorText');
+      if (errBox && errText) {
+        errText.textContent = msg;
+        errBox.classList.remove('hidden');
+      }
     }
 
     function hideError() {
-      document.getElementById('loginError').classList.add('hidden');
+      const errBox = document.getElementById('loginError');
+      if (errBox) errBox.classList.add('hidden');
     }
 
     function onLoginSuccess() {
@@ -700,23 +714,25 @@
       const activeSession = sessionStorage.getItem('active_session');
       if (!activeSession) {
         showSection('loginSection');
-        document.getElementById('userBadge').classList.add('hidden');
+        const badge = document.getElementById('userBadge');
+        if (badge) badge.classList.add('hidden');
         return;
       }
 
       currentSessionUser = JSON.parse(activeSession);
-      document.getElementById('userBadgeText').textContent = currentSessionUser.name || currentSessionUser.id;
-      document.getElementById('userBadge').classList.remove('hidden');
+      const badgeText = document.getElementById('userBadgeText');
+      const badge = document.getElementById('userBadge');
+      if (badgeText) badgeText.textContent = currentSessionUser.name || currentSessionUser.id;
+      if (badge) badge.classList.remove('hidden');
 
       const isHRorAdmin = currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '1980';
-
-      if (isHRorAdmin) {
-        document.getElementById('navDashboardBtn').classList.remove('hidden');
-      } else {
-        document.getElementById('navDashboardBtn').classList.add('hidden');
+      const navBtn = document.getElementById('navDashboardBtn');
+      if (navBtn) {
+        if (isHRorAdmin) navBtn.classList.remove('hidden');
+        else navBtn.classList.add('hidden');
       }
 
-      if (currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '1980') {
+      if (isHRorAdmin) {
         showSection('adminDashboard');
         renderAdminView();
       } else {
@@ -727,6 +743,7 @@
 
     function toggleDashboardNav() {
       const dbSec = document.getElementById('adminDashboard');
+      if (!dbSec) return;
       if (dbSec.classList.contains('hidden')) {
         showSection('adminDashboard');
         renderAdminView();
@@ -745,14 +762,20 @@
 
     function showSection(id) {
       ['loginSection', 'votingSection', 'adminDashboard'].forEach(s => {
-        document.getElementById(s).classList.add('hidden');
+        const el = document.getElementById(s);
+        if (el) el.classList.add('hidden');
       });
-      document.getElementById(id).classList.remove('hidden');
+      const target = document.getElementById(id);
+      if (target) target.classList.remove('hidden');
     }
 
     function renderVotingView() {
-      document.getElementById('voterNameDisplay').textContent = currentSessionUser.name;
+      const voterNameDisp = document.getElementById('voterNameDisplay');
+      if (voterNameDisp && currentSessionUser) {
+        voterNameDisp.textContent = currentSessionUser.name;
+      }
       const grid = document.getElementById('candidatesGrid');
+      if (!grid) return;
       grid.innerHTML = '';
 
       const closedBanner = document.getElementById('votingClosedBanner');
@@ -768,9 +791,9 @@
       const sortedCandidates = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
 
       if (!isVotingOpen) {
-        closedBanner.classList.remove('hidden');
-        actionContainer.classList.add('hidden');
-        instructionTxt.textContent = "تم إغلاق التصويت. إليك نتائج الفائزين النهائية المعتمدة:";
+        if (closedBanner) closedBanner.classList.remove('hidden');
+        if (actionContainer) actionContainer.classList.add('hidden');
+        if (instructionTxt) instructionTxt.textContent = "تم إغلاق التصويت. إليك نتائج الفائزين النهائية المعتمدة:";
 
         sortedCandidates.forEach((c, idx) => {
           const isWinner1 = idx === 0 && counts[c.id] > 0;
@@ -801,9 +824,9 @@
         return;
       }
 
-      closedBanner.classList.add('hidden');
-      actionContainer.classList.remove('hidden');
-      instructionTxt.textContent = "اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.";
+      if (closedBanner) closedBanner.classList.add('hidden');
+      if (actionContainer) actionContainer.classList.remove('hidden');
+      if (instructionTxt) instructionTxt.textContent = "اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.";
 
       const existingVote = votesList.find(v => v.managerId === currentSessionUser.id);
       if (existingVote) {
@@ -856,13 +879,14 @@
     }
 
     function updateVoteBadgeAndButton() {
-      document.getElementById('selectedCountBadge').textContent = selectedCandidateIds.length;
+      const badge = document.getElementById('selectedCountBadge');
+      if (badge) badge.textContent = selectedCandidateIds.length;
       const submitBtn = document.getElementById('submitVoteBtn');
-      submitBtn.disabled = selectedCandidateIds.length === 0 || !isVotingOpen;
+      if (submitBtn) submitBtn.disabled = selectedCandidateIds.length === 0 || !isVotingOpen;
     }
 
     function submitVotes() {
-      if (!isVotingOpen || selectedCandidateIds.length === 0) return;
+      if (!isVotingOpen || selectedCandidateIds.length === 0 || !currentSessionUser) return;
 
       const existingVoteIdx = votesList.findIndex(v => v.managerId === currentSessionUser.id);
       const voteData = {
@@ -898,19 +922,29 @@
 
     function switchAdminTab(tabName) {
       ['results', 'managers', 'candidates'].forEach(t => {
-        document.getElementById(`adminTab-${t}`).classList.add('hidden');
-        document.getElementById(`tab-${t}`).className = "px-5 py-3 rounded-2xl text-sm font-black transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2.5 shrink-0";
+        const tabSec = document.getElementById(`adminTab-${t}`);
+        const tabBtn = document.getElementById(`tab-${t}`);
+        if (tabSec) tabSec.classList.add('hidden');
+        if (tabBtn) {
+          tabBtn.className = "px-5 py-3 rounded-2xl text-sm font-black transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2.5 shrink-0";
+        }
       });
 
-      document.getElementById(`adminTab-${tabName}`).classList.remove('hidden');
-      document.getElementById(`tab-${tabName}`).className = "px-5 py-3 rounded-2xl text-sm font-black transition-all bg-gold-600 text-slate-900 shadow-md flex items-center gap-2.5 shrink-0";
+      const activeSec = document.getElementById(`adminTab-${tabName}`);
+      const activeBtn = document.getElementById(`tab-${tabName}`);
+      if (activeSec) activeSec.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.className = "px-5 py-3 rounded-2xl text-sm font-black transition-all bg-gold-600 text-slate-900 shadow-md flex items-center gap-2.5 shrink-0";
+      }
     }
 
     function renderAdminView() {
-      if (currentSessionUser.role === 'SUPER_ADMIN') {
-        document.getElementById('superAdminActions').classList.remove('hidden');
+      if (currentSessionUser && currentSessionUser.role === 'SUPER_ADMIN') {
+        const superActions = document.getElementById('superAdminActions');
+        if (superActions) superActions.classList.remove('hidden');
       } else {
-        document.getElementById('superAdminActions').classList.add('hidden');
+        const superActions = document.getElementById('superAdminActions');
+        if (superActions) superActions.classList.add('hidden');
       }
 
       renderResultsDashboard();
@@ -920,13 +954,16 @@
 
     function renderResultsDashboard() {
       const totalMgrs = defaultManagers.length;
-      document.getElementById('statTotalManagers').textContent = totalMgrs;
+      const statTot = document.getElementById('statTotalManagers');
+      if (statTot) statTot.textContent = totalMgrs;
 
       const votedCount = defaultManagers.filter(m => m.hasVoted || votesList.some(v => v.managerId === m.id)).length;
-      document.getElementById('statVotedManagers').textContent = votedCount;
+      const statVoted = document.getElementById('statVotedManagers');
+      if (statVoted) statVoted.textContent = votedCount;
 
       const rate = totalMgrs > 0 ? Math.round((votedCount / totalMgrs) * 100) : 0;
-      document.getElementById('statParticipationRate').textContent = `${rate}%`;
+      const statRate = document.getElementById('statParticipationRate');
+      if (statRate) statRate.textContent = `${rate}%`;
 
       const counts = {};
       defaultCandidates.forEach(c => counts[c.id] = 0);
@@ -938,12 +975,14 @@
 
       const sortedCandidates = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
       const leaderBoardContainer = document.getElementById('leaderboardList');
+      if (!leaderBoardContainer) return;
       leaderBoardContainer.innerHTML = '';
 
+      const statLeader = document.getElementById('statLeaderCandidate');
       if (sortedCandidates.length > 0 && counts[sortedCandidates[0].id] > 0) {
-        document.getElementById('statLeaderCandidate').textContent = sortedCandidates[0].name;
+        if (statLeader) statLeader.textContent = sortedCandidates[0].name;
       } else {
-        document.getElementById('statLeaderCandidate').textContent = "لا يوجد أصوات";
+        if (statLeader) statLeader.textContent = "لا يوجد أصوات";
       }
 
       sortedCandidates.forEach((c, idx) => {
@@ -972,7 +1011,9 @@
     }
 
     function renderChart(labels, data) {
-      const ctx = document.getElementById('resultsChart').getContext('2d');
+      const canvasEl = document.getElementById('resultsChart');
+      if (!canvasEl) return;
+      const ctx = canvasEl.getContext('2d');
       if (chartInstance) chartInstance.destroy();
 
       chartInstance = new Chart(ctx, {
@@ -999,6 +1040,7 @@
 
     function renderManagersTable() {
       const tbody = document.getElementById('managersTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       defaultManagers.forEach(m => {
@@ -1007,7 +1049,7 @@
         tr.className = "hover:bg-slate-50 transition-colors";
 
         let actionBtns = '';
-        if (currentSessionUser.role === 'SUPER_ADMIN') {
+        if (currentSessionUser && currentSessionUser.role === 'SUPER_ADMIN') {
           actionBtns = `
             <button onclick="toggleBlockManager('${m.id}')" class="p-2 ${m.isBlocked ? 'text-emerald-600 hover:bg-emerald-50' : 'text-amber-600 hover:bg-amber-50'} rounded-xl" title="${m.isBlocked ? 'إلغاء الحجب' : 'حجب'}">
               <i data-lucide="${m.isBlocked ? 'unlock' : 'lock'}" class="w-5 h-5"></i>
@@ -1036,6 +1078,7 @@
 
     function renderCandidatesTable() {
       const tbody = document.getElementById('candidatesTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       defaultCandidates.forEach(c => {
@@ -1062,24 +1105,34 @@
     let currentReportMode = 'voting';
 
     function openReportModal() {
-      document.getElementById('reportMonthSubtitle').textContent = "دورة شهر " + currentCycleMonth;
-      document.getElementById('reportModal').classList.remove('hidden');
+      const sub = document.getElementById('reportMonthSubtitle');
+      if (sub) sub.textContent = "دورة شهر " + currentCycleMonth;
+      const modal = document.getElementById('reportModal');
+      if (modal) modal.classList.remove('hidden');
       switchReportType('voting');
     }
 
     function closeReportModal() {
-      document.getElementById('reportModal').classList.add('hidden');
+      const modal = document.getElementById('reportModal');
+      if (modal) modal.classList.add('hidden');
     }
 
     function switchReportType(type) {
       currentReportMode = type;
       const btnV = document.getElementById('repBtnVoting');
       const btnC = document.getElementById('repBtnCandidates');
+      const btnY = document.getElementById('repBtnYearly');
+      const btnA = document.getElementById('repBtnArchive');
       const container = document.getElementById('reportContentContainer');
+      if (!container) return;
+
+      // Reset buttons style
+      [btnV, btnC, btnY, btnA].forEach(b => {
+        if(b) b.className = "px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200";
+      });
 
       if (type === 'voting') {
-        btnV.className = "px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all";
-        btnC.className = "px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200";
+        if (btnV) btnV.className = "px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all";
 
         const counts = {};
         defaultCandidates.forEach(c => counts[c.id] = 0);
@@ -1090,6 +1143,7 @@
         const sorted = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
 
         let html = `
+          <div class="mb-3 font-black text-slate-800 text-sm">تقرير نتائج شهر: ${currentCycleMonth}</div>
           <table class="w-full text-right text-xs border-collapse border border-slate-300">
             <thead>
               <tr class="bg-slate-100 text-slate-700">
@@ -1123,11 +1177,11 @@
         html += `</tbody></table>`;
         container.innerHTML = html;
 
-      } else {
-        btnC.className = "px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all";
-        btnV.className = "px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200";
+      } else if (type === 'candidates') {
+        if (btnC) btnC.className = "px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all";
 
         let html = `
+          <div class="mb-3 font-black text-slate-800 text-sm">قائمة المرشحين الرسمية الحالية</div>
           <table class="w-full text-right text-xs border-collapse border border-slate-300">
             <thead>
               <tr class="bg-slate-100 text-slate-700">
@@ -1151,26 +1205,97 @@
         });
         html += `</tbody></table>`;
         container.innerHTML = html;
+
+      } else if (type === 'yearly') {
+        if (btnY) btnY.className = "px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all";
+
+        let html = `
+          <div class="mb-3 font-black text-slate-800 text-sm">التقرير السنوي: أعلى (2) فائزين بالأصوات لكل شهر في الأرشيف</div>
+        `;
+
+        if (monthlyArchive.length === 0) {
+          html += `<p class="text-slate-500 text-sm text-center py-6">لا يوجد أرشيف شهري مسجل حتى الآن. يتم حفظ وتجميع النتائج عند الضغط على (شهر تصويت جديد وأرشفة).</p>`;
+        } else {
+          html += `<div class="space-y-6">`;
+          monthlyArchive.forEach(archive => {
+            html += `
+              <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50">
+                <h4 class="font-black text-gold-700 text-sm mb-2">دورة شهر: ${archive.monthName}</h4>
+                <table class="w-full text-right text-xs border-collapse border border-slate-300 bg-white">
+                  <thead>
+                    <tr class="bg-slate-100 text-slate-700">
+                      <th class="border border-slate-300 p-2">المركز</th>
+                      <th class="border border-slate-300 p-2">اسم الفائز</th>
+                      <th class="border border-slate-300 p-2">المسمى الوظيفي</th>
+                      <th class="border border-slate-300 p-2 text-center">الأصوات</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+            `;
+            if (archive.topWinners && archive.topWinners.length > 0) {
+              archive.topWinners.forEach((w, wIdx) => {
+                html += `
+                  <tr>
+                    <td class="border border-slate-300 p-2 text-center">${wIdx === 0 ? '🏆 الأول' : '🥈 الثاني'}</td>
+                    <td class="border border-slate-300 p-2 font-bold">${w.name}</td>
+                    <td class="border border-slate-300 p-2">${w.title} (${w.department})</td>
+                    <td class="border border-slate-300 p-2 text-center">${w.votes} صوت</td>
+                  </tr>
+                `;
+              });
+            } else {
+              html += `<tr><td colspan="4" class="p-2 text-center text-slate-400">لا توجد بيانات مسجلة</td></tr>`;
+            }
+            html += `</tbody></table></div>`;
+          });
+          html += `</div>`;
+        }
+        container.innerHTML = html;
+
+      } else if (type === 'archive') {
+        if (btnA) btnA.className = "px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all";
+
+        let html = `<div class="mb-3 font-black text-slate-800 text-sm">أرشيف دورات الشهور السابقة</div>`;
+        if (monthlyArchive.length === 0) {
+          html += `<p class="text-slate-500 text-sm text-center py-6">لا توجد شهور مؤرشفة بعد.</p>`;
+        } else {
+          monthlyArchive.forEach(arch => {
+            html += `
+              <div class="p-4 border border-slate-200 rounded-2xl bg-slate-50 mb-4">
+                <h4 class="font-black text-slate-900 mb-2">شهر: ${arch.monthName} (إجمالي المصوتين: ${arch.totalVoters})</h4>
+                <p class="text-xs text-slate-600">تمت الأرشفة بنجاح وحفظ النتائج الرسمية.</p>
+              </div>
+            `;
+          });
+        }
+        container.innerHTML = html;
       }
     }
 
     function openCandidateModal(candId = null) {
-      document.getElementById('candidateModal').classList.remove('hidden');
+      const modal = document.getElementById('candidateModal');
+      if (modal) modal.classList.remove('hidden');
       if (candId) {
         const c = defaultCandidates.find(x => x.id === candId);
-        document.getElementById('candEditId').value = c.id;
-        document.getElementById('candName').value = c.name;
-        document.getElementById('candTitle').value = c.title;
-        document.getElementById('candDept').value = c.department;
-        document.getElementById('candidateModalTitle').textContent = "تعديل بيانات المرشح";
+        if (c) {
+          document.getElementById('candEditId').value = c.id;
+          document.getElementById('candName').value = c.name;
+          document.getElementById('candTitle').value = c.title;
+          document.getElementById('candDept').value = c.department;
+          document.getElementById('candidateModalTitle').textContent = "تعديل بيانات المرشح";
+        }
       } else {
-        document.getElementById('candidateForm').reset();
+        const form = document.getElementById('candidateForm');
+        if (form) form.reset();
         document.getElementById('candEditId').value = '';
         document.getElementById('candidateModalTitle').textContent = "إضافة مرشح جديد";
       }
     }
 
-    function closeCandidateModal() { document.getElementById('candidateModal').classList.add('hidden'); }
+    function closeCandidateModal() {
+      const modal = document.getElementById('candidateModal');
+      if (modal) modal.classList.add('hidden');
+    }
 
     function handleCandidateSubmit(e) {
       e.preventDefault();
@@ -1181,7 +1306,9 @@
 
       if (id) {
         const idx = defaultCandidates.findIndex(c => c.id === id);
-        defaultCandidates[idx] = { id, name, title, department };
+        if (idx > -1) {
+          defaultCandidates[idx] = { id, name, title, department };
+        }
       } else {
         const newId = 'C' + Date.now().toString().slice(-4);
         defaultCandidates.push({ id: newId, name, title, department });
@@ -1195,6 +1322,7 @@
     }
 
     function editCandidate(id) { openCandidateModal(id); }
+
     function deleteCandidate(id) {
       if (confirm("هل أنت متأكد من حذف هذا المرشح؟")) {
         defaultCandidates = defaultCandidates.filter(c => c.id !== id);
@@ -1205,8 +1333,17 @@
       }
     }
 
-    function openAddManagerModal() { document.getElementById('managerModal').classList.remove('hidden'); document.getElementById('managerForm').reset(); }
-    function closeManagerModal() { document.getElementById('managerModal').classList.add('hidden'); }
+    function openAddManagerModal() {
+      const modal = document.getElementById('managerModal');
+      if (modal) modal.classList.remove('hidden');
+      const form = document.getElementById('managerForm');
+      if (form) form.reset();
+    }
+
+    function closeManagerModal() {
+      const modal = document.getElementById('managerModal');
+      if (modal) modal.classList.add('hidden');
+    }
 
     function handleManagerSubmit(e) {
       e.preventDefault();
@@ -1247,24 +1384,50 @@
     }
 
     function openNewMonthModal() {
-      document.getElementById('newMonthModal').classList.remove('hidden');
-      document.getElementById('newMonthInput').value = '';
+      const modal = document.getElementById('newMonthModal');
+      if (modal) modal.classList.remove('hidden');
+      const input = document.getElementById('newMonthInput');
+      if (input) input.value = '';
     }
 
     function closeNewMonthModal() {
-      document.getElementById('newMonthModal').classList.add('hidden');
+      const modal = document.getElementById('newMonthModal');
+      if (modal) modal.classList.add('hidden');
     }
 
     function confirmStartNewMonth() {
-      const newMonthVal = document.getElementById('newMonthInput').value.trim();
+      const input = document.getElementById('newMonthInput');
+      const newMonthVal = input ? input.value.trim() : '';
       if (!newMonthVal) {
         alert("يرجى إدخال اسم الشهر الجديد!");
         return;
       }
 
-      if (confirm(`تأكيد: هل تريد إنهاء تصويت شهر (${currentCycleMonth}) وبدء شهر جديد باسم (${newMonthVal})؟`)) {
+      if (confirm(`تأكيد: هل تريد أرشفة نتائج شهر (${currentCycleMonth}) وبدء دورة شهر جديد (${newMonthVal})؟`)) {
+        // حساب وتخزين أعلى اثنين فائزين في الأرشيف قبل التصفير
+        const counts = {};
+        defaultCandidates.forEach(c => counts[c.id] = 0);
+        votesList.forEach(v => {
+          if (v.candidate1 && counts[v.candidate1] !== undefined) counts[v.candidate1]++;
+          if (v.candidate2 && counts[v.candidate2] !== undefined) counts[v.candidate2]++;
+        });
+        const sorted = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
+        const top2 = sorted.slice(0, 2).map(c => ({
+          name: c.name,
+          title: c.title,
+          department: c.department,
+          votes: counts[c.id]
+        }));
+
+        monthlyArchive.push({
+          monthName: currentCycleMonth,
+          totalVoters: defaultManagers.filter(m => m.hasVoted || votesList.some(v => v.managerId === m.id)).length,
+          topWinners: top2
+        });
+
         currentCycleMonth = newMonthVal;
-        document.getElementById('monthTextDisplay').textContent = "تصويت شهر " + currentCycleMonth;
+        const monthDisplay = document.getElementById('monthTextDisplay');
+        if (monthDisplay) monthDisplay.textContent = "تصويت شهر " + currentCycleMonth;
         
         votesList = [];
         defaultManagers.forEach(m => m.hasVoted = false);
@@ -1274,7 +1437,7 @@
         sendApiRequest({ action: "RESET_VOTES" });
         closeNewMonthModal();
         renderAdminView();
-        alert("تمت بداية دورة التصويت للشهر الجديد بنجاح!");
+        alert("تمت أرشفة الشهر السابق وبدء دورة التصويت للشهر الجديد بنجاح!");
       }
     }
 
@@ -1287,13 +1450,11 @@
       }).catch(err => console.log("Sync Error: ", err));
     }
 
-    // دالة مزامنة آمنة تجعل التخزين المحلي هو المرجع الأساسي لتجنب عودة البيانات التجريبية
     function syncWithGoogleSheet() {
       fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
           if (data) {
-            // مزامنة الأصوات فقط وحالة التصويت وشهر الدورة لعدم مسح التعديلات المحلية للمدراء والمرشحين
             if (data.votes && Array.isArray(data.votes)) {
               votesList = data.votes;
             }
@@ -1302,8 +1463,34 @@
             }
             if (data.currentCycleMonth) {
               currentCycleMonth = data.currentCycleMonth;
-              document.getElementById('monthTextDisplay').textContent = "تصويت شهر " + currentCycleMonth;
+              const monthDisplay = document.getElementById('monthTextDisplay');
+              if (monthDisplay) monthDisplay.textContent = "تصويت شهر " + currentCycleMonth;
             }
+            if (data.monthlyArchive && Array.isArray(data.monthlyArchive)) {
+              monthlyArchive = data.monthlyArchive;
+            }
+            
+            if (data.managers && Array.isArray(data.managers) && data.managers.length > 0) {
+              data.managers.forEach(sm => {
+                const existing = defaultManagers.find(m => m.id === sm.id);
+                if (!existing) {
+                  defaultManagers.push(sm);
+                } else {
+                  existing.hasVoted = existing.hasVoted || sm.hasVoted;
+                  existing.isBlocked = sm.isBlocked;
+                }
+              });
+            }
+
+            if (data.candidates && Array.isArray(data.candidates) && data.candidates.length > 0) {
+              data.candidates.forEach(sc => {
+                const existing = defaultCandidates.find(c => c.id === sc.id);
+                if (!existing) {
+                  defaultCandidates.push(sc);
+                }
+              });
+            }
+
             saveDataLocally();
             updateVotingStatusUI();
             if (currentSessionUser) checkLoginStatus();
