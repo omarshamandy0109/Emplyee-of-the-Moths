@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منظومة اختيار العامل المثالي</title>
+  <title>منظومة اختيار العامل المثالي - صن رايز مونتماري</title>
   
   <!-- Fonts & Core Libraries -->
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -51,12 +51,18 @@
       background-color: #eff6ff;
       box-shadow: 0 0 0 3px #2563eb;
     }
+    @media print {
+      header, footer, .no-print { display: none !important; }
+      body { background: white !important; color: black !important; }
+      .print-only { display: block !important; }
+      .glass-card { border: none !important; box-shadow: none !important; background: white !important; }
+    }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white pb-20 sm:pb-0">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
 
   <!-- Main Header -->
-  <header class="bg-slate-900 text-white shadow-xl sticky top-0 z-40 border-b border-slate-800">
+  <header class="bg-slate-900 text-white shadow-xl sticky top-0 z-40 border-b border-slate-800 no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex flex-wrap justify-between items-center gap-4">
         <div class="flex items-center space-x-3 space-x-reverse">
@@ -64,21 +70,25 @@
             <i data-lucide="award" class="w-8 h-8 text-white"></i>
           </div>
           <div>
-            <h1 class="text-xl sm:text-2xl font-black tracking-tight">منظومة اختيار العامل المثالي</h1>
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl sm:text-2xl font-black tracking-tight">منظومة اختيار العامل المثالي</h1>
+              <span class="px-2.5 py-0.5 bg-brand-500/20 text-brand-400 border border-brand-500/30 rounded-full text-xs font-bold">صن رايز مونتماري</span>
+            </div>
             <p class="text-xs sm:text-sm text-slate-400 font-bold flex items-center gap-2 mt-0.5">
-              <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="votingStatusIndicator" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span id="monthTextDisplay">تصويت شهر أكتوبر 2026</span>
+              <span id="votingStatusText" class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[10px]">التصويت مفتوح</span>
             </p>
           </div>
         </div>
 
-        <!-- User Controls -->
+        <!-- User Badge Controls -->
         <div class="flex items-center gap-3">
           <div id="userBadge" class="hidden flex items-center gap-3 px-4 py-2 rounded-2xl bg-slate-800 text-sm font-bold text-slate-200 border border-slate-700 shadow-sm">
             <i data-lucide="user-check" class="w-5 h-5 text-brand-500"></i>
             <span id="userBadgeText">غير مسجل</span>
             
-            <button id="navDashboardBtn" onclick="toggleDashboardNav()" class="hidden px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-all mr-2">
+            <button id="navDashboardBtn" onclick="toggleDashboardNav()" class="hidden px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-all mr-2">
               لوحة النتائج
             </button>
 
@@ -94,62 +104,85 @@
   <!-- Content Container -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
 
-    <!-- 1. LOGIN SECTION -->
-    <section id="loginSection" class="max-w-md mx-auto my-8 sm:my-14">
-      <div class="glass-card rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden border border-slate-200">
-        <div class="absolute top-0 right-0 left-0 h-2 bg-gradient-to-r from-brand-500 to-indigo-600"></div>
-        <div class="text-center mb-8">
-          <div class="w-20 h-20 bg-brand-50 text-brand-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-sm">
-            <i data-lucide="shield-check" class="w-10 h-10"></i>
+    <!-- 1. LOGIN SELECTION VIEW -->
+    <section id="loginSection" class="max-w-4xl mx-auto my-6 sm:my-10 space-y-8 no-print">
+      <div class="text-center space-y-3">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-brand-50 text-brand-600 rounded-full text-sm font-bold border border-brand-100">
+          <i data-lucide="hotel" class="w-4 h-4"></i>
+          <span>SUNRISE Montemare Resort - HR Portal</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900">مرحباً بكم في منظومة العامل المثالي</h2>
+        <p class="text-slate-500 text-base max-w-lg mx-auto font-semibold">يرجى تحديد بوابة الدخول المناسبة للمتابعة</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Manager Voting Portal -->
+        <div class="glass-card rounded-3xl p-8 shadow-xl border border-slate-200 hover:border-brand-500 transition-all space-y-6 flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="w-16 h-16 bg-blue-50 text-brand-600 rounded-2xl flex items-center justify-center">
+              <i data-lucide="vote" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-2xl font-black text-slate-900">بوابة تصويت المدراء</h3>
+            <p class="text-sm text-slate-500 font-semibold leading-relaxed">خاصة بمدراء الإدارات المعتمدين لتسجيل الأصوات واختيار المرشحين عن هذا الشهر.</p>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-black text-slate-900">تسجيل الدخول</h2>
-          <p class="text-sm sm:text-base text-slate-500 font-semibold mt-2">أدخل الرقم الوظيفي الخاص بك لبدء التصويت</p>
+
+          <form onsubmit="handleManagerLogin(event)" class="space-y-4 pt-2">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">الرقم الوظيفي (Manager ID)</label>
+              <input type="text" id="mgrLoginId" required placeholder="أدخل الرقم الوظيفي (مثال: 3030)"
+                     class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-base font-bold">
+            </div>
+            <button type="submit" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-black text-base rounded-2xl shadow-lg shadow-brand-500/25 transition-all flex items-center justify-center gap-2">
+              <span>دخول بوابة التصويت</span>
+              <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+          </form>
         </div>
 
-        <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-6">
-          <div>
-            <label class="block text-sm sm:text-base font-bold text-slate-700 mb-2">الرقم الوظيفي / اسم المستخدم</label>
-            <div class="relative">
-              <i data-lucide="user" class="w-6 h-6 text-slate-400 absolute right-4 top-3.5"></i>
-              <input type="text" id="loginId" required placeholder="مثال: 3030 أو 2650"
-                     class="w-full pr-12 pl-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-base font-bold">
+        <!-- Admin & HR Portal -->
+        <div class="glass-card rounded-3xl p-8 shadow-xl border border-slate-200 hover:border-indigo-500 transition-all space-y-6 flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center">
+              <i data-lucide="shield-check" class="w-8 h-8"></i>
             </div>
+            <h3 class="text-2xl font-black text-slate-900">بوابة الإدارة و HR</h3>
+            <p class="text-sm text-slate-500 font-semibold leading-relaxed">خاصة بالسوبر أدمن ومسؤولي الموارد البشرية لإدارة المنظومة واستخراج التقارير وإغلاق التصويت.</p>
           </div>
 
-          <div id="passwordFieldGroup" class="hidden">
-            <label class="block text-sm sm:text-base font-bold text-slate-700 mb-2">كلمة المرور (خاص بالأدمن)</label>
-            <div class="relative">
-              <i data-lucide="lock" class="w-6 h-6 text-slate-400 absolute right-4 top-3.5"></i>
-              <input type="password" id="loginPassword" placeholder="••••••••"
-                     class="w-full pr-12 pl-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-base font-bold">
+          <form onsubmit="handleAdminLogin(event)" class="space-y-4 pt-2">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-1.5">اسم المستخدم (Admin Username)</label>
+              <input type="text" id="adminLoginId" required placeholder="OMAR / Amr.Ragab / ..."
+                     class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-bold">
             </div>
-          </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-1.5">كلمة المرور (Password)</label>
+              <input type="password" id="adminPassword" required placeholder="••••••••"
+                     class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-bold">
+            </div>
+            <button type="submit" class="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-black text-base rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
+              <span>دخول لوحة التحكم</span>
+              <i data-lucide="lock" class="w-5 h-5"></i>
+            </button>
+          </form>
+        </div>
+      </div>
 
-          <div id="loginError" class="hidden p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-600 text-sm font-bold flex items-center gap-3">
-            <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
-            <span id="loginErrorText">البيانات غير صحيحة!</span>
-          </div>
-
-          <button type="submit"
-                  class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-black text-base sm:text-lg rounded-2xl shadow-xl shadow-brand-500/25 transition-all flex items-center justify-center gap-3 group">
-            <span>دخول المنظومة</span>
-            <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
-          </button>
-        </form>
+      <div id="loginError" class="hidden p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-600 text-sm font-bold flex items-center gap-3 max-w-md mx-auto">
+        <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+        <span id="loginErrorText">البيانات المدخلة غير صحيحة!</span>
       </div>
     </section>
 
     <!-- 2. VOTING SECTION -->
-    <section id="votingSection" class="hidden space-y-6">
-      
-      <!-- Top Voting Info Bar -->
+    <section id="votingSection" class="hidden space-y-6 no-print">
       <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 flex flex-wrap justify-between items-center gap-6">
         <div>
           <h2 class="text-xl sm:text-3xl font-black text-slate-900">أهلاً بك، <span id="voterNameDisplay" class="text-brand-600">المدير</span></h2>
-          <p class="text-sm sm:text-base text-slate-500 font-bold mt-1">اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.</p>
+          <p id="votingInstructionText" class="text-sm sm:text-base text-slate-500 font-bold mt-1">اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.</p>
         </div>
 
-        <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
+        <div id="votingActionContainer" class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
           <div class="px-5 py-3 bg-slate-100 rounded-2xl text-sm sm:text-base font-black text-slate-700 flex items-center gap-3 border border-slate-200">
             <span>الأصوات المحددة:</span>
             <span id="selectedCountBadge" class="w-8 h-8 bg-brand-600 text-white rounded-full flex items-center justify-center text-sm font-black shadow-sm">0</span>
@@ -164,15 +197,20 @@
         </div>
       </div>
 
-      <!-- Candidates Grid List -->
+      <!-- Closed Voting Notice Banner -->
+      <div id="votingClosedBanner" class="hidden p-5 bg-amber-50 border border-amber-200 rounded-3xl text-amber-800 font-bold text-center">
+        ⚠️ تنبيه: تم إغلاق التصويت رسمياً لهذا الشهر من قِبل الإدارة. يمكنك الآن الاطلاع على نتائج التصويت النهائية.
+      </div>
+
+      <!-- Candidates Grid List / Or Results View if Voting Closed -->
       <div id="candidatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
     <!-- 3. ADMIN & HR DASHBOARD -->
     <section id="adminDashboard" class="hidden space-y-8">
       
-      <!-- Admin Navigation -->
-      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+      <!-- Admin Navigation Tabs -->
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 no-print">
         <div class="flex items-center gap-3 overflow-x-auto pb-2 w-full sm:w-auto">
           <button onclick="switchAdminTab('results')" id="tab-results" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-brand-600 text-white shadow-md flex items-center gap-2.5 shrink-0">
             <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
@@ -188,21 +226,31 @@
           </button>
         </div>
 
-        <div id="superAdminActions" class="hidden flex items-center gap-3">
-          <button onclick="openMonthSettingsModal()" class="px-4 py-3 bg-slate-800 hover:bg-slate-900 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
-            <i data-lucide="calendar" class="w-5 h-5 text-emerald-400"></i>
-            <span>تعديل الشهر</span>
+        <div class="flex items-center gap-3">
+          <button onclick="toggleVotingStatus()" id="toggleVotingBtn" class="px-4 py-3 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
+            <i data-lucide="lock" class="w-5 h-5"></i>
+            <span id="toggleVotingBtnText">إغلاق التصويت</span>
           </button>
-          <button onclick="resetCycleVotes()" class="px-4 py-3 bg-rose-50 border border-rose-200 text-rose-600 hover:bg-rose-100 text-sm font-bold rounded-2xl transition-all flex items-center gap-2">
-            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
-            <span>تصفير الأصوات</span>
+
+          <button onclick="openReportModal()" class="px-4 py-3 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+            <span>سحب تقرير رسمي للطباعة</span>
           </button>
+
+          <div id="superAdminActions" class="hidden flex items-center gap-3">
+            <button onclick="openNewMonthModal()" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
+              <i data-lucide="calendar-plus" class="w-5 h-5"></i>
+              <span>شهر تصويت جديد</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Tab 1: Reports & Charts -->
+      <!-- Tab 1: Reports & Analytics -->
       <div id="adminTab-results" class="space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        
+        <!-- KPI Metrics Header -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 no-print">
           <div class="glass-card rounded-3xl p-6 shadow-sm flex items-center gap-5">
             <div class="p-4 bg-blue-50 text-blue-600 rounded-2xl">
               <i data-lucide="users-round" class="w-7 h-7"></i>
@@ -218,8 +266,18 @@
               <i data-lucide="check-circle-2" class="w-7 h-7"></i>
             </div>
             <div>
-              <p class="text-sm font-bold text-slate-500">من قاموا بالتصويت</p>
+              <p class="text-sm font-bold text-slate-500">المشاركون بالتصويت</p>
               <h3 id="statVotedManagers" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-3xl p-6 shadow-sm flex items-center gap-5">
+            <div class="p-4 bg-amber-50 text-amber-600 rounded-2xl">
+              <i data-lucide="percent" class="w-7 h-7"></i>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-slate-500">نسبة المشاركة</p>
+              <h3 id="statParticipationRate" class="text-3xl font-black text-slate-900 mt-1">0%</h3>
             </div>
           </div>
 
@@ -229,13 +287,14 @@
             </div>
             <div>
               <p class="text-sm font-bold text-slate-500">المرشح المتصدر</p>
-              <h3 id="statLeaderCandidate" class="text-xl font-extrabold text-slate-900 mt-1 truncate max-w-[200px]">لا يوجد أصوات</h3>
+              <h3 id="statLeaderCandidate" class="text-lg font-extrabold text-slate-900 mt-1 truncate max-w-[170px]">لا يوجد أصوات</h3>
             </div>
           </div>
         </div>
 
+        <!-- Charts and Leaderboard -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 glass-card rounded-3xl p-6 sm:p-8 shadow-sm">
+          <div class="lg:col-span-2 glass-card rounded-3xl p-6 sm:p-8 shadow-sm no-print">
             <h3 class="text-lg font-black text-slate-900 mb-6 flex items-center gap-3">
               <i data-lucide="pie-chart" class="w-6 h-6 text-brand-600"></i>
               <span>نسب وتوزيع أصوات المرشحين</span>
@@ -245,11 +304,11 @@
             </div>
           </div>
 
-          <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+          <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between w-full lg:w-auto col-span-1 lg:col-span-1">
             <div>
               <h3 class="text-lg font-black text-slate-900 mb-6 flex items-center gap-3">
                 <i data-lucide="award" class="w-6 h-6 text-amber-500"></i>
-                <span>ترتيب المرشحين</span>
+                <span>ترتيب الفائزين بالأصوات</span>
               </h3>
               <div id="leaderboardList" class="space-y-3.5 max-h-72 overflow-y-auto pr-1"></div>
             </div>
@@ -258,7 +317,7 @@
       </div>
 
       <!-- Tab 2: Managers Control -->
-      <div id="adminTab-managers" class="hidden space-y-6">
+      <div id="adminTab-managers" class="hidden space-y-6 no-print">
         <div class="flex justify-between items-center flex-wrap gap-4 bg-white p-5 rounded-3xl border border-slate-200">
           <h3 class="text-lg font-black text-slate-900">قائمة المدراء</h3>
           <button onclick="openAddManagerModal()" class="px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white text-sm font-black rounded-2xl shadow-md transition-all flex items-center gap-2">
@@ -286,7 +345,7 @@
       </div>
 
       <!-- Tab 3: Candidates Control -->
-      <div id="adminTab-candidates" class="hidden space-y-6">
+      <div id="adminTab-candidates" class="hidden space-y-6 no-print">
         <div class="flex justify-between items-center flex-wrap gap-4 bg-white p-5 rounded-3xl border border-slate-200">
           <h3 class="text-lg font-black text-slate-900">قائمة المرشحين</h3>
           <button onclick="openCandidateModal()" class="px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white text-sm font-black rounded-2xl shadow-md transition-all flex items-center gap-2">
@@ -315,14 +374,66 @@
     </section>
   </main>
 
-  <!-- Modals -->
-  <div id="monthModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl space-y-5">
-      <h3 class="text-lg font-black text-slate-900">تعديل شهر التصويت</h3>
-      <input type="text" id="monthInput" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-base font-semibold outline-none focus:ring-2 focus:ring-brand-500">
+  <!-- PRINTABLE OFFICIAL REPORT MODAL VIEW -->
+  <div id="reportModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-10 shadow-2xl space-y-6 my-8 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Report Header -->
+      <div class="text-center border-b border-slate-200 pb-6 space-y-2">
+        <div class="flex items-center justify-center gap-2 text-brand-600">
+          <i data-lucide="award" class="w-8 h-8"></i>
+          <span class="text-xl font-black">SUNRISE Montemare Resort</span>
+        </div>
+        <h2 class="text-2xl font-black text-slate-900">تقرير نتائج انتخاب العامل المثالي</h2>
+        <p id="reportMonthSubtitle" class="text-sm text-slate-500 font-bold">دورة شهر أكتوبر 2026</p>
+      </div>
+
+      <!-- Report Body Selection Type -->
+      <div class="no-print flex items-center justify-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+        <button onclick="switchReportType('voting')" id="repBtnVoting" class="px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all">تقرير نتائج الأصوات</button>
+        <button onclick="switchReportType('candidates')" id="repBtnCandidates" class="px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200">تقرير قائمة المرشحين</button>
+      </div>
+
+      <!-- Report Dynamic Content -->
+      <div id="reportContentContainer" class="space-y-4">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Official Signatures Section -->
+      <div class="pt-8 grid grid-cols-2 gap-8 border-t border-slate-200 mt-8 text-center">
+        <div class="space-y-12">
+          <p class="font-black text-slate-800 text-sm">مدير الموارد البشرية</p>
+          <p class="text-xs text-slate-400 font-semibold border-t border-slate-300 pt-2 w-3/4 mx-auto">Human Resources Manager</p>
+        </div>
+        <div class="space-y-12">
+          <p class="font-black text-slate-800 text-sm">المدير العام</p>
+          <p class="text-xs text-slate-400 font-semibold border-t border-slate-300 pt-2 w-3/4 mx-auto">General Manager</p>
+        </div>
+      </div>
+
+      <!-- Modal Actions -->
+      <div class="flex justify-end gap-3 pt-4 no-print border-t border-slate-100">
+        <button onclick="closeReportModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إغلاق</button>
+        <button onclick="window.print()" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl text-sm font-black flex items-center gap-2">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          <span>طباعة التقرير رسمياً</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other Modals -->
+  <div id="newMonthModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
+      <h3 class="text-xl font-black text-slate-900">بدء شهر تصويت جديد</h3>
+      <p class="text-sm text-slate-500 font-semibold">سيتم حفظ الدورة الحالية وتصفير أصوات المدراء وفتح دورة جديدة بالكامل.</p>
+      <div>
+        <label class="block text-sm font-bold text-slate-700 mb-1.5">اسم الشهر والدورة الجديد</label>
+        <input type="text" id="newMonthInput" placeholder="مثال: نوفمبر 2026" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-base font-bold outline-none focus:ring-2 focus:ring-emerald-500">
+      </div>
       <div class="flex justify-end gap-3 pt-2">
-        <button onclick="closeMonthModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
-        <button onclick="saveMonthSetting()" class="px-5 py-3 bg-brand-600 text-white rounded-2xl text-sm font-bold">حفظ</button>
+        <button onclick="closeNewMonthModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
+        <button onclick="confirmStartNewMonth()" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-sm font-bold">تأكيد وبدء الدورة</button>
       </div>
     </div>
   </div>
@@ -376,12 +487,18 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-center text-sm font-semibold">
-    <p>جميع الحقوق محفوظة © منظومة اختيار العامل المثالي 2026</p>
+  <!-- Footer with HR MM Office Signature -->
+  <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-center text-sm font-semibold no-print">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p>جميع الحقوق محفوظة © SUNRISE Montemare Resort 2026</p>
+      <div class="px-4 py-2 bg-slate-800 rounded-2xl text-xs text-brand-400 font-bold border border-slate-700">
+        <span>تطوير وإشراف: </span>
+        <span class="text-white">HR MM Office</span>
+      </div>
+    </div>
   </footer>
 
-  <!-- Javascript Implementation Logic -->
+  <!-- App Javascript Implementation Logic -->
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCEGGYwC-313PGW6s3YeXumS7bW5Gy-tW2eSt54BDIiayTuM9vC4Sap2-lCzJiqWWCtA/exec";
 
@@ -397,6 +514,7 @@
     let selectedCandidateIds = [];
     let chartInstance = null;
     let currentCycleMonth = "أكتوبر 2026";
+    let isVotingOpen = true; // Voting toggle state
 
     let defaultManagers = [
       { id: '3030', name: 'Hossam Ephram Saba Malak', title: 'General Manager', isBlocked: false, hasVoted: false },
@@ -443,6 +561,7 @@
       const storedCands = localStorage.getItem('app_candidates');
       const storedVotes = localStorage.getItem('app_votes');
       const storedMonth = localStorage.getItem('app_month');
+      const storedVotingStatus = localStorage.getItem('app_voting_open');
 
       if (storedMgrs) defaultManagers = JSON.parse(storedMgrs);
       if (storedCands) defaultCandidates = JSON.parse(storedCands);
@@ -451,6 +570,10 @@
         currentCycleMonth = storedMonth;
         document.getElementById('monthTextDisplay').textContent = "تصويت شهر " + currentCycleMonth;
       }
+      if (storedVotingStatus !== null) {
+        isVotingOpen = JSON.parse(storedVotingStatus);
+      }
+      updateVotingStatusUI();
     }
 
     function saveDataLocally() {
@@ -458,35 +581,41 @@
       localStorage.setItem('app_candidates', JSON.stringify(defaultCandidates));
       localStorage.setItem('app_votes', JSON.stringify(votesList));
       localStorage.setItem('app_month', currentCycleMonth);
+      localStorage.setItem('app_voting_open', JSON.stringify(isVotingOpen));
     }
 
-    document.getElementById('loginId').addEventListener('input', (e) => {
-      const val = e.target.value.trim();
-      const pwdGroup = document.getElementById('passwordFieldGroup');
-      const isAdminUser = val === SUPER_ADMIN.id || SUB_ADMINS.some(a => a.id.toLowerCase() === val.toLowerCase());
-      if (isAdminUser) pwdGroup.classList.remove('hidden');
-      else pwdGroup.classList.add('hidden');
-    });
+    function updateVotingStatusUI() {
+      const ind = document.getElementById('votingStatusIndicator');
+      const txt = document.getElementById('votingStatusText');
+      const btnTxt = document.getElementById('toggleVotingBtnText');
+      if (isVotingOpen) {
+        ind.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+        txt.textContent = "التصويت مفتوح";
+        txt.className = "px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[10px]";
+        if(btnTxt) btnTxt.textContent = "إغلاق التصويت";
+      } else {
+        ind.className = "inline-block w-2.5 h-2.5 rounded-full bg-rose-500";
+        txt.textContent = "التصويت مغلق";
+        txt.className = "px-2 py-0.5 bg-rose-500/20 text-rose-400 rounded text-[10px]";
+        if(btnTxt) btnTxt.textContent = "فتح التصويت";
+      }
+    }
 
-    function handleLogin(e) {
+    function toggleVotingStatus() {
+      isVotingOpen = !isVotingOpen;
+      saveDataLocally();
+      updateVotingStatusUI();
+      alert(isVotingOpen ? "تم فتح التصويت بنجاح." : "تم إغلاق التصويت بنجاح.");
+      if(currentSessionUser && currentSessionUser.role === 'MANAGER') {
+        renderVotingView();
+      }
+    }
+
+    // Portal Login Handler Functions
+    function handleManagerLogin(e) {
       e.preventDefault();
-      const idInput = document.getElementById('loginId').value.trim();
-      const pwdInput = document.getElementById('loginPassword').value.trim();
-      const errBox = document.getElementById('loginError');
-      errBox.classList.add('hidden');
-
-      if (idInput === SUPER_ADMIN.id && pwdInput === SUPER_ADMIN.pass) {
-        currentSessionUser = { role: 'SUPER_ADMIN', ...SUPER_ADMIN };
-        onLoginSuccess();
-        return;
-      }
-
-      const subAdmin = SUB_ADMINS.find(a => a.id.toLowerCase() === idInput.toLowerCase() && a.pass === pwdInput);
-      if (subAdmin) {
-        currentSessionUser = { role: 'SUB_ADMIN', ...subAdmin };
-        onLoginSuccess();
-        return;
-      }
+      const idInput = document.getElementById('mgrLoginId').value.trim();
+      hideError();
 
       const manager = defaultManagers.find(m => m.id === idInput);
       if (manager) {
@@ -496,16 +625,41 @@
         }
         currentSessionUser = { role: 'MANAGER', ...manager };
         onLoginSuccess();
+      } else {
+        showLoginError('الرقم الوظيفي غير موجود في قائمة المدراء المصرح لهم!');
+      }
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('adminLoginId').value.trim();
+      const password = document.getElementById('adminPassword').value.trim();
+      hideError();
+
+      if (username === SUPER_ADMIN.id && password === SUPER_ADMIN.pass) {
+        currentSessionUser = { role: 'SUPER_ADMIN', ...SUPER_ADMIN };
+        onLoginSuccess();
         return;
       }
 
-      showLoginError('الرقم الوظيفي أو كلمة المرور غير صحيحة!');
+      const subAdmin = SUB_ADMINS.find(a => a.id.toLowerCase() === username.toLowerCase() && a.pass === password);
+      if (subAdmin) {
+        currentSessionUser = { role: 'SUB_ADMIN', ...subAdmin };
+        onLoginSuccess();
+        return;
+      }
+
+      showLoginError('اسم المستخدم أو كلمة المرور غير صحيحة!');
     }
 
     function showLoginError(msg) {
       const errBox = document.getElementById('loginError');
       document.getElementById('loginErrorText').textContent = msg;
       errBox.classList.remove('hidden');
+    }
+
+    function hideError() {
+      document.getElementById('loginError').classList.add('hidden');
     }
 
     function onLoginSuccess() {
@@ -533,10 +687,15 @@
         document.getElementById('navDashboardBtn').classList.add('hidden');
       }
 
-      // Default to voting section for managers & HR, Dashboard for pure Super Admin
-      if (currentSessionUser.role === 'SUPER_ADMIN') {
-        showSection('adminDashboard');
-        renderAdminView();
+      if (currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '2650' || currentSessionUser.id === '1980') {
+        if(currentSessionUser.role === 'MANAGER' && currentSessionUser.id !== '2650' && currentSessionUser.id !== '1980') {
+          showSection('votingSection');
+          renderVotingView();
+        } else {
+          // If admin or HR
+          showSection('adminDashboard');
+          renderAdminView();
+        }
       } else {
         showSection('votingSection');
         renderVotingView();
@@ -573,6 +732,58 @@
       const grid = document.getElementById('candidatesGrid');
       grid.innerHTML = '';
 
+      const closedBanner = document.getElementById('votingClosedBanner');
+      const actionContainer = document.getElementById('votingActionContainer');
+      const instructionTxt = document.getElementById('votingInstructionText');
+
+      // Tally Votes
+      const counts = {};
+      defaultCandidates.forEach(c => counts[c.id] = 0);
+      votesList.forEach(v => {
+        if (v.candidate1 && counts[v.candidate1] !== undefined) counts[v.candidate1]++;
+        if (v.candidate2 && counts[v.candidate2] !== undefined) counts[v.candidate2]++;
+      });
+      const sortedCandidates = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
+
+      if (!isVotingOpen) {
+        closedBanner.classList.remove('hidden');
+        actionContainer.classList.add('hidden');
+        instructionTxt.textContent = "تم إغلاق التصويت. إليك نتائج الفائزين النهائية المعتمدة:";
+
+        sortedCandidates.forEach((c, idx) => {
+          const isWinner1 = idx === 0 && counts[c.id] > 0;
+          const isWinner2 = idx === 1 && counts[c.id] > 0;
+          const card = document.createElement('div');
+          card.className = `glass-card rounded-3xl p-6 relative border ${isWinner1 ? 'border-amber-400 bg-amber-50/40' : (isWinner2 ? 'border-blue-400 bg-blue-50/40' : 'border-slate-200')}`;
+          
+          card.innerHTML = `
+            <div class="flex items-start justify-between">
+              <div class="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 font-black flex items-center justify-center text-2xl shadow-sm">
+                ${c.name.charAt(0)}
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="px-3 py-1 bg-slate-900 text-white rounded-xl text-xs font-black">${counts[c.id]} صوت</span>
+                ${isWinner1 ? '<span class="mt-1 px-2.5 py-0.5 bg-amber-500 text-white rounded-full text-[10px] font-black">🏆 الفائز بالمركز الأول</span>' : ''}
+                ${isWinner2 ? '<span class="mt-1 px-2.5 py-0.5 bg-blue-600 text-white rounded-full text-[10px] font-black">🥈 الفائز بالمركز الثاني</span>' : ''}
+              </div>
+            </div>
+            <div class="mt-5">
+              <h4 class="font-black text-slate-900 text-xl">${c.name}</h4>
+              <p class="text-sm font-bold text-brand-600 mt-1">${c.title}</p>
+              <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department}</p>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        lucide.createIcons();
+        return;
+      }
+
+      // Voting is open
+      closedBanner.classList.add('hidden');
+      actionContainer.classList.remove('hidden');
+      instructionTxt.textContent = "اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.";
+
       const existingVote = votesList.find(v => v.managerId === currentSessionUser.id);
       if (existingVote) {
         selectedCandidateIds = [existingVote.candidate1, existingVote.candidate2].filter(Boolean);
@@ -607,6 +818,10 @@
     }
 
     function toggleCandidateSelection(candId) {
+      if (!isVotingOpen) {
+        alert("عذراً، تم إغلاق التصويت رسمياً.");
+        return;
+      }
       if (selectedCandidateIds.includes(candId)) {
         selectedCandidateIds = selectedCandidateIds.filter(id => id !== candId);
       } else {
@@ -622,11 +837,11 @@
     function updateVoteBadgeAndButton() {
       document.getElementById('selectedCountBadge').textContent = selectedCandidateIds.length;
       const submitBtn = document.getElementById('submitVoteBtn');
-      submitBtn.disabled = selectedCandidateIds.length === 0;
+      submitBtn.disabled = selectedCandidateIds.length === 0 || !isVotingOpen;
     }
 
     function submitVotes() {
-      if (selectedCandidateIds.length === 0) return;
+      if (!isVotingOpen || selectedCandidateIds.length === 0) return;
 
       const existingVoteIdx = votesList.findIndex(v => v.managerId === currentSessionUser.id);
       const voteData = {
@@ -683,9 +898,14 @@
     }
 
     function renderResultsDashboard() {
-      document.getElementById('statTotalManagers').textContent = defaultManagers.length;
+      const totalMgrs = defaultManagers.length;
+      document.getElementById('statTotalManagers').textContent = totalMgrs;
+
       const votedCount = defaultManagers.filter(m => m.hasVoted || votesList.some(v => v.managerId === m.id)).length;
       document.getElementById('statVotedManagers').textContent = votedCount;
+
+      const rate = totalMgrs > 0 ? Math.round((votedCount / totalMgrs) * 100) : 0;
+      document.getElementById('statParticipationRate').textContent = `${rate}%`;
 
       const counts = {};
       defaultCandidates.forEach(c => counts[c.id] = 0);
@@ -706,15 +926,17 @@
       }
 
       sortedCandidates.forEach((c, idx) => {
+        const isWinner1 = idx === 0 && counts[c.id] > 0;
+        const isWinner2 = idx === 1 && counts[c.id] > 0;
         const item = document.createElement('div');
-        item.className = "flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200/60";
+        item.className = `flex items-center justify-between p-4 rounded-2xl border ${isWinner1 ? 'bg-amber-50 border-amber-300' : (isWinner2 ? 'bg-blue-50 border-blue-300' : 'bg-slate-50 border-slate-200/60')}`;
         item.innerHTML = `
           <div class="flex items-center gap-3.5">
-            <span class="w-8 h-8 rounded-full ${idx === 0 ? 'bg-amber-400 text-white' : 'bg-slate-200 text-slate-700'} flex items-center justify-center font-black text-sm">
+            <span class="w-8 h-8 rounded-full ${idx === 0 ? 'bg-amber-500 text-white' : (idx === 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700')} flex items-center justify-center font-black text-sm">
               ${idx + 1}
             </span>
             <div>
-              <p class="font-black text-slate-900 text-base">${c.name}</p>
+              <p class="font-black text-slate-900 text-base">${c.name} ${isWinner1 ? '🏆 (المركز الأول)' : (isWinner2 ? '🥈 (المركز الثاني)' : '')}</p>
               <p class="text-xs text-slate-500 font-semibold">${c.department}</p>
             </div>
           </div>
@@ -816,6 +1038,103 @@
       lucide.createIcons();
     }
 
+    // Reports Generation & Modal Logic
+    let currentReportMode = 'voting';
+
+    function openReportModal() {
+      document.getElementById('reportMonthSubtitle').textContent = "دورة شهر " + currentCycleMonth;
+      document.getElementById('reportModal').classList.remove('hidden');
+      switchReportType('voting');
+    }
+
+    function closeReportModal() {
+      document.getElementById('reportModal').classList.add('hidden');
+    }
+
+    function switchReportType(type) {
+      currentReportMode = type;
+      const btnV = document.getElementById('repBtnVoting');
+      const btnC = document.getElementById('repBtnCandidates');
+      const container = document.getElementById('reportContentContainer');
+
+      if (type === 'voting') {
+        btnV.className = "px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all";
+        btnC.className = "px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200";
+
+        // Tally votes
+        const counts = {};
+        defaultCandidates.forEach(c => counts[c.id] = 0);
+        votesList.forEach(v => {
+          if (v.candidate1 && counts[v.candidate1] !== undefined) counts[v.candidate1]++;
+          if (v.candidate2 && counts[v.candidate2] !== undefined) counts[v.candidate2]++;
+        });
+        const sorted = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
+
+        let html = `
+          <table class="w-full text-right text-xs border-collapse border border-slate-300">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700">
+                <th class="border border-slate-300 p-2.5">المركز</th>
+                <th class="border border-slate-300 p-2.5">اسم المرشح</th>
+                <th class="border border-slate-300 p-2.5">المسمى الوظيفي والقسم</th>
+                <th class="border border-slate-300 p-2.5 text-center">مجموع الأصوات</th>
+                <th class="border border-slate-300 p-2.5 text-center">نتيجة التتويج</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        sorted.forEach((c, idx) => {
+          const isWinner1 = idx === 0 && counts[c.id] > 0;
+          const isWinner2 = idx === 1 && counts[c.id] > 0;
+          html += `
+            <tr class="${isWinner1 ? 'bg-amber-50 font-bold' : (isWinner2 ? 'bg-blue-50 font-bold' : '')}">
+              <td class="border border-slate-300 p-2.5 text-center">${idx + 1}</td>
+              <td class="border border-slate-300 p-2.5">${c.name}</td>
+              <td class="border border-slate-300 p-2.5">${c.title} (${c.department})</td>
+              <td class="border border-slate-300 p-2.5 text-center">${counts[c.id]} صوت</td>
+              <td class="border border-slate-300 p-2.5 text-center">
+                ${isWinner1 ? '<span class="text-amber-700 font-black">🏆 الفائز بالمركز الأول</span>' : ''}
+                ${isWinner2 ? '<span class="text-blue-700 font-black">🥈 الفائز بالمركز الثاني</span>' : ''}
+                ${!isWinner1 && !isWinner2 ? '<span class="text-slate-500">مرشح</span>' : ''}
+              </td>
+            </tr>
+          `;
+        });
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+
+      } else {
+        btnC.className = "px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all";
+        btnV.className = "px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200";
+
+        let html = `
+          <table class="w-full text-right text-xs border-collapse border border-slate-300">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700">
+                <th class="border border-slate-300 p-2.5">#</th>
+                <th class="border border-slate-300 p-2.5">اسم المرشح</th>
+                <th class="border border-slate-300 p-2.5">المسمى الوظيفي</th>
+                <th class="border border-slate-300 p-2.5">القسم / الإدارة</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        defaultCandidates.forEach((c, idx) => {
+          html += `
+            <tr>
+              <td class="border border-slate-300 p-2.5 text-center">${idx + 1}</td>
+              <td class="border border-slate-300 p-2.5 font-bold">${c.name}</td>
+              <td class="border border-slate-300 p-2.5">${c.title}</td>
+              <td class="border border-slate-300 p-2.5">${c.department}</td>
+            </tr>
+          `;
+        });
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+      }
+    }
+
     function openCandidateModal(candId = null) {
       document.getElementById('candidateModal').classList.remove('hidden');
       if (candId) {
@@ -905,27 +1224,36 @@
       }
     }
 
-    function openMonthSettingsModal() { document.getElementById('monthModal').classList.remove('hidden'); document.getElementById('monthInput').value = currentCycleMonth; }
-    function closeMonthModal() { document.getElementById('monthModal').classList.add('hidden'); }
-
-    function saveMonthSetting() {
-      const val = document.getElementById('monthInput').value.trim();
-      if (val) {
-        currentCycleMonth = val;
-        document.getElementById('monthTextDisplay').textContent = "تصويت شهر " + currentCycleMonth;
-        saveDataLocally();
-        closeMonthModal();
-      }
+    function openNewMonthModal() {
+      document.getElementById('newMonthModal').classList.remove('hidden');
+      document.getElementById('newMonthInput').value = '';
     }
 
-    function resetCycleVotes() {
-      if (confirm("تنبيه: هل أنت متأكد من تصفير جميع الأصوات وبدء دورة جديدة؟")) {
+    function closeNewMonthModal() {
+      document.getElementById('newMonthModal').classList.add('hidden');
+    }
+
+    function confirmStartNewMonth() {
+      const newMonthVal = document.getElementById('newMonthInput').value.trim();
+      if (!newMonthVal) {
+        alert("يرجى أدخال اسم الشهر الجديد!");
+        return;
+      }
+
+      if (confirm(`تأكيد: هل تريد إنهاء تصويت شهر (${currentCycleMonth}) وبدء تصويت جديد لشهر (${newMonthVal})؟`)) {
+        currentCycleMonth = newMonthVal;
+        document.getElementById('monthTextDisplay').textContent = "تصويت شهر " + currentCycleMonth;
+        
+        // Reset Votes
         votesList = [];
         defaultManagers.forEach(m => m.hasVoted = false);
+        isVotingOpen = true; // Open voting for new cycle
         saveDataLocally();
+        updateVotingStatusUI();
         sendApiRequest({ action: "RESET_VOTES" });
+        closeNewMonthModal();
         renderAdminView();
-        alert("تمت الإعادة بنجاح!");
+        alert("تمت بداية دورة التصويت للشهر الجديد بنجاح!");
       }
     }
 
