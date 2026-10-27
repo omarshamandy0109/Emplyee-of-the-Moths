@@ -353,7 +353,6 @@
   </footer>
 
   <script>
-    // الرابط الجديد المُحدث من قِبلك
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNry_NopNXGhBBk87eCjmaBuOjoWe57IcUzEjMoV63vozq8AfZMIQWCIB43DYsCquGHA/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
@@ -518,12 +517,21 @@
       const actionContainer = document.getElementById('votingActionContainer');
       const instructionTxt = document.getElementById('votingInstructionText');
 
+      // دالة محسنة لاحتساب الأصوات بمطابقة الـ ID أو الاسم بدقة
       const counts = {};
       defaultCandidates.forEach(c => counts[c.id] = 0);
+      
       votesList.forEach(v => {
-        if (v.candidate1 && counts[v.candidate1] !== undefined) counts[v.candidate1]++;
-        if (v.candidate2 && counts[v.candidate2] !== undefined) counts[v.candidate2]++;
+        if (v.candidate1) {
+          const matchedC1 = defaultCandidates.find(c => String(c.id) === String(v.candidate1) || String(c.name).trim() === String(v.candidate1).trim());
+          if (matchedC1) counts[matchedC1.id] = (counts[matchedC1.id] || 0) + 1;
+        }
+        if (v.candidate2) {
+          const matchedC2 = defaultCandidates.find(c => String(c.id) === String(v.candidate2) || String(c.name).trim() === String(v.candidate2).trim());
+          if (matchedC2) counts[matchedC2.id] = (counts[matchedC2.id] || 0) + 1;
+        }
       });
+
       const sortedCandidates = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
 
       if (!isVotingOpen) {
@@ -572,8 +580,8 @@
 
       const existingVote = votesList.find(v => String(v.managerId) === String(currentSessionUser.id));
       if (existingVote) {
-        const c1 = defaultCandidates.find(c => c.id === existingVote.candidate1);
-        const c2 = defaultCandidates.find(c => c.id === existingVote.candidate2);
+        const c1 = defaultCandidates.find(c => String(c.id) === String(existingVote.candidate1) || String(c.name).trim() === String(existingVote.candidate1).trim());
+        const c2 = defaultCandidates.find(c => String(c.id) === String(existingVote.candidate2) || String(c.name).trim() === String(existingVote.candidate2).trim());
         if (c1) {
           if (c1.group === 'Non Guest Contact') selectedNonGuestId = c1.id;
           else selectedGuestId = c1.id;
@@ -590,7 +598,7 @@
       const nonGuestCandidates = defaultCandidates.filter(c => c.group === 'Non Guest Contact');
 
       if (guestCandidates.length === 0) {
-        guestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Guest Contact. قم بإضافتهم من لوحة الأدمن.</div>`;
+        guestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Guest Contact.</div>`;
       } else {
         guestCandidates.forEach(c => {
           const isSelected = selectedGuestId === c.id;
@@ -614,7 +622,7 @@
       }
 
       if (nonGuestCandidates.length === 0) {
-        nonGuestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Non Guest Contact. قم بإضافتهم من لوحة الأدمن.</div>`;
+        nonGuestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Non Guest Contact.</div>`;
       } else {
         nonGuestCandidates.forEach(c => {
           const isSelected = selectedNonGuestId === c.id;
@@ -743,8 +751,14 @@
       defaultCandidates.forEach(c => counts[c.id] = 0);
 
       votesList.forEach(v => {
-        if (v.candidate1 && counts[v.candidate1] !== undefined) counts[v.candidate1]++;
-        if (v.candidate2 && counts[v.candidate2] !== undefined) counts[v.candidate2]++;
+        if (v.candidate1) {
+          const matchedC1 = defaultCandidates.find(c => String(c.id) === String(v.candidate1) || String(c.name).trim() === String(v.candidate1).trim());
+          if (matchedC1) counts[matchedC1.id] = (counts[matchedC1.id] || 0) + 1;
+        }
+        if (v.candidate2) {
+          const matchedC2 = defaultCandidates.find(c => String(c.id) === String(v.candidate2) || String(c.name).trim() === String(v.candidate2).trim());
+          if (matchedC2) counts[matchedC2.id] = (counts[matchedC2.id] || 0) + 1;
+        }
       });
 
       const sortedCandidates = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
