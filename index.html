@@ -178,9 +178,7 @@
 
       <div class="space-y-4">
         <div class="flex items-center gap-3 border-b border-gold-500/30 pb-3">
-          <div class="p-2 bg-gold-500 text-slate-900 rounded-xl font-black">
-            <i data-lucide="users" class="w-5 h-5"></i>
-          </div>
+          <div class="p-2 bg-gold-500 text-slate-900 rounded-xl font-black"><i data-lucide="users" class="w-5 h-5"></i></div>
           <div>
             <h3 class="text-xl font-black text-slate-900">المجموعة الأولى: Guest Contact</h3>
             <p class="text-xs text-slate-500 font-bold">يرجى اختيار مرشح واحد (1) فقط من هذه المجموعة.</p>
@@ -191,9 +189,7 @@
 
       <div class="space-y-4 pt-6">
         <div class="flex items-center gap-3 border-b border-slate-700/30 pb-3">
-          <div class="p-2 bg-slate-900 text-gold-400 rounded-xl font-black">
-            <i data-lucide="briefcase" class="w-5 h-5"></i>
-          </div>
+          <div class="p-2 bg-slate-900 text-gold-400 rounded-xl font-black"><i data-lucide="briefcase" class="w-5 h-5"></i></div>
           <div>
             <h3 class="text-xl font-black text-slate-900">المجموعة الثانية: Non Guest Contact</h3>
             <p class="text-xs text-slate-500 font-bold">يرجى اختيار مرشح واحد (1) فقط من هذه المجموعة.</p>
@@ -207,35 +203,28 @@
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 no-print">
         <div class="flex items-center gap-3 overflow-x-auto pb-2 w-full sm:w-auto">
           <button onclick="switchAdminTab('results')" id="tab-results" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-gold-600 text-slate-900 shadow-md flex items-center gap-2.5 shrink-0">
-            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-            <span>نتائج وتقارير التصويت</span>
+            <i data-lucide="bar-chart-3" class="w-5 h-5"></i><span>نتائج وتقارير التصويت</span>
           </button>
           <button onclick="switchAdminTab('managers')" id="tab-managers" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2.5 shrink-0">
-            <i data-lucide="users" class="w-5 h-5"></i>
-            <span>إدارة قائمة المدراء</span>
+            <i data-lucide="users" class="w-5 h-5"></i><span>إدارة قائمة المدراء</span>
           </button>
           <button onclick="switchAdminTab('candidates')" id="tab-candidates" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2.5 shrink-0">
-            <i data-lucide="award" class="w-5 h-5"></i>
-            <span>إدارة المرشحين</span>
+            <i data-lucide="award" class="w-5 h-5"></i><span>إدارة المرشحين</span>
           </button>
         </div>
 
         <div class="flex items-center gap-3 flex-wrap">
           <button onclick="toggleVotingStatus()" id="toggleVotingBtn" class="px-4 py-3 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
-            <i data-lucide="lock" class="w-5 h-5"></i>
-            <span id="toggleVotingBtnText">إغلاق التصويت</span>
+            <i data-lucide="lock" class="w-5 h-5"></i><span id="toggleVotingBtnText">إغلاق التصويت</span>
           </button>
           <button onclick="openReportModal()" class="px-4 py-3 bg-gold-600 hover:bg-gold-700 text-slate-900 font-bold text-sm rounded-2xl transition-all flex items-center gap-2 shadow-sm">
-            <i data-lucide="file-text" class="w-5 h-5"></i>
-            <span>سحب تقرير رسمي للطباعة</span>
+            <i data-lucide="file-text" class="w-5 h-5"></i><span>سحب تقرير رسمي للطباعة</span>
           </button>
           <button onclick="resetAndReopenVoting()" class="px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
-            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
-            <span>إعادة التصويت والتصفير</span>
+            <i data-lucide="rotate-ccw" class="w-5 h-5"></i><span>إعادة التصويت والتصفير</span>
           </button>
           <button onclick="openNewMonthModal()" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
-            <i data-lucide="calendar-plus" class="w-5 h-5"></i>
-            <span>شهر تصويت جديد</span>
+            <i data-lucide="calendar-plus" class="w-5 h-5"></i><span>شهر تصويت جديد</span>
           </button>
         </div>
       </div>
@@ -364,8 +353,8 @@
   </footer>
 
   <script>
-    // الرابط الجديد لجوجل شيت الخاص بك
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-N_ubUlZR3PXWBEIzJDq2NWxBD0U3LqViNL2TKDR7L0s_E0VQIhzGGZZHbQjp3bQdkg/exec";
+    // الرابط الجديد الذي أرسلته
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZ9E1pcU8heiTyF-8kqzYfEneiglpAQnz7iBFWqB6hpPjvSjsfAx4axjXS4DeCwKIBLQ/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
     const SUB_ADMINS = [
@@ -555,9 +544,7 @@
           
           card.innerHTML = `
             <div class="flex items-start justify-between">
-              <div class="w-14 h-14 rounded-2xl bg-gold-50 text-gold-700 border border-gold-200 font-black flex items-center justify-center text-2xl shadow-sm">
-                ${(c.name || 'م').charAt(0)}
-              </div>
+              <div class="w-14 h-14 rounded-2xl bg-gold-50 text-gold-700 border border-gold-200 font-black flex items-center justify-center text-2xl shadow-sm">${(c.name || 'م').charAt(0)}</div>
               <div class="flex flex-col items-end">
                 <span class="px-3 py-1 bg-slate-900 text-white rounded-xl text-xs font-black">${counts[c.id]} صوت</span>
                 <span class="mt-1 px-2.5 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[10px] font-bold">${c.group || 'Guest Contact'}</span>
@@ -613,12 +600,8 @@
 
           card.innerHTML = `
             <div class="flex items-start justify-between">
-              <div class="w-14 h-14 rounded-2xl bg-gold-50 text-gold-700 border border-gold-200 font-black flex items-center justify-center text-2xl shadow-sm">
-                ${(c.name || 'م').charAt(0)}
-              </div>
-              <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-gold-600 bg-gold-600 text-slate-900' : 'border-slate-300'} flex items-center justify-center transition-all">
-                <i data-lucide="check" class="w-5 h-5"></i>
-              </div>
+              <div class="w-14 h-14 rounded-2xl bg-gold-50 text-gold-700 border border-gold-200 font-black flex items-center justify-center text-2xl shadow-sm">${(c.name || 'م').charAt(0)}</div>
+              <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-gold-600 bg-gold-600 text-slate-900' : 'border-slate-300'} flex items-center justify-center transition-all"><i data-lucide="check" class="w-5 h-5"></i></div>
             </div>
             <div class="mt-5">
               <h4 class="font-black text-slate-900 text-xl">${c.name || ''}</h4>
@@ -641,12 +624,8 @@
 
           card.innerHTML = `
             <div class="flex items-start justify-between">
-              <div class="w-14 h-14 rounded-2xl bg-slate-900 text-gold-400 border border-slate-800 font-black flex items-center justify-center text-2xl shadow-sm">
-                ${(c.name || 'م').charAt(0)}
-              </div>
-              <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-gold-600 bg-gold-600 text-slate-900' : 'border-slate-300'} flex items-center justify-center transition-all">
-                <i data-lucide="check" class="w-5 h-5"></i>
-              </div>
+              <div class="w-14 h-14 rounded-2xl bg-slate-900 text-gold-400 border border-slate-800 font-black flex items-center justify-center text-2xl shadow-sm">${(c.name || 'م').charAt(0)}</div>
+              <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-gold-600 bg-gold-600 text-slate-900' : 'border-slate-300'} flex items-center justify-center transition-all"><i data-lucide="check" class="w-5 h-5"></i></div>
             </div>
             <div class="mt-5">
               <h4 class="font-black text-slate-900 text-xl">${c.name || ''}</h4>
@@ -790,17 +769,13 @@
           item.className = `flex items-center justify-between p-4 rounded-2xl border ${isWinner1 ? 'bg-amber-50 border-amber-300' : (isWinner2 ? 'bg-blue-50 border-blue-300' : 'bg-slate-50 border-slate-200/60')}`;
           item.innerHTML = `
             <div class="flex items-center gap-3.5">
-              <span class="w-8 h-8 rounded-full ${idx === 0 ? 'bg-amber-500 text-white' : (idx === 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700')} flex items-center justify-center font-black text-sm">
-                ${idx + 1}
-              </span>
+              <span class="w-8 h-8 rounded-full ${idx === 0 ? 'bg-amber-500 text-white' : (idx === 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700')} flex items-center justify-center font-black text-sm">${idx + 1}</span>
               <div>
                 <p class="font-black text-slate-900 text-base">${c.name || ''} ${isWinner1 ? '🏆 (المركز الأول)' : (isWinner2 ? '🥈 (المركز الثاني)' : '')}</p>
                 <p class="text-xs text-slate-500 font-semibold">${c.department || ''} <span class="text-[10px] text-gold-700">(${c.group || 'Guest Contact'})</span></p>
               </div>
             </div>
-            <div class="px-4 py-1.5 bg-gold-50 text-gold-700 border border-gold-200 rounded-xl text-sm font-black">
-              ${counts[c.id]} صوت
-            </div>
+            <div class="px-4 py-1.5 bg-gold-50 text-gold-700 border border-gold-200 rounded-xl text-sm font-black">${counts[c.id]} صوت</div>
           `;
           leaderBoardContainer.appendChild(item);
         });
@@ -853,7 +828,7 @@
         tr.className = "hover:bg-slate-50 transition-colors";
 
         let actionBtns = `
-          <button onclick="editManager('${m.id}')" class="p-2 text-gold-700 hover:bg-gold-50 rounded-xl" title="تعديل الاسم أو الرقم الوظيفي"><i data-lucide="edit" class="w-5 h-5"></i></button>
+          <button onclick="editManager('${m.id}')" class="p-2 text-gold-700 hover:bg-gold-50 rounded-xl" title="تعديل"><i data-lucide="edit" class="w-5 h-5"></i></button>
           <button onclick="toggleBlockManager('${m.id}')" class="p-2 ${m.isBlocked ? 'text-emerald-600 hover:bg-emerald-50' : 'text-amber-600 hover:bg-amber-50'} rounded-xl" title="${m.isBlocked ? 'إلغاء الحجب' : 'حجب'}"><i data-lucide="${m.isBlocked ? 'unlock' : 'lock'}" class="w-5 h-5"></i></button>
           <button onclick="deleteManager('${m.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-xl" title="حذف"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
         `;
@@ -1123,6 +1098,49 @@
       localStorage.setItem('app_month', currentCycleMonth);
       localStorage.setItem('app_voting_open', JSON.stringify(isVotingOpen));
       localStorage.setItem('app_monthly_archive', JSON.stringify(monthlyArchive));
+    }
+
+    function updateVotingStatusUI() {
+      const ind = document.getElementById('votingStatusIndicator');
+      const txt = document.getElementById('votingStatusText');
+      const btnTxt = document.getElementById('toggleVotingBtnText');
+      if (!ind || !txt) return;
+
+      if (isVotingOpen) {
+        ind.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+        txt.textContent = "التصويت مفتوح";
+        txt.className = "px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[10px]";
+        if(btnTxt) btnTxt.textContent = "إغلاق التصويت";
+      } else {
+        ind.className = "inline-block w-2.5 h-2.5 rounded-full bg-rose-500";
+        txt.textContent = "التصويت مغلق";
+        txt.className = "px-2 py-0.5 bg-rose-500/20 text-rose-400 rounded text-[10px]";
+        if(btnTxt) btnTxt.textContent = "فتح التصويت";
+      }
+    }
+
+    function toggleVotingStatus() {
+      isVotingOpen = !isVotingOpen;
+      saveDataLocally();
+      updateVotingStatusUI();
+      sendApiRequest({ action: "TOGGLE_VOTING", isOpen: isVotingOpen });
+      alert(isVotingOpen ? "تم فتح التصويت بنجاح." : "تم إغلاق التصويت بنجاح.");
+      if(currentSessionUser && currentSessionUser.role === 'MANAGER') {
+        renderVotingView();
+      }
+    }
+
+    function resetAndReopenVoting() {
+      if (confirm("تنبيه: هل أنت متأكد من إعادة فتح التصويت وتصفير جميع الأصوات الحالية للبدء من جديد؟")) {
+        votesList = [];
+        defaultManagers.forEach(m => m.hasVoted = false);
+        isVotingOpen = true;
+        saveDataLocally();
+        updateVotingStatusUI();
+        sendApiRequest({ action: "RESET_VOTES" });
+        renderAdminView();
+        alert("تمت إعادة فتح التصويت وتصفير الأصوات بنجاح.");
+      }
     }
   </script>
 </body>
