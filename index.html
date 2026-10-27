@@ -1287,19 +1287,15 @@
       }).catch(err => console.log("Sync Error: ", err));
     }
 
+    // دالة مزامنة آمنة تجعل التخزين المحلي هو المرجع الأساسي لتجنب عودة البيانات التجريبية
     function syncWithGoogleSheet() {
       fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
           if (data) {
+            // مزامنة الأصوات فقط وحالة التصويت وشهر الدورة لعدم مسح التعديلات المحلية للمدراء والمرشحين
             if (data.votes && Array.isArray(data.votes)) {
               votesList = data.votes;
-            }
-            if (data.candidates && Array.isArray(data.candidates) && data.candidates.length > 0) {
-              defaultCandidates = data.candidates;
-            }
-            if (data.managers && Array.isArray(data.managers) && data.managers.length > 0) {
-              defaultManagers = data.managers;
             }
             if (typeof data.isVotingOpen !== 'undefined') {
               isVotingOpen = data.isVotingOpen;
