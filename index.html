@@ -112,7 +112,7 @@
           <span>SUNRISE Montemare Resort - HR Portal</span>
         </div>
         <h2 class="text-3xl sm:text-4xl font-black text-slate-900">مرحباً بكم في نظام اختيار العامل المثالي</h2>
-        <p class="text-slate-500 text-base max-w-lg mx-auto font-semibold">يرجى تسجيل الدخول حسب صففتك للمتابعة</p>
+        <p class="text-slate-500 text-base max-w-lg mx-auto font-semibold">يرجى تسجيل الدخول حسب صفتك للمتابعة</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -607,13 +607,13 @@
       isVotingOpen = !isVotingOpen;
       saveDataLocally();
       updateVotingStatusUI();
+      sendApiRequest({ action: "TOGGLE_VOTING", isOpen: isVotingOpen });
       alert(isVotingOpen ? "تم فتح التصويت بنجاح." : "تم إغلاق التصويت بنجاح.");
       if(currentSessionUser && currentSessionUser.role === 'MANAGER') {
         renderVotingView();
       }
     }
 
-    // Super Admin: Reset and Reopen Voting
     function resetAndReopenVoting() {
       if (confirm("تنبيه: هل أنت متأكد من إعادة فتح التصويت وتصفير جميع الأصوات الحالية للبدء من جديد؟")) {
         votesList = [];
@@ -694,7 +694,7 @@
       document.getElementById('userBadgeText').textContent = currentSessionUser.name || currentSessionUser.id;
       document.getElementById('userBadge').classList.remove('hidden');
 
-      const isHRorAdmin = currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '2650' || currentSessionUser.id === '1980';
+      const isHRorAdmin = currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '1980';
 
       if (isHRorAdmin) {
         document.getElementById('navDashboardBtn').classList.remove('hidden');
@@ -702,14 +702,9 @@
         document.getElementById('navDashboardBtn').classList.add('hidden');
       }
 
-      if (currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '2650' || currentSessionUser.id === '1980') {
-        if(currentSessionUser.role === 'MANAGER' && currentSessionUser.id !== '2650' && currentSessionUser.id !== '1980') {
-          showSection('votingSection');
-          renderVotingView();
-        } else {
-          showSection('adminDashboard');
-          renderAdminView();
-        }
+      if (currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '1980') {
+        showSection('adminDashboard');
+        renderAdminView();
       } else {
         showSection('votingSection');
         renderVotingView();
@@ -1178,10 +1173,12 @@
         defaultCandidates.push({ id: newId, name, title, department });
       }
 
+      // الحفظ الفوري ومزامنة البيانات محلياً وعلى السيرفر
       saveDataLocally();
       sendApiRequest({ action: "SYNC_CANDIDATES", data: defaultCandidates });
       closeCandidateModal();
       renderAdminView();
+      alert("تم حفظ بيانات المرشح بنجاح!");
     }
 
     function editCandidate(id) { openCandidateModal(id); }
@@ -1191,6 +1188,7 @@
         saveDataLocally();
         sendApiRequest({ action: "SYNC_CANDIDATES", data: defaultCandidates });
         renderAdminView();
+        alert("تم الحذف بنجاح!");
       }
     }
 
@@ -1209,10 +1207,13 @@
       }
 
       defaultManagers.push({ id, name, title, isBlocked: false, hasVoted: false });
+      
+      // الحفظ الفوري ومزامنة البيانات محلياً وعلى السيرفر
       saveDataLocally();
       sendApiRequest({ action: "SYNC_MANAGERS", data: defaultManagers });
       closeManagerModal();
       renderAdminView();
+      alert("تمت إضافة المدير بنجاح!");
     }
 
     function toggleBlockManager(id) {
@@ -1246,7 +1247,7 @@
     function confirmStartNewMonth() {
       const newMonthVal = document.getElementById('newMonthInput').value.trim();
       if (!newMonthVal) {
-        alert("يرجى أدخال اسم الشهر الجديد!");
+        alert("يرجى إدخال اسم الشهر الجديد!");
         return;
       }
 
