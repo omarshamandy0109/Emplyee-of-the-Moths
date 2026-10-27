@@ -136,7 +136,7 @@
           <form onsubmit="handleManagerLogin(event)" class="space-y-4 pt-2">
             <div>
               <label class="block text-sm font-bold text-slate-700 mb-2">الرقم الوظيفي</label>
-              <input type="text" id="mgrLoginId" required placeholder="أدخل الرقم الوظيفي الخاص بك (مثل: 3030)"
+              <input type="text" id="mgrLoginId" required placeholder="أدخل الرقم الوظيفي الخاص بك"
                      class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-gold-500 focus:bg-white outline-none transition-all text-base font-bold">
             </div>
             <button type="submit" class="w-full py-4 bg-gold-600 hover:bg-gold-700 text-slate-900 font-black text-base rounded-2xl shadow-lg shadow-gold-500/20 transition-all flex items-center justify-center gap-2">
@@ -153,7 +153,7 @@
               <i data-lucide="shield-check" class="w-8 h-8"></i>
             </div>
             <h3 class="text-2xl font-black text-slate-900">إدارة الموارد البشرية والأدمن</h3>
-            <p class="text-sm text-slate-500 font-semibold leading-relaxed">خاص بالسوبر أدمن ومسؤولي الموارد البشرية لإدارة القوائم واستخراج التقارير وإغلاق التصويت.</p>
+            <p class="text-sm text-slate-500 font-semibold leading-relaxed">خاص بالأدمن ومسؤولي الموارد البشرية لإدارة القوائم واستخراج التقارير وإغلاق التصويت وبدء دورة جديدة.</p>
           </div>
 
           <form onsubmit="handleAdminLogin(event)" class="space-y-4 pt-2">
@@ -233,7 +233,7 @@
           </button>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 flex-wrap">
           <button onclick="toggleVotingStatus()" id="toggleVotingBtn" class="px-4 py-3 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
             <i data-lucide="lock" class="w-5 h-5"></i>
             <span id="toggleVotingBtnText">إغلاق التصويت</span>
@@ -244,16 +244,15 @@
             <span>سحب تقرير رسمي للطباعة</span>
           </button>
 
-          <div id="superAdminActions" class="hidden flex items-center gap-3">
-            <button onclick="resetAndReopenVoting()" class="px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm" title="فتح التصويت من جديد وتصفير الأصوات">
-              <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
-              <span>إعادة التصويت والتصفير</span>
-            </button>
-            <button onclick="openNewMonthModal()" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
-              <i data-lucide="calendar-plus" class="w-5 h-5"></i>
-              <span>شهر تصويت جديد</span>
-            </button>
-          </div>
+          <!-- صلاحيات الأدمن الشاملة لجميع الأدمنز -->
+          <button onclick="resetAndReopenVoting()" class="px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm" title="فتح التصويت من جديد وتصفير الأصوات">
+            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+            <span>إعادة التصويت والتصفير</span>
+          </button>
+          <button onclick="openNewMonthModal()" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
+            <i data-lucide="calendar-plus" class="w-5 h-5"></i>
+            <span>شهر تصويت جديد</span>
+          </button>
         </div>
       </div>
 
@@ -331,7 +330,7 @@
       <div id="adminTab-managers" class="hidden space-y-6 no-print">
         <div class="flex justify-between items-center flex-wrap gap-4 bg-white p-5 rounded-3xl border border-slate-200">
           <h3 class="text-lg font-black text-slate-900">قائمة المدراء</h3>
-          <button onclick="openAddManagerModal()" class="px-5 py-3 bg-gold-600 hover:bg-gold-700 text-slate-900 font-bold text-sm rounded-2xl shadow-md transition-all flex items-center gap-2">
+          <button onclick="openManagerModal()" class="px-5 py-3 bg-gold-600 hover:bg-gold-700 text-slate-900 font-bold text-sm rounded-2xl shadow-md transition-all flex items-center gap-2">
             <i data-lucide="user-plus" class="w-5 h-5"></i>
             <span>إضافة مدير جديد</span>
           </button>
@@ -518,11 +517,12 @@
     </div>
   </div>
 
-  <!-- Manager Modal -->
+  <!-- Manager Modal (إضافة أو تعديل مدير مع إمكانية تعديل الرقم الوظيفي والاسم) -->
   <div id="managerModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
-      <h3 id="managerModalTitle" class="text-lg font-black text-slate-900">إضافة مدير جديد</h3>
+      <h3 id="managerModalTitle" class="text-lg font-black text-slate-900">إضافة أو تعديل بيانات مدير</h3>
       <form id="managerForm" onsubmit="handleManagerSubmit(event)" class="space-y-4">
+        <input type="hidden" id="mgrOriginalId">
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1.5">الرقم الوظيفي</label>
           <input type="text" id="mgrId" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-gold-500">
@@ -537,7 +537,7 @@
         </div>
         <div class="flex justify-end gap-3 pt-3">
           <button type="button" onclick="closeManagerModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
-          <button type="submit" class="px-5 py-3 bg-gold-600 text-slate-900 font-bold rounded-2xl text-sm">حفظ</button>
+          <button type="submit" class="px-5 py-3 bg-gold-600 text-slate-900 font-bold rounded-2xl text-sm">حفظ البيانات</button>
         </div>
       </form>
     </div>
@@ -566,7 +566,6 @@
       { id: 'Mohamed.Desouky', pass: '1980', name: 'محمد دسوقي (Admin)' }
     ];
 
-    // قائمة المدراء الافتتاحية الأساسية للفندق لضمان دخولهم المباشر
     let initialManagers = [
       { id: '3030', name: 'Hossam Ephram Saba Malak', title: 'General Manager', isBlocked: false, hasVoted: false },
       { id: '2650', name: 'Mohamed Desouky Abd Elhalim Mohamed', title: 'Human Resources Manager', isBlocked: false, hasVoted: false },
@@ -618,7 +617,6 @@
       const storedVotingStatus = localStorage.getItem('app_voting_open');
       const storedArchive = localStorage.getItem('app_monthly_archive');
 
-      // ضمان وجود المدراء الافتتاحيين لكي لا يواجه أي مدير مشكلة في الدخول
       const parsedMgrs = storedMgrs ? JSON.parse(storedMgrs) : [];
       defaultManagers = (parsedMgrs && parsedMgrs.length > 0) ? parsedMgrs : [...initialManagers];
 
@@ -720,14 +718,15 @@
       hideError();
 
       if (username === SUPER_ADMIN.id && password === SUPER_ADMIN.pass) {
-        currentSessionUser = { role: 'SUPER_ADMIN', ...SUPER_ADMIN };
+        currentSessionUser = { role: 'ADMIN', ...SUPER_ADMIN };
         onLoginSuccess();
         return;
       }
 
       const subAdmin = SUB_ADMINS.find(a => a.id.toLowerCase() === username.toLowerCase() && a.pass === password);
       if (subAdmin) {
-        currentSessionUser = { role: 'SUB_ADMIN', ...subAdmin };
+        // جعل جميع الـ Sub Admins يتمتعون بصلاحية ADMIN الكاملة
+        currentSessionUser = { role: 'ADMIN', ...subAdmin };
         onLoginSuccess();
         return;
       }
@@ -769,14 +768,15 @@
       if (badgeText) badgeText.textContent = currentSessionUser.name || currentSessionUser.id;
       if (badge) badge.classList.remove('hidden');
 
-      const isHRorAdmin = currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '1980';
+      // جميع الأدمنز يمكنهم رؤية زر لوحة التحكم
+      const isAdmin = currentSessionUser.role === 'ADMIN';
       const navBtn = document.getElementById('navDashboardBtn');
       if (navBtn) {
-        if (isHRorAdmin) navBtn.classList.remove('hidden');
+        if (isAdmin) navBtn.classList.remove('hidden');
         else navBtn.classList.add('hidden');
       }
 
-      if (isHRorAdmin) {
+      if (isAdmin) {
         showSection('adminDashboard');
         renderAdminView();
       } else {
@@ -993,14 +993,6 @@
     }
 
     function renderAdminView() {
-      if (currentSessionUser && currentSessionUser.role === 'SUPER_ADMIN') {
-        const superActions = document.getElementById('superAdminActions');
-        if (superActions) superActions.classList.remove('hidden');
-      } else {
-        const superActions = document.getElementById('superAdminActions');
-        if (superActions) superActions.classList.add('hidden');
-      }
-
       renderResultsDashboard();
       renderManagersTable();
       renderCandidatesTable();
@@ -1111,17 +1103,18 @@
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-50 transition-colors";
 
-        let actionBtns = '';
-        if (currentSessionUser && currentSessionUser.role === 'SUPER_ADMIN') {
-          actionBtns = `
-            <button onclick="toggleBlockManager('${m.id}')" class="p-2 ${m.isBlocked ? 'text-emerald-600 hover:bg-emerald-50' : 'text-amber-600 hover:bg-amber-50'} rounded-xl" title="${m.isBlocked ? 'إلغاء الحجب' : 'حجب'}">
-              <i data-lucide="${m.isBlocked ? 'unlock' : 'lock'}" class="w-5 h-5"></i>
-            </button>
-            <button onclick="deleteManager('${m.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-xl" title="حذف">
-              <i data-lucide="trash-2" class="w-5 h-5"></i>
-            </button>
-          `;
-        }
+        // إتاحة كافة أزرار التحكم في المدراء لكل الأدمنز
+        let actionBtns = `
+          <button onclick="editManager('${m.id}')" class="p-2 text-gold-700 hover:bg-gold-50 rounded-xl" title="تعديل الاسم أو الرقم الوظيفي">
+            <i data-lucide="edit" class="w-5 h-5"></i>
+          </button>
+          <button onclick="toggleBlockManager('${m.id}')" class="p-2 ${m.isBlocked ? 'text-emerald-600 hover:bg-emerald-50' : 'text-amber-600 hover:bg-amber-50'} rounded-xl" title="${m.isBlocked ? 'إلغاء الحجب' : 'حجب'}">
+            <i data-lucide="${m.isBlocked ? 'unlock' : 'lock'}" class="w-5 h-5"></i>
+          </button>
+          <button onclick="deleteManager('${m.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-xl" title="حذف">
+            <i data-lucide="trash-2" class="w-5 h-5"></i>
+          </button>
+        `;
 
         tr.innerHTML = `
           <td class="p-4 font-bold text-gold-700">${m.id}</td>
@@ -1465,11 +1458,25 @@
       }
     }
 
-    function openAddManagerModal() {
+    function openManagerModal(mgrId = null) {
       const modal = document.getElementById('managerModal');
       if (modal) modal.classList.remove('hidden');
-      const form = document.getElementById('managerForm');
-      if (form) form.reset();
+      
+      if (mgrId) {
+        const m = defaultManagers.find(x => x.id === mgrId);
+        if (m) {
+          document.getElementById('mgrOriginalId').value = m.id;
+          document.getElementById('mgrId').value = m.id;
+          document.getElementById('mgrName').value = m.name;
+          document.getElementById('mgrTitle').value = m.title;
+          document.getElementById('managerModalTitle').textContent = "تعديل بيانات المدير";
+        }
+      } else {
+        const form = document.getElementById('managerForm');
+        if (form) form.reset();
+        document.getElementById('mgrOriginalId').value = '';
+        document.getElementById('managerModalTitle').textContent = "إضافة مدير جديد";
+      }
     }
 
     function closeManagerModal() {
@@ -1479,21 +1486,41 @@
 
     function handleManagerSubmit(e) {
       e.preventDefault();
-      const id = document.getElementById('mgrId').value.trim();
+      const originalId = document.getElementById('mgrOriginalId').value;
+      const newId = document.getElementById('mgrId').value.trim();
       const name = document.getElementById('mgrName').value.trim();
       const title = document.getElementById('mgrTitle').value.trim();
 
-      if (defaultManagers.some(m => m.id === id)) {
-        alert("الرقم الوظيفي موجود بالفعل!");
-        return;
+      if (originalId) {
+        // حالة التعديل
+        const idx = defaultManagers.findIndex(m => m.id === originalId);
+        if (idx > -1) {
+          if (newId !== originalId && defaultManagers.some(m => m.id === newId)) {
+            alert("الرقم الوظيفي الجديد موجود بالفعل لمدير آخر!");
+            return;
+          }
+          defaultManagers[idx].id = newId;
+          defaultManagers[idx].name = name;
+          defaultManagers[idx].title = title;
+        }
+      } else {
+        // حالة الإضافة
+        if (defaultManagers.some(m => m.id === newId)) {
+          alert("الرقم الوظيفي موجود بالفعل!");
+          return;
+        }
+        defaultManagers.push({ id: newId, name, title, isBlocked: false, hasVoted: false });
       }
 
-      defaultManagers.push({ id, name, title, isBlocked: false, hasVoted: false });
       saveDataLocally();
       sendApiRequest({ action: "SYNC_MANAGERS", data: defaultManagers });
       closeManagerModal();
       renderAdminView();
-      alert("تمت إضافة المدير بنجاح!");
+      alert("تم حفظ بيانات المدير بنجاح!");
+    }
+
+    function editManager(id) {
+      openManagerModal(id);
     }
 
     function toggleBlockManager(id) {
