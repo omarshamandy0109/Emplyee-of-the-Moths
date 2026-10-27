@@ -83,7 +83,7 @@
             </div>
             <p class="text-xs sm:text-sm text-slate-400 font-bold flex items-center gap-2 mt-0.5">
               <span id="votingStatusIndicator" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span id="monthTextDisplay">جاري تحميل الشهر...</span>
+              <span id="monthTextDisplay">تصويت شهر أكتوبر 2026</span>
               <span id="votingStatusText" class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[10px]">التصويت مفتوح</span>
             </p>
           </div>
@@ -136,7 +136,7 @@
           <form onsubmit="handleManagerLogin(event)" class="space-y-4 pt-2">
             <div>
               <label class="block text-sm font-bold text-slate-700 mb-2">الرقم الوظيفي</label>
-              <input type="text" id="mgrLoginId" required placeholder="أدخل الرقم الوظيفي الخاص بك"
+              <input type="text" id="mgrLoginId" required placeholder="أدخل الرقم الوظيفي الخاص بك (مثل: 3030)"
                      class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-gold-500 focus:bg-white outline-none transition-all text-base font-bold">
             </div>
             <button type="submit" class="w-full py-4 bg-gold-600 hover:bg-gold-700 text-slate-900 font-black text-base rounded-2xl shadow-lg shadow-gold-500/20 transition-all flex items-center justify-center gap-2">
@@ -554,9 +554,8 @@
     </div>
   </footer>
 
-  <!-- App Javascript Implementation Logic with New URL -->
+  <!-- App Javascript Implementation Logic -->
   <script>
-    // رابط السكربت المعتمد الجديد
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqsOGYP2eVJ8nkZw5HRNa0_I_4iF6xOY6nt_cNdULUiOzV5jW3mwwCkQ3z-FbYJp4NlQ/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
@@ -567,14 +566,37 @@
       { id: 'Mohamed.Desouky', pass: '1980', name: 'محمد دسوقي (Admin)' }
     ];
 
+    // قائمة المدراء الافتتاحية الأساسية للفندق لضمان دخولهم المباشر
+    let initialManagers = [
+      { id: '3030', name: 'Hossam Ephram Saba Malak', title: 'General Manager', isBlocked: false, hasVoted: false },
+      { id: '2650', name: 'Mohamed Desouky Abd Elhalim Mohamed', title: 'Human Resources Manager', isBlocked: false, hasVoted: false },
+      { id: '1980', name: 'Mohamed Desouky', title: 'HR Admin', isBlocked: false, hasVoted: false },
+      { id: '2648', name: 'Hamdy Mohamed Mohamed Hassan El Alfy', title: 'Chief Engineer', isBlocked: false, hasVoted: false },
+      { id: '2244', name: 'Ahmed Abd Elmotty Ahmed Mohamed Elraay', title: 'Hotel Financial Controller', isBlocked: false, hasVoted: false },
+      { id: '2965', name: 'Khaled Mohy El Din Abd El Kader', title: 'Food & Beverage Manager', isBlocked: false, hasVoted: false },
+      { id: '3027', name: 'Mohamed Taher Alhgrsy Yousef Abd Alla', title: 'Executive Assistant General Manager', isBlocked: false, hasVoted: false },
+      { id: '2977', name: 'Mohamed Reda El Sayed', title: 'Executive Sous Chef', isBlocked: false, hasVoted: false },
+      { id: '1477', name: 'Hazem Khaled Mohamed Mohamed Elshebasy', title: 'Information & Technology Manager', isBlocked: false, hasVoted: false },
+      { id: '1679', name: 'Hany Hesham Abd El Halim Mohamed', title: 'Team Leader Software Developer', isBlocked: false, hasVoted: false },
+      { id: '1751', name: 'Mohamed Mahmoud Ibrahim Mahmoud Essawy', title: 'Security Manager', isBlocked: false, hasVoted: false },
+      { id: '2429', name: 'Mohamed Ibrahim Omran Hussain', title: 'Front Office Manager', isBlocked: false, hasVoted: false },
+      { id: '2474', name: 'Essam Ibrahim Mohamed El Anwar', title: 'Assistant Chief Engineer', isBlocked: false, hasVoted: false },
+      { id: '2607', name: 'Mahmoud Fattoh Zakry Abo El Dahab', title: 'Executive Housekeeper', isBlocked: false, hasVoted: false },
+      { id: '2651', name: 'Hamdi Abd Elmonaem Mohamed Abd Elmonaem', title: 'Recreation Manager', isBlocked: false, hasVoted: false },
+      { id: '2666', name: 'Omnia Hussein Yahya Hussein', title: 'Guest Experience Manager', isBlocked: false, hasVoted: false },
+      { id: '2789', name: 'Marwa Hamedalh El Wehidi Awad', title: 'Hygiene Manager', isBlocked: false, hasVoted: false },
+      { id: '2827', name: 'Rana Khaled Mohamed El Sayed Khedr', title: 'Administrative Assistant To General Manager', isBlocked: false, hasVoted: false },
+      { id: '3003', name: 'Monir Ali Megahed Senan', title: 'Spa Manager', isBlocked: false, hasVoted: false },
+      { id: '3004', name: 'Abd Elfatah Hamdi Abd Elfatah Ali', title: 'L&D Manager', isBlocked: false, hasVoted: false }
+    ];
+
     let currentSessionUser = null;
     let selectedCandidateIds = [];
     let chartInstance = null;
-    let currentCycleMonth = ""; 
+    let currentCycleMonth = "أكتوبر 2026"; 
     let isVotingOpen = true;
     let monthlyArchive = [];
 
-    // قوائم تبدأ فارغة تماماً ليتم إدخالها يدوياً من لوحة التحكم
     let defaultManagers = [];
     let defaultCandidates = [];
     let votesList = [];
@@ -596,7 +618,10 @@
       const storedVotingStatus = localStorage.getItem('app_voting_open');
       const storedArchive = localStorage.getItem('app_monthly_archive');
 
-      defaultManagers = storedMgrs ? JSON.parse(storedMgrs) : [];
+      // ضمان وجود المدراء الافتتاحيين لكي لا يواجه أي مدير مشكلة في الدخول
+      const parsedMgrs = storedMgrs ? JSON.parse(storedMgrs) : [];
+      defaultManagers = (parsedMgrs && parsedMgrs.length > 0) ? parsedMgrs : [...initialManagers];
+
       defaultCandidates = storedCands ? JSON.parse(storedCands) : [];
       votesList = storedVotes ? JSON.parse(storedVotes) : [];
       if (storedArchive) monthlyArchive = JSON.parse(storedArchive);
@@ -604,7 +629,7 @@
       if (storedMonth) {
         currentCycleMonth = storedMonth;
       } else {
-        currentCycleMonth = prompt("يرجى إدخال اسم الشهر والدورة الحالية يدوياً (مثال: أكتوبر 2026):") || "أكتوبر 2026";
+        currentCycleMonth = "أكتوبر 2026";
       }
 
       const monthDisplay = document.getElementById('monthTextDisplay');
