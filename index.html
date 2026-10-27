@@ -244,7 +244,6 @@
             <span>سحب تقرير رسمي للطباعة</span>
           </button>
 
-          <!-- صلاحيات الأدمن الشاملة لجميع الأدمنز -->
           <button onclick="resetAndReopenVoting()" class="px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm" title="فتح التصويت من جديد وتصفير الأصوات">
             <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
             <span>إعادة التصويت والتصفير</span>
@@ -517,7 +516,7 @@
     </div>
   </div>
 
-  <!-- Manager Modal (تعديل الرقم الوظيفي والاسم والمسمى) -->
+  <!-- Manager Modal -->
   <div id="managerModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
       <h3 id="managerModalTitle" class="text-lg font-black text-slate-900">إضافة أو تعديل بيانات مدير</h3>
@@ -556,7 +555,8 @@
 
   <!-- App Javascript Implementation Logic -->
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqsOGYP2eVJ8nkZw5HRNa0_I_4iF6xOY6nt_cNdULUiOzV5jW3mwwCkQ3z-FbYJp4NlQ/exec";
+    // تم تحديث الـ SCRIPT_URL بالرابط الجديد بدقة
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYFUCz9tYNkLyk2UIE__28evZV8YpudcHFbSwRn-QNcLNZOqM9RLwaq7shxnrgOavWwg/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
     const SUB_ADMINS = [
@@ -619,7 +619,6 @@
       const parsedMgrs = storedMgrs ? JSON.parse(storedMgrs) : [];
       defaultManagers = (parsedMgrs && parsedMgrs.length > 0) ? parsedMgrs : [...initialManagers];
 
-      // تطبيق التحديثات التلقائية (إزالة هاني هشام وتحديث اسم 3030) على الذاكرة المحلية المخزنة مسبقاً
       defaultManagers = defaultManagers.filter(m => m.id !== '1679');
       const m3030 = defaultManagers.find(m => m.id === '3030');
       if (m3030) {
@@ -1496,7 +1495,6 @@
       const title = document.getElementById('mgrTitle').value.trim();
 
       if (originalId) {
-        // حالة التعديل
         const idx = defaultManagers.findIndex(m => m.id === originalId);
         if (idx > -1) {
           if (newId !== originalId && defaultManagers.some(m => m.id === newId)) {
@@ -1508,7 +1506,6 @@
           defaultManagers[idx].title = title;
         }
       } else {
-        // حالة الإضافة
         if (defaultManagers.some(m => m.id === newId)) {
           alert("الرقم الوظيفي موجود بالفعل!");
           return;
@@ -1653,19 +1650,12 @@
               monthlyArchive = data.monthlyArchive;
             }
             
-            // مزامنة ذكية للمدراء مع احترام التحديثات المحلية وعدم إعادة المدراء المحذوفين
             if (data.managers && Array.isArray(data.managers) && data.managers.length > 0) {
-              // فلترة هاني هشام أينما وجد
               let remoteMgrs = data.managers.filter(m => m.id !== '1679');
-              
               remoteMgrs.forEach(sm => {
-                // تحديث اسم 3030 في السيرفر إن وجد قديماً
                 if (sm.id === '3030') sm.name = 'Husam Afram Saba Malki';
-
                 const existing = defaultManagers.find(m => m.id === sm.id);
-                if (!existing) {
-                  // إذا كان غير موجود محلياً، نتحقق أنه لم يتم حذفه عمداً (يمكن الاعتماد على القائمة الحالية)
-                } else {
+                if (existing) {
                   existing.name = sm.name;
                   existing.title = sm.title;
                   existing.hasVoted = existing.hasVoted || sm.hasVoted;
