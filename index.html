@@ -186,12 +186,12 @@
       <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm border border-gold-200 flex flex-wrap justify-between items-center gap-6">
         <div>
           <h2 class="text-xl sm:text-3xl font-black text-slate-900">أهلاً بك، <span id="voterNameDisplay" class="text-gold-700">المدير</span></h2>
-          <p id="votingInstructionText" class="text-sm sm:text-base text-slate-500 font-bold mt-1">اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.</p>
+          <p id="votingInstructionText" class="text-sm sm:text-base text-slate-500 font-bold mt-1">اختر مرشحاً واحداً (1) من مجموعة Guest Contact ومرشحاً واحداً (1) من مجموعة Non Guest Contact.</p>
         </div>
 
         <div id="votingActionContainer" class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
           <div class="px-5 py-3 bg-gold-50/70 rounded-2xl text-sm sm:text-base font-black text-slate-700 flex items-center gap-3 border border-gold-200">
-            <span>الأصوات المحددة:</span>
+            <span>الاختيارات:</span>
             <span id="selectedCountBadge" class="w-8 h-8 bg-gold-600 text-slate-900 rounded-full flex items-center justify-center text-sm font-black shadow-sm">0</span>
             <span class="text-slate-400">/ 2</span>
           </div>
@@ -209,8 +209,33 @@
         ⚠️ تنبيه: تم إغلاق التصويت رسمياً لهذا الشهر من قِبل الإدارة. يمكنك الآن الاطلاع على نتائج التصويت النهائية.
       </div>
 
-      <!-- Candidates Grid List -->
-      <div id="candidatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      <!-- Candidates Group 1: Guest Contact -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-3 border-b border-gold-500/30 pb-3">
+          <div class="p-2 bg-gold-500 text-slate-900 rounded-xl font-black">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-black text-slate-900">المجموعة الأولى: Guest Contact</h3>
+            <p class="text-xs text-slate-500 font-bold">يرجى اختيار مرشح واحد (1) فقط من هذه المجموعة.</p>
+          </div>
+        </div>
+        <div id="guestContactGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+
+      <!-- Candidates Group 2: Non Guest Contact -->
+      <div class="space-y-4 pt-6">
+        <div class="flex items-center gap-3 border-b border-slate-700/30 pb-3">
+          <div class="p-2 bg-slate-900 text-gold-400 rounded-xl font-black">
+            <i data-lucide="briefcase" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-black text-slate-900">المجموعة الثانية: Non Guest Contact</h3>
+            <p class="text-xs text-slate-500 font-bold">يرجى اختيار مرشح واحد (1) فقط من هذه المجموعة.</p>
+          </div>
+        </div>
+        <div id="nonGuestContactGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
     </section>
 
     <!-- 3. ADMIN & HR DASHBOARD -->
@@ -371,6 +396,7 @@
                   <th class="p-4">المرشح</th>
                   <th class="p-4">المسمى الوظيفي</th>
                   <th class="p-4">القسم</th>
+                  <th class="p-4">المجموعة</th>
                   <th class="p-4 text-center">الإجراءات</th>
                 </tr>
               </thead>
@@ -508,6 +534,13 @@
           <label class="block text-sm font-bold text-slate-700 mb-1.5">القسم</label>
           <input type="text" id="candDept" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-gold-500">
         </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1.5">المجموعة (Group)</label>
+          <select id="candGroup" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-gold-500">
+            <option value="Guest Contact">Guest Contact (التواصل مع الضيوف)</option>
+            <option value="Non Guest Contact">Non Guest Contact (غير مباشر مع الضيوف)</option>
+          </select>
+        </div>
         <div class="flex justify-end gap-3 pt-3">
           <button type="button" onclick="closeCandidateModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
           <button type="submit" class="px-5 py-3 bg-gold-600 text-slate-900 font-bold rounded-2xl text-sm">حفظ البيانات</button>
@@ -588,7 +621,8 @@
     ];
 
     let currentSessionUser = null;
-    let selectedCandidateIds = [];
+    let selectedGuestId = null;
+    let selectedNonGuestId = null;
     let chartInstance = null;
     let currentCycleMonth = "أكتوبر 2026"; 
     let isVotingOpen = true;
@@ -624,7 +658,13 @@
         m3030.name = 'Husam Afram Saba Malki';
       }
 
-      defaultCandidates = storedCands ? JSON.parse(storedCands) : [];
+      let parsedCands = storedCands ? JSON.parse(storedCands) : [];
+      // التأكد من وجود خاصية المجموعة لكل مرشح قديم مسجل مسبقاً
+      parsedCands.forEach(c => {
+        if (!c.group) c.group = 'Guest Contact';
+      });
+      defaultCandidates = parsedCands;
+
       votesList = storedVotes ? JSON.parse(storedVotes) : [];
       if (storedArchive) monthlyArchive = JSON.parse(storedArchive);
 
@@ -803,7 +843,8 @@
     function logout() {
       sessionStorage.removeItem('active_session');
       currentSessionUser = null;
-      selectedCandidateIds = [];
+      selectedGuestId = null;
+      selectedNonGuestId = null;
       checkLoginStatus();
     }
 
@@ -821,9 +862,13 @@
       if (voterNameDisp && currentSessionUser) {
         voterNameDisp.textContent = currentSessionUser.name;
       }
-      const grid = document.getElementById('candidatesGrid');
-      if (!grid) return;
-      grid.innerHTML = '';
+      
+      const guestGrid = document.getElementById('guestContactGrid');
+      const nonGuestGrid = document.getElementById('nonGuestContactGrid');
+      if (!guestGrid || !nonGuestGrid) return;
+
+      guestGrid.innerHTML = '';
+      nonGuestGrid.innerHTML = '';
 
       const closedBanner = document.getElementById('votingClosedBanner');
       const actionContainer = document.getElementById('votingActionContainer');
@@ -843,7 +888,7 @@
         if (instructionTxt) instructionTxt.textContent = "تم إغلاق التصويت. إليك نتائج الفائزين النهائية المعتمدة:";
 
         if (sortedCandidates.length === 0) {
-          grid.innerHTML = `<div class="col-span-full text-center text-slate-500 py-8 font-bold">لا توجد مرشحين مضافين حالياً.</div>`;
+          guestGrid.innerHTML = `<div class="col-span-full text-center text-slate-500 py-8 font-bold">لا توجد مرشحين مضافين حالياً.</div>`;
           return;
         }
 
@@ -860,8 +905,7 @@
               </div>
               <div class="flex flex-col items-end">
                 <span class="px-3 py-1 bg-slate-900 text-white rounded-xl text-xs font-black">${counts[c.id]} صوت</span>
-                ${isWinner1 ? '<span class="mt-1 px-2.5 py-0.5 bg-amber-500 text-white rounded-full text-[10px] font-black">🏆 الفائز بالمركز الأول</span>' : ''}
-                ${isWinner2 ? '<span class="mt-1 px-2.5 py-0.5 bg-blue-600 text-white rounded-full text-[10px] font-black">🥈 الفائز بالمركز الثاني</span>' : ''}
+                <span class="mt-1 px-2.5 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[10px] font-bold">${c.group || 'Guest Contact'}</span>
               </div>
             </div>
             <div class="mt-5">
@@ -870,7 +914,11 @@
               <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department}</p>
             </div>
           `;
-          grid.appendChild(card);
+          if (c.group === 'Non Guest Contact') {
+            nonGuestGrid.appendChild(card);
+          } else {
+            guestGrid.appendChild(card);
+          }
         });
         if (typeof lucide !== 'undefined') lucide.createIcons();
         return;
@@ -878,79 +926,123 @@
 
       if (closedBanner) closedBanner.classList.add('hidden');
       if (actionContainer) actionContainer.classList.remove('hidden');
-      if (instructionTxt) instructionTxt.textContent = "اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.";
-
-      if (defaultCandidates.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center text-slate-500 py-8 font-bold">لا توجد مرشحين مضافين حالياً. يرجى من الإدارة إضافة المرشحين.</div>`;
-        return;
-      }
+      if (instructionTxt) instructionTxt.textContent = "اختر مرشحاً واحداً (1) من مجموعة Guest Contact ومرشحاً واحداً (1) من مجموعة Non Guest Contact.";
 
       const existingVote = votesList.find(v => v.managerId === currentSessionUser.id);
       if (existingVote) {
-        selectedCandidateIds = [existingVote.candidate1, existingVote.candidate2].filter(Boolean);
+        const c1 = defaultCandidates.find(c => c.id === existingVote.candidate1);
+        const c2 = defaultCandidates.find(c => c.id === existingVote.candidate2);
+        if (c1) {
+          if (c1.group === 'Non Guest Contact') selectedNonGuestId = c1.id;
+          else selectedGuestId = c1.id;
+        }
+        if (c2) {
+          if (c2.group === 'Non Guest Contact') selectedNonGuestId = c2.id;
+          else selectedGuestId = c2.id;
+        }
       }
 
       updateVoteBadgeAndButton();
 
-      defaultCandidates.forEach(c => {
-        const isSelected = selectedCandidateIds.includes(c.id);
-        const card = document.createElement('div');
-        card.className = `candidate-card glass-card rounded-3xl p-6 cursor-pointer relative border ${isSelected ? 'selected' : 'border-slate-200'}`;
-        card.onclick = () => toggleCandidateSelection(c.id);
+      const guestCandidates = defaultCandidates.filter(c => c.group !== 'Non Guest Contact');
+      const nonGuestCandidates = defaultCandidates.filter(c => c.group === 'Non Guest Contact');
 
-        card.innerHTML = `
-          <div class="flex items-start justify-between">
-            <div class="w-14 h-14 rounded-2xl bg-gold-50 text-gold-700 border border-gold-200 font-black flex items-center justify-center text-2xl shadow-sm">
-              ${c.name.charAt(0)}
+      if (guestCandidates.length === 0) {
+        guestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Guest Contact.</div>`;
+      } else {
+        guestCandidates.forEach(c => {
+          const isSelected = selectedGuestId === c.id;
+          const card = document.createElement('div');
+          card.className = `candidate-card glass-card rounded-3xl p-6 cursor-pointer relative border ${isSelected ? 'selected' : 'border-slate-200'}`;
+          card.onclick = () => toggleGroupSelection('guest', c.id);
+
+          card.innerHTML = `
+            <div class="flex items-start justify-between">
+              <div class="w-14 h-14 rounded-2xl bg-gold-50 text-gold-700 border border-gold-200 font-black flex items-center justify-center text-2xl shadow-sm">
+                ${c.name.charAt(0)}
+              </div>
+              <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-gold-600 bg-gold-600 text-slate-900' : 'border-slate-300'} flex items-center justify-center transition-all">
+                <i data-lucide="check" class="w-5 h-5"></i>
+              </div>
             </div>
-            <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-gold-600 bg-gold-600 text-slate-900' : 'border-slate-300'} flex items-center justify-center transition-all">
-              <i data-lucide="check" class="w-5 h-5"></i>
+            <div class="mt-5">
+              <h4 class="font-black text-slate-900 text-xl">${c.name}</h4>
+              <p class="text-sm font-bold text-gold-700 mt-1">${c.title}</p>
+              <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department}</p>
             </div>
-          </div>
-          <div class="mt-5">
-            <h4 class="font-black text-slate-900 text-xl">${c.name}</h4>
-            <p class="text-sm font-bold text-gold-700 mt-1">${c.title}</p>
-            <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department}</p>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
+          `;
+          guestGrid.appendChild(card);
+        });
+      }
+
+      if (nonGuestCandidates.length === 0) {
+        nonGuestGrid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-4 text-sm font-bold">لا توجد مرشحين في مجموعة Non Guest Contact.</div>`;
+      } else {
+        nonGuestCandidates.forEach(c => {
+          const isSelected = selectedNonGuestId === c.id;
+          const card = document.createElement('div');
+          card.className = `candidate-card glass-card rounded-3xl p-6 cursor-pointer relative border ${isSelected ? 'selected' : 'border-slate-200'}`;
+          card.onclick = () => toggleGroupSelection('nonguest', c.id);
+
+          card.innerHTML = `
+            <div class="flex items-start justify-between">
+              <div class="w-14 h-14 rounded-2xl bg-slate-900 text-gold-400 border border-slate-800 font-black flex items-center justify-center text-2xl shadow-sm">
+                ${c.name.charAt(0)}
+              </div>
+              <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-gold-600 bg-gold-600 text-slate-900' : 'border-slate-300'} flex items-center justify-center transition-all">
+                <i data-lucide="check" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <div class="mt-5">
+              <h4 class="font-black text-slate-900 text-xl">${c.name}</h4>
+              <p class="text-sm font-bold text-gold-700 mt-1">${c.title}</p>
+              <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department}</p>
+            </div>
+          `;
+          nonGuestGrid.appendChild(card);
+        });
+      }
+
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    function toggleCandidateSelection(candId) {
+    function toggleGroupSelection(groupType, candId) {
       if (!isVotingOpen) {
         alert("عذراً، تم إغلاق التصويت رسمياً.");
         return;
       }
-      if (selectedCandidateIds.includes(candId)) {
-        selectedCandidateIds = selectedCandidateIds.filter(id => id !== candId);
+      if (groupType === 'guest') {
+        selectedGuestId = (selectedGuestId === candId) ? null : candId;
       } else {
-        if (selectedCandidateIds.length >= 2) {
-          alert("يمكنك اختيار (2) مرشحين فقط كحد أقصى.");
-          return;
-        }
-        selectedCandidateIds.push(candId);
+        selectedNonGuestId = (selectedNonGuestId === candId) ? null : candId;
       }
       renderVotingView();
     }
 
     function updateVoteBadgeAndButton() {
+      let count = 0;
+      if (selectedGuestId) count++;
+      if (selectedNonGuestId) count++;
+
       const badge = document.getElementById('selectedCountBadge');
-      if (badge) badge.textContent = selectedCandidateIds.length;
+      if (badge) badge.textContent = count;
+
       const submitBtn = document.getElementById('submitVoteBtn');
-      if (submitBtn) submitBtn.disabled = selectedCandidateIds.length === 0 || !isVotingOpen;
+      // شرط فعال ومستوفي: مرشح من Guest Contact ومرشح من Non Guest Contact
+      if (submitBtn) {
+        submitBtn.disabled = (!selectedGuestId || !selectedNonGuestId || !isVotingOpen);
+      }
     }
 
     function submitVotes() {
-      if (!isVotingOpen || selectedCandidateIds.length === 0 || !currentSessionUser) return;
+      if (!isVotingOpen || !selectedGuestId || !selectedNonGuestId || !currentSessionUser) return;
 
       const existingVoteIdx = votesList.findIndex(v => v.managerId === currentSessionUser.id);
       const voteData = {
         managerId: currentSessionUser.id,
         managerName: currentSessionUser.name,
-        candidate1: selectedCandidateIds[0] || '',
-        candidate2: selectedCandidateIds[1] || '',
+        candidate1: selectedGuestId,
+        candidate2: selectedNonGuestId,
         timestamp: new Date().toISOString()
       };
 
@@ -1049,7 +1141,7 @@
               </span>
               <div>
                 <p class="font-black text-slate-900 text-base">${c.name} ${isWinner1 ? '🏆 (المركز الأول)' : (isWinner2 ? '🥈 (المركز الثاني)' : '')}</p>
-                <p class="text-xs text-slate-500 font-semibold">${c.department}</p>
+                <p class="text-xs text-slate-500 font-semibold">${c.department} <span class="text-[10px] text-gold-700">(${c.group || 'Guest Contact'})</span></p>
               </div>
             </div>
             <div class="px-4 py-1.5 bg-gold-50 text-gold-700 border border-gold-200 rounded-xl text-sm font-black">
@@ -1140,7 +1232,7 @@
       tbody.innerHTML = '';
 
       if (defaultCandidates.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-bold">لا توجد مرشحين مسجلين. قم بإضافة مرشح جديد.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">لا توجد مرشحين مسجلين. قم بإضافة مرشح جديد.</td></tr>`;
         return;
       }
 
@@ -1151,6 +1243,7 @@
           <td class="p-4 font-black text-slate-900">${c.name}</td>
           <td class="p-4 text-slate-600 font-semibold">${c.title}</td>
           <td class="p-4 text-slate-600 font-semibold">${c.department}</td>
+          <td class="p-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${c.group === 'Non Guest Contact' ? 'bg-slate-900 text-gold-400' : 'bg-gold-100 text-gold-800'}">${c.group || 'Guest Contact'}</span></td>
           <td class="p-4 text-center">
             <button onclick="editCandidate('${c.id}')" class="p-2 text-gold-700 hover:bg-gold-50 rounded-xl" title="تعديل">
               <i data-lucide="edit" class="w-5 h-5"></i>
@@ -1211,7 +1304,7 @@
               <tr class="bg-slate-100 text-slate-700">
                 <th class="border border-slate-300 p-2.5">المركز</th>
                 <th class="border border-slate-300 p-2.5">اسم المرشح</th>
-                <th class="border border-slate-300 p-2.5">المسمى الوظيفي والقسم</th>
+                <th class="border border-slate-300 p-2.5">المسمى والمجموعة</th>
                 <th class="border border-slate-300 p-2.5 text-center">مجموع الأصوات</th>
                 <th class="border border-slate-300 p-2.5 text-center">نتيجة التتويج</th>
               </tr>
@@ -1229,7 +1322,7 @@
               <tr class="${isWinner1 ? 'bg-amber-50 font-bold' : (isWinner2 ? 'bg-blue-50 font-bold' : '')}">
                 <td class="border border-slate-300 p-2.5 text-center">${idx + 1}</td>
                 <td class="border border-slate-300 p-2.5">${c.name}</td>
-                <td class="border border-slate-300 p-2.5">${c.title} (${c.department})</td>
+                <td class="border border-slate-300 p-2.5">${c.title} (${c.group || 'Guest Contact'})</td>
                 <td class="border border-slate-300 p-2.5 text-center">${counts[c.id]} صوت</td>
                 <td class="border border-slate-300 p-2.5 text-center">
                   ${isWinner1 ? '<span class="text-amber-700 font-black">🏆 الفائز بالمركز الأول</span>' : ''}
@@ -1247,20 +1340,21 @@
         if (btnC) btnC.className = "px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all";
 
         let html = `
-          <div class="mb-3 font-black text-slate-800 text-sm">قائمة المرشحين الرسمية الحالية</div>
+          <div class="mb-3 font-black text-slate-800 text-sm">قائمة المرشحين الرسمية الحالية ومجموعاتهم</div>
           <table class="w-full text-right text-xs border-collapse border border-slate-300">
             <thead>
               <tr class="bg-slate-100 text-slate-700">
                 <th class="border border-slate-300 p-2.5">#</th>
                 <th class="border border-slate-300 p-2.5">اسم المرشح</th>
                 <th class="border border-slate-300 p-2.5">المسمى الوظيفي</th>
-                <th class="border border-slate-300 p-2.5">القسم / الإدارة</th>
+                <th class="border border-slate-300 p-2.5">القسم</th>
+                <th class="border border-slate-300 p-2.5">المجموعة</th>
               </tr>
             </thead>
             <tbody>
         `;
         if (defaultCandidates.length === 0) {
-          html += `<tr><td colspan="4" class="p-4 text-center text-slate-400">لا توجد مرشحين مضافين</td></tr>`;
+          html += `<tr><td colspan="5" class="p-4 text-center text-slate-400">لا توجد مرشحين مضافين</td></tr>`;
         } else {
           defaultCandidates.forEach((c, idx) => {
             html += `
@@ -1269,6 +1363,7 @@
                 <td class="border border-slate-300 p-2.5 font-bold">${c.name}</td>
                 <td class="border border-slate-300 p-2.5">${c.title}</td>
                 <td class="border border-slate-300 p-2.5">${c.department}</td>
+                <td class="border border-slate-300 p-2.5 font-bold">${c.group || 'Guest Contact'}</td>
               </tr>
             `;
           });
@@ -1296,7 +1391,7 @@
                     <tr class="bg-slate-100 text-slate-700">
                       <th class="border border-slate-300 p-2">المركز</th>
                       <th class="border border-slate-300 p-2">اسم الفائز</th>
-                      <th class="border border-slate-300 p-2">المسمى الوظيفي</th>
+                      <th class="border border-slate-300 p-2">المسمى والمجموعة</th>
                       <th class="border border-slate-300 p-2 text-center">الأصوات</th>
                     </tr>
                   </thead>
@@ -1308,7 +1403,7 @@
                   <tr>
                     <td class="border border-slate-300 p-2 text-center">${wIdx === 0 ? '🏆 الأول' : '🥈 الثاني'}</td>
                     <td class="border border-slate-300 p-2 font-bold">${w.name}</td>
-                    <td class="border border-slate-300 p-2">${w.title} (${w.department})</td>
+                    <td class="border border-slate-300 p-2">${w.title} (${w.group || 'Guest Contact'})</td>
                     <td class="border border-slate-300 p-2 text-center">${w.votes} صوت</td>
                   </tr>
                 `;
@@ -1376,7 +1471,7 @@
                       </span>
                       <div>
                         <p class="font-black text-slate-900">${w.name}</p>
-                        <p class="text-[10px] text-slate-500">${w.title}</p>
+                        <p class="text-[10px] text-slate-500">${w.title} (${w.group || 'Guest Contact'})</p>
                       </div>
                     </div>
                     <span class="font-black text-gold-700">${w.votes} صوت</span>
@@ -1409,12 +1504,14 @@
           document.getElementById('candName').value = c.name;
           document.getElementById('candTitle').value = c.title;
           document.getElementById('candDept').value = c.department;
+          document.getElementById('candGroup').value = c.group || 'Guest Contact';
           document.getElementById('candidateModalTitle').textContent = "تعديل بيانات المرشح";
         }
       } else {
         const form = document.getElementById('candidateForm');
         if (form) form.reset();
         document.getElementById('candEditId').value = '';
+        document.getElementById('candGroup').value = 'Guest Contact';
         document.getElementById('candidateModalTitle').textContent = "إضافة مرشح جديد";
       }
     }
@@ -1430,15 +1527,16 @@
       const name = document.getElementById('candName').value;
       const title = document.getElementById('candTitle').value;
       const department = document.getElementById('candDept').value;
+      const group = document.getElementById('candGroup').value;
 
       if (id) {
         const idx = defaultCandidates.findIndex(c => c.id === id);
         if (idx > -1) {
-          defaultCandidates[idx] = { id, name, title, department };
+          defaultCandidates[idx] = { id, name, title, department, group };
         }
       } else {
         const newId = 'C' + Date.now().toString().slice(-4);
-        defaultCandidates.push({ id: newId, name, title, department });
+        defaultCandidates.push({ id: newId, name, title, department, group });
       }
 
       saveDataLocally();
@@ -1586,6 +1684,7 @@
           name: c.name,
           title: c.title,
           department: c.department,
+          group: c.group || 'Guest Contact',
           votes: counts[c.id]
         }));
 
@@ -1595,7 +1694,7 @@
           totalVoters: defaultManagers.filter(m => m.hasVoted || votesList.some(v => v.managerId === m.id)).length,
           totalManagers: defaultManagers.length,
           topWinners: topWinnersList,
-          fullResults: sorted.map(c => ({ name: c.name, title: c.title, department: c.department, votes: counts[c.id] }))
+          fullResults: sorted.map(c => ({ name: c.name, title: c.title, department: c.department, group: c.group || 'Guest Contact', votes: counts[c.id] }))
         };
 
         monthlyArchive.push(archiveCardData);
@@ -1649,7 +1748,6 @@
               monthlyArchive = data.monthlyArchive;
             }
             
-            // جعل القائمة القادمة من جوجل شيت هي الأساس المعتمد (ليعمل الحذف والتعديل فورياً)
             if (data.managers && Array.isArray(data.managers) && data.managers.length > 0) {
               let remoteMgrs = data.managers.filter(m => m.id !== '1679');
               remoteMgrs.forEach(sm => {
@@ -1659,6 +1757,9 @@
             }
 
             if (data.candidates && Array.isArray(data.candidates)) {
+              data.candidates.forEach(c => {
+                if (!c.group) c.group = 'Guest Contact';
+              });
               defaultCandidates = data.candidates;
             }
 
