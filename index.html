@@ -588,7 +588,8 @@
 
   <!-- App Javascript Implementation Logic -->
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYFUCz9tYNkLyk2UIE__28evZV8YpudcHFbSwRn-QNcLNZOqM9RLwaq7shxnrgOavWwg/exec";
+    // تم تحديث رابط السكربت بالرابط الجديد بدقة
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybaj29bORnFklXhnSRQSQjSYW08Y_YqKcSmkdgr7NTgCKtADXbZftNEf0ybuBT8UcWiw/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
     const SUB_ADMINS = [
@@ -659,7 +660,6 @@
       }
 
       let parsedCands = storedCands ? JSON.parse(storedCands) : [];
-      // التأكد من وجود خاصية المجموعة لكل مرشح قديم مسجل مسبقاً
       parsedCands.forEach(c => {
         if (!c.group) c.group = 'Guest Contact';
       });
@@ -1028,7 +1028,6 @@
       if (badge) badge.textContent = count;
 
       const submitBtn = document.getElementById('submitVoteBtn');
-      // شرط فعال ومستوفي: مرشح من Guest Contact ومرشح من Non Guest Contact
       if (submitBtn) {
         submitBtn.disabled = (!selectedGuestId || !selectedNonGuestId || !isVotingOpen);
       }
