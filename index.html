@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منظومة اختيار العامل المثالي - صن رايز مونتماري</title>
+  <title>اختيار العامل المثالي - صن رايز مونتماري</title>
   
   <!-- Fonts & Core Libraries -->
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -71,7 +71,7 @@
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-xl sm:text-2xl font-black tracking-tight">منظومة اختيار العامل المثالي</h1>
+              <h1 class="text-xl sm:text-2xl font-black tracking-tight">اختيار العامل المثالي</h1>
               <span class="px-2.5 py-0.5 bg-brand-500/20 text-brand-400 border border-brand-500/30 rounded-full text-xs font-bold">صن رايز مونتماري</span>
             </div>
             <p class="text-xs sm:text-sm text-slate-400 font-bold flex items-center gap-2 mt-0.5">
@@ -111,8 +111,8 @@
           <i data-lucide="hotel" class="w-4 h-4"></i>
           <span>SUNRISE Montemare Resort - HR Portal</span>
         </div>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900">مرحباً بكم في منظومة العامل المثالي</h2>
-        <p class="text-slate-500 text-base max-w-lg mx-auto font-semibold">يرجى تحديد بوابة الدخول المناسبة للمتابعة</p>
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900">مرحباً بكم في نظام اختيار العامل المثالي</h2>
+        <p class="text-slate-500 text-base max-w-lg mx-auto font-semibold">يرجى تسجيل الدخول حسب صففتك للمتابعة</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -122,18 +122,18 @@
             <div class="w-16 h-16 bg-blue-50 text-brand-600 rounded-2xl flex items-center justify-center">
               <i data-lucide="vote" class="w-8 h-8"></i>
             </div>
-            <h3 class="text-2xl font-black text-slate-900">بوابة تصويت المدراء</h3>
-            <p class="text-sm text-slate-500 font-semibold leading-relaxed">خاصة بمدراء الإدارات المعتمدين لتسجيل الأصوات واختيار المرشحين عن هذا الشهر.</p>
+            <h3 class="text-2xl font-black text-slate-900">تسجيل دخول المدراء</h3>
+            <p class="text-sm text-slate-500 font-semibold leading-relaxed">خاص بمدراء الإدارات المعتمدين لتسجيل الأصوات واختيار المرشحين عن هذا الشهر.</p>
           </div>
 
           <form onsubmit="handleManagerLogin(event)" class="space-y-4 pt-2">
             <div>
-              <label class="block text-sm font-bold text-slate-700 mb-2">الرقم الوظيفي (Manager ID)</label>
-              <input type="text" id="mgrLoginId" required placeholder="أدخل الرقم الوظيفي (مثال: 3030)"
+              <label class="block text-sm font-bold text-slate-700 mb-2">الرقم الوظيفي</label>
+              <input type="text" id="mgrLoginId" required placeholder="أدخل الرقم الوظيفي الخاص بك (مثل: 3030)"
                      class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-base font-bold">
             </div>
             <button type="submit" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-black text-base rounded-2xl shadow-lg shadow-brand-500/25 transition-all flex items-center justify-center gap-2">
-              <span>دخول بوابة التصويت</span>
+              <span>دخول صفحة التصويت</span>
               <i data-lucide="arrow-left" class="w-5 h-5"></i>
             </button>
           </form>
@@ -145,18 +145,18 @@
             <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center">
               <i data-lucide="shield-check" class="w-8 h-8"></i>
             </div>
-            <h3 class="text-2xl font-black text-slate-900">بوابة الإدارة و HR</h3>
-            <p class="text-sm text-slate-500 font-semibold leading-relaxed">خاصة بالسوبر أدمن ومسؤولي الموارد البشرية لإدارة المنظومة واستخراج التقارير وإغلاق التصويت.</p>
+            <h3 class="text-2xl font-black text-slate-900">إدارة الموارد البشرية والأدمن</h3>
+            <p class="text-sm text-slate-500 font-semibold leading-relaxed">خاص بالسوبر أدمن ومسؤولي الموارد البشرية لإدارة القوائم واستخراج التقارير وإغلاق التصويت.</p>
           </div>
 
           <form onsubmit="handleAdminLogin(event)" class="space-y-4 pt-2">
             <div>
-              <label class="block text-sm font-bold text-slate-700 mb-1.5">اسم المستخدم (Admin Username)</label>
-              <input type="text" id="adminLoginId" required placeholder="OMAR / Amr.Ragab / ..."
+              <label class="block text-sm font-bold text-slate-700 mb-1.5">اسم المستخدم</label>
+              <input type="text" id="adminLoginId" required placeholder="أدخل اسم المستخدم (مثل: OMAR)"
                      class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-bold">
             </div>
             <div>
-              <label class="block text-sm font-bold text-slate-700 mb-1.5">كلمة المرور (Password)</label>
+              <label class="block text-sm font-bold text-slate-700 mb-1.5">كلمة المرور</label>
               <input type="password" id="adminPassword" required placeholder="••••••••"
                      class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-bold">
             </div>
@@ -202,7 +202,7 @@
         ⚠️ تنبيه: تم إغلاق التصويت رسمياً لهذا الشهر من قِبل الإدارة. يمكنك الآن الاطلاع على نتائج التصويت النهائية.
       </div>
 
-      <!-- Candidates Grid List / Or Results View if Voting Closed -->
+      <!-- Candidates Grid List -->
       <div id="candidatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
@@ -238,6 +238,10 @@
           </button>
 
           <div id="superAdminActions" class="hidden flex items-center gap-3">
+            <button onclick="resetAndReopenVoting()" class="px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm" title="فتح التصويت من جديد وتصفير الأصوات">
+              <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+              <span>إعادة التصويت والتصفير</span>
+            </button>
             <button onclick="openNewMonthModal()" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
               <i data-lucide="calendar-plus" class="w-5 h-5"></i>
               <span>شهر تصويت جديد</span>
@@ -395,9 +399,7 @@
       </div>
 
       <!-- Report Dynamic Content -->
-      <div id="reportContentContainer" class="space-y-4">
-        <!-- Rendered via JS -->
-      </div>
+      <div id="reportContentContainer" class="space-y-4"></div>
 
       <!-- Official Signatures Section -->
       <div class="pt-8 grid grid-cols-2 gap-8 border-t border-slate-200 mt-8 text-center">
@@ -429,7 +431,7 @@
       <p class="text-sm text-slate-500 font-semibold">سيتم حفظ الدورة الحالية وتصفير أصوات المدراء وفتح دورة جديدة بالكامل.</p>
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1.5">اسم الشهر والدورة الجديد</label>
-        <input type="text" id="newMonthInput" placeholder="مثال: نوفمبر 2026" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-base font-bold outline-none focus:ring-2 focus:ring-emerald-500">
+        <input type="text" id="newMonthInput" placeholder="أدخل اسم الشهر الجديد (مثل: نوفمبر 2026)" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-base font-bold outline-none focus:ring-2 focus:ring-emerald-500">
       </div>
       <div class="flex justify-end gap-3 pt-2">
         <button onclick="closeNewMonthModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
@@ -468,7 +470,7 @@
       <h3 id="managerModalTitle" class="text-lg font-black text-slate-900">إضافة مدير جديد</h3>
       <form id="managerForm" onsubmit="handleManagerSubmit(event)" class="space-y-4">
         <div>
-          <label class="block text-sm font-bold text-slate-700 mb-1.5">الرقم الوظيفي (ID)</label>
+          <label class="block text-sm font-bold text-slate-700 mb-1.5">الرقم الوظيفي</label>
           <input type="text" id="mgrId" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-brand-500">
         </div>
         <div>
@@ -514,7 +516,7 @@
     let selectedCandidateIds = [];
     let chartInstance = null;
     let currentCycleMonth = "أكتوبر 2026";
-    let isVotingOpen = true; // Voting toggle state
+    let isVotingOpen = true;
 
     let defaultManagers = [
       { id: '3030', name: 'Hossam Ephram Saba Malak', title: 'General Manager', isBlocked: false, hasVoted: false },
@@ -611,7 +613,20 @@
       }
     }
 
-    // Portal Login Handler Functions
+    // Super Admin: Reset and Reopen Voting
+    function resetAndReopenVoting() {
+      if (confirm("تنبيه: هل أنت متأكد من إعادة فتح التصويت وتصفير جميع الأصوات الحالية للبدء من جديد؟")) {
+        votesList = [];
+        defaultManagers.forEach(m => m.hasVoted = false);
+        isVotingOpen = true;
+        saveDataLocally();
+        updateVotingStatusUI();
+        sendApiRequest({ action: "RESET_VOTES" });
+        renderAdminView();
+        alert("تمت إعادة فتح التصويت وتصفير الأصوات بنجاح.");
+      }
+    }
+
     function handleManagerLogin(e) {
       e.preventDefault();
       const idInput = document.getElementById('mgrLoginId').value.trim();
@@ -620,7 +635,7 @@
       const manager = defaultManagers.find(m => m.id === idInput);
       if (manager) {
         if (manager.isBlocked) {
-          showLoginError('تم حجب هذا الحساب من قِبل إدارة المنظومة.');
+          showLoginError('تم حجب هذا الحساب من قِبل إدارة الفندق.');
           return;
         }
         currentSessionUser = { role: 'MANAGER', ...manager };
@@ -692,7 +707,6 @@
           showSection('votingSection');
           renderVotingView();
         } else {
-          // If admin or HR
           showSection('adminDashboard');
           renderAdminView();
         }
@@ -736,7 +750,6 @@
       const actionContainer = document.getElementById('votingActionContainer');
       const instructionTxt = document.getElementById('votingInstructionText');
 
-      // Tally Votes
       const counts = {};
       defaultCandidates.forEach(c => counts[c.id] = 0);
       votesList.forEach(v => {
@@ -779,7 +792,6 @@
         return;
       }
 
-      // Voting is open
       closedBanner.classList.add('hidden');
       actionContainer.classList.remove('hidden');
       instructionTxt.textContent = "اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.";
@@ -826,7 +838,7 @@
         selectedCandidateIds = selectedCandidateIds.filter(id => id !== candId);
       } else {
         if (selectedCandidateIds.length >= 2) {
-          alert("يمكنك كمدير اختيار (2) مرشحين فقط كحد أقصى.");
+          alert("يمكنك اختيار (2) مرشحين فقط كحد أقصى.");
           return;
         }
         selectedCandidateIds.push(candId);
@@ -871,7 +883,7 @@
         c2: voteData.candidate2
       });
 
-      alert("تم إرسال وحفظ صوتك بنجاح في المنظومة!");
+      alert("تم إرسال وحفظ صوتك بنجاح!");
       renderVotingView();
     }
 
@@ -1038,7 +1050,6 @@
       lucide.createIcons();
     }
 
-    // Reports Generation & Modal Logic
     let currentReportMode = 'voting';
 
     function openReportModal() {
@@ -1061,7 +1072,6 @@
         btnV.className = "px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-bold transition-all";
         btnC.className = "px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200";
 
-        // Tally votes
         const counts = {};
         defaultCandidates.forEach(c => counts[c.id] = 0);
         votesList.forEach(v => {
@@ -1240,14 +1250,13 @@
         return;
       }
 
-      if (confirm(`تأكيد: هل تريد إنهاء تصويت شهر (${currentCycleMonth}) وبدء تصويت جديد لشهر (${newMonthVal})؟`)) {
+      if (confirm(`تأكيد: هل تريد إنهاء تصويت شهر (${currentCycleMonth}) وبدء شهر جديد باسم (${newMonthVal})؟`)) {
         currentCycleMonth = newMonthVal;
         document.getElementById('monthTextDisplay').textContent = "تصويت شهر " + currentCycleMonth;
         
-        // Reset Votes
         votesList = [];
         defaultManagers.forEach(m => m.hasVoted = false);
-        isVotingOpen = true; // Open voting for new cycle
+        isVotingOpen = true;
         saveDataLocally();
         updateVotingStatusUI();
         sendApiRequest({ action: "RESET_VOTES" });
