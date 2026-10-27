@@ -83,7 +83,7 @@
             </div>
             <p class="text-xs sm:text-sm text-slate-400 font-bold flex items-center gap-2 mt-0.5">
               <span id="votingStatusIndicator" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span id="monthTextDisplay">تصويت شهر أكتوبر 2026</span>
+              <span id="monthTextDisplay">جاري تحميل الشهر...</span>
               <span id="votingStatusText" class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[10px]">التصويت مفتوح</span>
             </p>
           </div>
@@ -136,7 +136,7 @@
           <form onsubmit="handleManagerLogin(event)" class="space-y-4 pt-2">
             <div>
               <label class="block text-sm font-bold text-slate-700 mb-2">الرقم الوظيفي</label>
-              <input type="text" id="mgrLoginId" required placeholder="أدخل الرقم الوظيفي الخاص بك (مثل: 3030)"
+              <input type="text" id="mgrLoginId" required placeholder="أدخل الرقم الوظيفي الخاص بك"
                      class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-gold-500 focus:bg-white outline-none transition-all text-base font-bold">
             </div>
             <button type="submit" class="w-full py-4 bg-gold-600 hover:bg-gold-700 text-slate-900 font-black text-base rounded-2xl shadow-lg shadow-gold-500/20 transition-all flex items-center justify-center gap-2">
@@ -398,7 +398,7 @@
           <span class="text-xl font-black text-slate-900">SUNRISE Grand Select Montemare Resort</span>
         </div>
         <h2 class="text-2xl font-black text-slate-900">تقرير نتائج انتخاب العامل المثالي</h2>
-        <p id="reportMonthSubtitle" class="text-sm text-slate-500 font-bold">دورة شهر أكتوبر 2026</p>
+        <p id="reportMonthSubtitle" class="text-sm text-slate-500 font-bold">دورة الشهر الحالي</p>
       </div>
 
       <!-- Report Body Selection Type -->
@@ -435,22 +435,64 @@
     </div>
   </div>
 
-  <!-- Other Modals -->
-  <div id="newMonthModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
-      <h3 class="text-xl font-black text-slate-900">بدء شهر تصويت جديد وأرشفة الشهر الحالي</h3>
-      <p class="text-sm text-slate-500 font-semibold">سيتم حفظ نتائج الشهر الحالي في الأرشيف التاريخي، وتصفير الأصوات وبدء دورة جديدة.</p>
-      <div>
-        <label class="block text-sm font-bold text-slate-700 mb-1.5">اسم الشهر والدورة الجديد</label>
-        <input type="text" id="newMonthInput" placeholder="أدخل اسم الشهر الجديد (مثل: نوفمبر 2026)" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-base font-bold outline-none focus:ring-2 focus:ring-gold-500">
+  <!-- New Month & Archive Modal -->
+  <div id="newMonthModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+        <div class="p-3 bg-gold-50 text-gold-700 rounded-2xl border border-gold-200">
+          <i data-lucide="calendar-plus" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-black text-slate-900">بدء شهر تصويت جديد وأرشفة الشهر الحالي</h3>
+          <p class="text-xs text-slate-500 font-semibold mt-0.5">سيتم حفظ الشهر الحالي كبطاقة مستقلة في الأرشيف وتصفير الأصوات.</p>
+        </div>
       </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-2">اختر الشهر</label>
+          <select id="selectMonthName" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-gold-500">
+            <option value="يناير">يناير (January)</option>
+            <option value="فبراير">فبراير (February)</option>
+            <option value="مارس">مارس (March)</option>
+            <option value="أبريل">أبريل (April)</option>
+            <option value="مايو">مايو (May)</option>
+            <option value="يونيو">يونيو (June)</option>
+            <option value="يوليو">يوليو (July)</option>
+            <option value="أغسطس">أغسطس (August)</option>
+            <option value="سبتمبر">سبتمبر (September)</option>
+            <option value="أكتوبر" selected>أكتوبر (October)</option>
+            <option value="نوفمبر">نوفمبر (November)</option>
+            <option value="ديسمبر">ديسمبر (December)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-2">السنة</label>
+          <select id="selectYearValue" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-gold-500">
+            <option value="2026" selected>2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-amber-800 text-xs font-bold leading-relaxed">
+        ⚠️ تنبيه هام: عند الضغط على تأكيد، سيتم نقل نتائج الشهر الحالي <b><span id="currentMonthBadgeText">الشهر الحالي</span></b> للأرشيف التاريخي كبطاقة منفصلة، وفتح دورة جديدة بالكامل.
+      </div>
+
       <div class="flex justify-end gap-3 pt-2">
-        <button onclick="closeNewMonthModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
-        <button onclick="confirmStartNewMonth()" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-sm font-bold">أرشفة وبدء الدورة</button>
+        <button onclick="closeNewMonthModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold hover:bg-slate-200 transition-all">إلغاء</button>
+        <button onclick="confirmStartNewMonth()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-sm font-black shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-2">
+          <i data-lucide="archive" class="w-4 h-4"></i>
+          <span>تأكيد الأرشفة وبدء الشهر الجديد</span>
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- Candidate Modal -->
   <div id="candidateModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
       <h3 id="candidateModalTitle" class="text-lg font-black text-slate-900">إضافة مرشح جديد</h3>
@@ -476,6 +518,7 @@
     </div>
   </div>
 
+  <!-- Manager Modal -->
   <div id="managerModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
       <h3 id="managerModalTitle" class="text-lg font-black text-slate-900">إضافة مدير جديد</h3>
@@ -511,9 +554,10 @@
     </div>
   </footer>
 
-  <!-- App Javascript Implementation Logic -->
+  <!-- App Javascript Implementation Logic with New URL -->
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgJfAwV4RdOo6eIQaDeMky-EPLb72U7Pk_SCPv0vWTuVzzsxS8ZYW3a9c2JWjz8C9f1g/exec";
+    // رابط السكربت المعتمد الجديد
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqsOGYP2eVJ8nkZw5HRNa0_I_4iF6xOY6nt_cNdULUiOzV5jW3mwwCkQ3z-FbYJp4NlQ/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
     const SUB_ADMINS = [
@@ -526,50 +570,22 @@
     let currentSessionUser = null;
     let selectedCandidateIds = [];
     let chartInstance = null;
-    let currentCycleMonth = "أكتوبر 2026";
+    let currentCycleMonth = ""; 
     let isVotingOpen = true;
-    let monthlyArchive = []; // تخزين أرشيف الشهور السابقة والسنوية
+    let monthlyArchive = [];
 
-    let initialManagers = [
-      { id: '3030', name: 'Hossam Ephram Saba Malak', title: 'General Manager', isBlocked: false, hasVoted: false },
-      { id: '2650', name: 'Mohamed Desouky Abd Elhalim Mohamed', title: 'Human Resources Manager', isBlocked: false, hasVoted: false },
-      { id: '1980', name: 'Mohamed Desouky', title: 'HR Admin', isBlocked: false, hasVoted: false },
-      { id: '2648', name: 'Hamdy Mohamed Mohamed Hassan El Alfy', title: 'Chief Engineer', isBlocked: false, hasVoted: false },
-      { id: '2244', name: 'Ahmed Abd Elmotty Ahmed Mohamed Elraay', title: 'Hotel Financial Controller', isBlocked: false, hasVoted: false },
-      { id: '2965', name: 'Khaled Mohy El Din Abd El Kader', title: 'Food & Beverage Manager', isBlocked: false, hasVoted: false },
-      { id: '3027', name: 'Mohamed Taher Alhgrsy Yousef Abd Alla', title: 'Executive Assistant General Manager', isBlocked: false, hasVoted: false },
-      { id: '2977', name: 'Mohamed Reda El Sayed', title: 'Executive Sous Chef', isBlocked: false, hasVoted: false },
-      { id: '1477', name: 'Hazem Khaled Mohamed Mohamed Elshebasy', title: 'Information & Technology Manager', isBlocked: false, hasVoted: false },
-      { id: '1679', name: 'Hany Hesham Abd El Halim Mohamed', title: 'Team Leader Software Developer', isBlocked: false, hasVoted: false },
-      { id: '1751', name: 'Mohamed Mahmoud Ibrahim Mahmoud Essawy', title: 'Security Manager', isBlocked: false, hasVoted: false },
-      { id: '2429', name: 'Mohamed Ibrahim Omran Hussain', title: 'Front Office Manager', isBlocked: false, hasVoted: false },
-      { id: '2474', name: 'Essam Ibrahim Mohamed El Anwar', title: 'Assistant Chief Engineer', isBlocked: false, hasVoted: false },
-      { id: '2607', name: 'Mahmoud Fattoh Zakry Abo El Dahab', title: 'Executive Housekeeper', isBlocked: false, hasVoted: false },
-      { id: '2651', name: 'Hamdi Abd Elmonaem Mohamed Abd Elmonaem', title: 'Recreation Manager', isBlocked: false, hasVoted: false },
-      { id: '2666', name: 'Omnia Hussein Yahya Hussein', title: 'Guest Experience Manager', isBlocked: false, hasVoted: false },
-      { id: '2789', name: 'Marwa Hamedalh El Wehidi Awad', title: 'Hygiene Manager', isBlocked: false, hasVoted: false },
-      { id: '2827', name: 'Rana Khaled Mohamed El Sayed Khedr', title: 'Administrative Assistant To General Manager', isBlocked: false, hasVoted: false },
-      { id: '3003', name: 'Monir Ali Megahed Senan', title: 'Spa Manager', isBlocked: false, hasVoted: false },
-      { id: '3004', name: 'Abd Elfatah Hamdi Abd Elfatah Ali', title: 'L&D Manager', isBlocked: false, hasVoted: false }
-    ];
-
-    let initialCandidates = [
-      { id: 'C1', name: 'محمود حسن', title: 'مشرف فندقي', department: 'الأغذية والمشروبات' },
-      { id: 'C2', name: 'سارة أحمد', title: 'مهندسة جودة', department: 'الجودة والتطوير' },
-      { id: 'C3', name: 'علي محمود', title: 'أخصائي دعم فني', department: 'تكنولوجيا المعلومات' },
-      { id: 'C4', name: 'منى فاروق', title: 'منسقة مبيعات', department: 'المبيعات' },
-      { id: 'C5', name: 'إبراهيم علي', title: 'مساعد مدير استقبال', department: 'المكاتب الأمامية' }
-    ];
-
+    // قوائم تبدأ فارغة تماماً ليتم إدخالها يدوياً من لوحة التحكم
     let defaultManagers = [];
     let defaultCandidates = [];
     let votesList = [];
 
     window.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
       loadStoredData();
       checkLoginStatus();
-      syncWithGoogleSheet();
+      if (SCRIPT_URL) {
+        syncWithGoogleSheet();
+      }
     });
 
     function loadStoredData() {
@@ -580,14 +596,17 @@
       const storedVotingStatus = localStorage.getItem('app_voting_open');
       const storedArchive = localStorage.getItem('app_monthly_archive');
 
-      defaultManagers = storedMgrs ? JSON.parse(storedMgrs) : [...initialManagers];
-      defaultCandidates = storedCands ? JSON.parse(storedCands) : [...initialCandidates];
+      defaultManagers = storedMgrs ? JSON.parse(storedMgrs) : [];
+      defaultCandidates = storedCands ? JSON.parse(storedCands) : [];
       votesList = storedVotes ? JSON.parse(storedVotes) : [];
       if (storedArchive) monthlyArchive = JSON.parse(storedArchive);
 
       if (storedMonth) {
         currentCycleMonth = storedMonth;
+      } else {
+        currentCycleMonth = prompt("يرجى إدخال اسم الشهر والدورة الحالية يدوياً (مثال: أكتوبر 2026):") || "أكتوبر 2026";
       }
+
       const monthDisplay = document.getElementById('monthTextDisplay');
       if (monthDisplay) {
         monthDisplay.textContent = "تصويت شهر " + currentCycleMonth;
@@ -795,6 +814,11 @@
         if (actionContainer) actionContainer.classList.add('hidden');
         if (instructionTxt) instructionTxt.textContent = "تم إغلاق التصويت. إليك نتائج الفائزين النهائية المعتمدة:";
 
+        if (sortedCandidates.length === 0) {
+          grid.innerHTML = `<div class="col-span-full text-center text-slate-500 py-8 font-bold">لا توجد مرشحين مضافين حالياً.</div>`;
+          return;
+        }
+
         sortedCandidates.forEach((c, idx) => {
           const isWinner1 = idx === 0 && counts[c.id] > 0;
           const isWinner2 = idx === 1 && counts[c.id] > 0;
@@ -820,13 +844,18 @@
           `;
           grid.appendChild(card);
         });
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
         return;
       }
 
       if (closedBanner) closedBanner.classList.add('hidden');
       if (actionContainer) actionContainer.classList.remove('hidden');
       if (instructionTxt) instructionTxt.textContent = "اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.";
+
+      if (defaultCandidates.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-slate-500 py-8 font-bold">لا توجد مرشحين مضافين حالياً. يرجى من الإدارة إضافة المرشحين.</div>`;
+        return;
+      }
 
       const existingVote = votesList.find(v => v.managerId === currentSessionUser.id);
       if (existingVote) {
@@ -858,7 +887,7 @@
         `;
         grid.appendChild(card);
       });
-      lucide.createIcons();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function toggleCandidateSelection(candId) {
@@ -985,27 +1014,31 @@
         if (statLeader) statLeader.textContent = "لا يوجد أصوات";
       }
 
-      sortedCandidates.forEach((c, idx) => {
-        const isWinner1 = idx === 0 && counts[c.id] > 0;
-        const isWinner2 = idx === 1 && counts[c.id] > 0;
-        const item = document.createElement('div');
-        item.className = `flex items-center justify-between p-4 rounded-2xl border ${isWinner1 ? 'bg-amber-50 border-amber-300' : (isWinner2 ? 'bg-blue-50 border-blue-300' : 'bg-slate-50 border-slate-200/60')}`;
-        item.innerHTML = `
-          <div class="flex items-center gap-3.5">
-            <span class="w-8 h-8 rounded-full ${idx === 0 ? 'bg-amber-500 text-white' : (idx === 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700')} flex items-center justify-center font-black text-sm">
-              ${idx + 1}
-            </span>
-            <div>
-              <p class="font-black text-slate-900 text-base">${c.name} ${isWinner1 ? '🏆 (المركز الأول)' : (isWinner2 ? '🥈 (المركز الثاني)' : '')}</p>
-              <p class="text-xs text-slate-500 font-semibold">${c.department}</p>
+      if (sortedCandidates.length === 0) {
+        leaderBoardContainer.innerHTML = `<p class="text-slate-400 text-xs text-center">لا توجد مرشحين مسجلين.</p>`;
+      } else {
+        sortedCandidates.forEach((c, idx) => {
+          const isWinner1 = idx === 0 && counts[c.id] > 0;
+          const isWinner2 = idx === 1 && counts[c.id] > 0;
+          const item = document.createElement('div');
+          item.className = `flex items-center justify-between p-4 rounded-2xl border ${isWinner1 ? 'bg-amber-50 border-amber-300' : (isWinner2 ? 'bg-blue-50 border-blue-300' : 'bg-slate-50 border-slate-200/60')}`;
+          item.innerHTML = `
+            <div class="flex items-center gap-3.5">
+              <span class="w-8 h-8 rounded-full ${idx === 0 ? 'bg-amber-500 text-white' : (idx === 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700')} flex items-center justify-center font-black text-sm">
+                ${idx + 1}
+              </span>
+              <div>
+                <p class="font-black text-slate-900 text-base">${c.name} ${isWinner1 ? '🏆 (المركز الأول)' : (isWinner2 ? '🥈 (المركز الثاني)' : '')}</p>
+                <p class="text-xs text-slate-500 font-semibold">${c.department}</p>
+              </div>
             </div>
-          </div>
-          <div class="px-4 py-1.5 bg-gold-50 text-gold-700 border border-gold-200 rounded-xl text-sm font-black">
-            ${counts[c.id]} صوت
-          </div>
-        `;
-        leaderBoardContainer.appendChild(item);
-      });
+            <div class="px-4 py-1.5 bg-gold-50 text-gold-700 border border-gold-200 rounded-xl text-sm font-black">
+              ${counts[c.id]} صوت
+            </div>
+          `;
+          leaderBoardContainer.appendChild(item);
+        });
+      }
 
       renderChart(sortedCandidates.map(c => c.name), sortedCandidates.map(c => counts[c.id]));
     }
@@ -1043,6 +1076,11 @@
       if (!tbody) return;
       tbody.innerHTML = '';
 
+      if (defaultManagers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">لا توجد مدراء مسجلين. قم بإضافة مدير جديد.</td></tr>`;
+        return;
+      }
+
       defaultManagers.forEach(m => {
         const hasVoted = m.hasVoted || votesList.some(v => v.managerId === m.id);
         const tr = document.createElement('tr');
@@ -1073,13 +1111,18 @@
         `;
         tbody.appendChild(tr);
       });
-      lucide.createIcons();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function renderCandidatesTable() {
       const tbody = document.getElementById('candidatesTableBody');
       if (!tbody) return;
       tbody.innerHTML = '';
+
+      if (defaultCandidates.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-bold">لا توجد مرشحين مسجلين. قم بإضافة مرشح جديد.</td></tr>`;
+        return;
+      }
 
       defaultCandidates.forEach(c => {
         const tr = document.createElement('tr');
@@ -1099,7 +1142,7 @@
         `;
         tbody.appendChild(tr);
       });
-      lucide.createIcons();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     let currentReportMode = 'voting';
@@ -1126,7 +1169,6 @@
       const container = document.getElementById('reportContentContainer');
       if (!container) return;
 
-      // Reset buttons style
       [btnV, btnC, btnY, btnA].forEach(b => {
         if(b) b.className = "px-4 py-2 bg-white text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200";
       });
@@ -1157,23 +1199,27 @@
             <tbody>
         `;
 
-        sorted.forEach((c, idx) => {
-          const isWinner1 = idx === 0 && counts[c.id] > 0;
-          const isWinner2 = idx === 1 && counts[c.id] > 0;
-          html += `
-            <tr class="${isWinner1 ? 'bg-amber-50 font-bold' : (isWinner2 ? 'bg-blue-50 font-bold' : '')}">
-              <td class="border border-slate-300 p-2.5 text-center">${idx + 1}</td>
-              <td class="border border-slate-300 p-2.5">${c.name}</td>
-              <td class="border border-slate-300 p-2.5">${c.title} (${c.department})</td>
-              <td class="border border-slate-300 p-2.5 text-center">${counts[c.id]} صوت</td>
-              <td class="border border-slate-300 p-2.5 text-center">
-                ${isWinner1 ? '<span class="text-amber-700 font-black">🏆 الفائز بالمركز الأول</span>' : ''}
-                ${isWinner2 ? '<span class="text-blue-700 font-black">🥈 الفائز بالمركز الثاني</span>' : ''}
-                ${!isWinner1 && !isWinner2 ? '<span class="text-slate-500">مرشح</span>' : ''}
-              </td>
-            </tr>
-          `;
-        });
+        if (sorted.length === 0) {
+          html += `<tr><td colspan="5" class="p-4 text-center text-slate-400">لا توجد مرشحين مضافين</td></tr>`;
+        } else {
+          sorted.forEach((c, idx) => {
+            const isWinner1 = idx === 0 && counts[c.id] > 0;
+            const isWinner2 = idx === 1 && counts[c.id] > 0;
+            html += `
+              <tr class="${isWinner1 ? 'bg-amber-50 font-bold' : (isWinner2 ? 'bg-blue-50 font-bold' : '')}">
+                <td class="border border-slate-300 p-2.5 text-center">${idx + 1}</td>
+                <td class="border border-slate-300 p-2.5">${c.name}</td>
+                <td class="border border-slate-300 p-2.5">${c.title} (${c.department})</td>
+                <td class="border border-slate-300 p-2.5 text-center">${counts[c.id]} صوت</td>
+                <td class="border border-slate-300 p-2.5 text-center">
+                  ${isWinner1 ? '<span class="text-amber-700 font-black">🏆 الفائز بالمركز الأول</span>' : ''}
+                  ${isWinner2 ? '<span class="text-blue-700 font-black">🥈 الفائز بالمركز الثاني</span>' : ''}
+                  ${!isWinner1 && !isWinner2 ? '<span class="text-slate-500">مرشح</span>' : ''}
+                </td>
+              </tr>
+            `;
+          });
+        }
         html += `</tbody></table>`;
         container.innerHTML = html;
 
@@ -1193,16 +1239,20 @@
             </thead>
             <tbody>
         `;
-        defaultCandidates.forEach((c, idx) => {
-          html += `
-            <tr>
-              <td class="border border-slate-300 p-2.5 text-center">${idx + 1}</td>
-              <td class="border border-slate-300 p-2.5 font-bold">${c.name}</td>
-              <td class="border border-slate-300 p-2.5">${c.title}</td>
-              <td class="border border-slate-300 p-2.5">${c.department}</td>
-            </tr>
-          `;
-        });
+        if (defaultCandidates.length === 0) {
+          html += `<tr><td colspan="4" class="p-4 text-center text-slate-400">لا توجد مرشحين مضافين</td></tr>`;
+        } else {
+          defaultCandidates.forEach((c, idx) => {
+            html += `
+              <tr>
+                <td class="border border-slate-300 p-2.5 text-center">${idx + 1}</td>
+                <td class="border border-slate-300 p-2.5 font-bold">${c.name}</td>
+                <td class="border border-slate-300 p-2.5">${c.title}</td>
+                <td class="border border-slate-300 p-2.5">${c.department}</td>
+              </tr>
+            `;
+          });
+        }
         html += `</tbody></table>`;
         container.innerHTML = html;
 
@@ -1255,18 +1305,75 @@
       } else if (type === 'archive') {
         if (btnA) btnA.className = "px-4 py-2 bg-gold-600 text-slate-900 font-bold rounded-xl text-xs transition-all";
 
-        let html = `<div class="mb-3 font-black text-slate-800 text-sm">أرشيف دورات الشهور السابقة</div>`;
+        let html = `
+          <div class="mb-4 space-y-1">
+            <h3 class="font-black text-slate-900 text-base">أرشيف الشهور والبطاقات التاريخية المستقلة</h3>
+            <p class="text-xs text-slate-500 font-semibold">استعراض كافة نتائج دورات الشهور السابقة المحفوظة بأمان في كروت منفصلة.</p>
+          </div>
+        `;
+
         if (monthlyArchive.length === 0) {
-          html += `<p class="text-slate-500 text-sm text-center py-6">لا توجد شهور مؤرشفة بعد.</p>`;
+          html += `<div class="p-12 text-center bg-slate-50 rounded-3xl border border-slate-200 text-slate-400 font-bold text-sm">لا توجد شهور مؤرشفة حتى الآن.</div>`;
         } else {
-          monthlyArchive.forEach(arch => {
+          html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">`;
+          monthlyArchive.forEach((arch, index) => {
             html += `
-              <div class="p-4 border border-slate-200 rounded-2xl bg-slate-50 mb-4">
-                <h4 class="font-black text-slate-900 mb-2">شهر: ${arch.monthName} (إجمالي المصوتين: ${arch.totalVoters})</h4>
-                <p class="text-xs text-slate-600">تمت الأرشفة بنجاح وحفظ النتائج الرسمية.</p>
+              <div class="glass-card rounded-3xl p-6 border border-gold-200/60 shadow-sm space-y-4 relative overflow-hidden bg-gradient-to-br from-white to-gold-50/20">
+                <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+                  <div>
+                    <span class="px-3 py-1 bg-gold-100 text-gold-800 rounded-xl text-xs font-black">الدورة رقم #${index + 1}</span>
+                    <h4 class="font-black text-slate-900 text-lg mt-1.5">شهر: ${arch.monthName}</h4>
+                  </div>
+                  <span class="text-xs text-slate-400 font-bold">تاريخ الأرشفة: ${arch.archivedAt || 'معتمد'}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-2xl border border-slate-200/50">
+                  <div>
+                    <span class="text-slate-500 font-semibold">إجمالي المصوتين:</span>
+                    <span class="font-black text-slate-900 mr-1">${arch.totalVoters} / ${arch.totalManagers}</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-500 font-semibold">حالة الدورة:</span>
+                    <span class="font-black text-emerald-600 mr-1">مؤرشفة ومعتمدة</span>
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <p class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+                    <i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i>
+                    <span>الفائزون الرسميون للشهر:</span>
+                  </p>
+                  <div class="space-y-2">
+            `;
+
+            if (arch.topWinners && arch.topWinners.length > 0) {
+              arch.topWinners.forEach((w, wIdx) => {
+                html += `
+                  <div class="flex items-center justify-between p-2.5 rounded-xl ${wIdx === 0 ? 'bg-amber-50/80 border border-amber-200' : 'bg-blue-50/80 border border-blue-200'} text-xs">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full ${wIdx === 0 ? 'bg-amber-500 text-white' : 'bg-blue-600 text-white'} flex items-center justify-center font-black text-[10px]">
+                        ${wIdx === 0 ? '1' : '2'}
+                      </span>
+                      <div>
+                        <p class="font-black text-slate-900">${w.name}</p>
+                        <p class="text-[10px] text-slate-500">${w.title}</p>
+                      </div>
+                    </div>
+                    <span class="font-black text-gold-700">${w.votes} صوت</span>
+                  </div>
+                `;
+              });
+            } else {
+              html += `<p class="text-xs text-slate-400 p-2">لا توجد بيانات فائزين مسجلة.</p>`;
+            }
+
+            html += `
+                  </div>
+                </div>
               </div>
             `;
           });
+          html += `</div>`;
         }
         container.innerHTML = html;
       }
@@ -1384,10 +1491,11 @@
     }
 
     function openNewMonthModal() {
+      const badgeText = document.getElementById('currentMonthBadgeText');
+      if (badgeText) badgeText.textContent = currentCycleMonth;
       const modal = document.getElementById('newMonthModal');
       if (modal) modal.classList.remove('hidden');
-      const input = document.getElementById('newMonthInput');
-      if (input) input.value = '';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function closeNewMonthModal() {
@@ -1396,15 +1504,24 @@
     }
 
     function confirmStartNewMonth() {
-      const input = document.getElementById('newMonthInput');
-      const newMonthVal = input ? input.value.trim() : '';
-      if (!newMonthVal) {
-        alert("يرجى إدخال اسم الشهر الجديد!");
+      const monthSelect = document.getElementById('selectMonthName');
+      const yearSelect = document.getElementById('selectYearValue');
+      
+      if (!monthSelect || !yearSelect) {
+        alert("يرجى التأكد من اختيار الشهر والسنة!");
         return;
       }
 
-      if (confirm(`تأكيد: هل تريد أرشفة نتائج شهر (${currentCycleMonth}) وبدء دورة شهر جديد (${newMonthVal})؟`)) {
-        // حساب وتخزين أعلى اثنين فائزين في الأرشيف قبل التصفير
+      const monthName = monthSelect.value;
+      const yearVal = yearSelect.value;
+      const newMonthFull = `${monthName} ${yearVal}`;
+
+      if (newMonthFull === currentCycleMonth) {
+        alert("الشهر الجديد المطابق هو نفس الشهر الحالي!");
+        return;
+      }
+
+      if (confirm(`تأكيد نهائي: هل تريد أرشفة نتائج شهر (${currentCycleMonth}) في كارت مستقل وبدء دورة شهر (${newMonthFull})؟`)) {
         const counts = {};
         defaultCandidates.forEach(c => counts[c.id] = 0);
         votesList.forEach(v => {
@@ -1412,36 +1529,44 @@
           if (v.candidate2 && counts[v.candidate2] !== undefined) counts[v.candidate2]++;
         });
         const sorted = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
-        const top2 = sorted.slice(0, 2).map(c => ({
+        const topWinnersList = sorted.slice(0, 2).map(c => ({
           name: c.name,
           title: c.title,
           department: c.department,
           votes: counts[c.id]
         }));
 
-        monthlyArchive.push({
+        const archiveCardData = {
           monthName: currentCycleMonth,
+          archivedAt: new Date().toLocaleDateString('ar-EG'),
           totalVoters: defaultManagers.filter(m => m.hasVoted || votesList.some(v => v.managerId === m.id)).length,
-          topWinners: top2
-        });
+          totalManagers: defaultManagers.length,
+          topWinners: topWinnersList,
+          fullResults: sorted.map(c => ({ name: c.name, title: c.title, department: c.department, votes: counts[c.id] }))
+        };
 
-        currentCycleMonth = newMonthVal;
+        monthlyArchive.push(archiveCardData);
+
+        currentCycleMonth = newMonthFull;
         const monthDisplay = document.getElementById('monthTextDisplay');
         if (monthDisplay) monthDisplay.textContent = "تصويت شهر " + currentCycleMonth;
         
         votesList = [];
         defaultManagers.forEach(m => m.hasVoted = false);
         isVotingOpen = true;
+
         saveDataLocally();
         updateVotingStatusUI();
-        sendApiRequest({ action: "RESET_VOTES" });
+        sendApiRequest({ action: "RESET_VOTES", archive: monthlyArchive, newMonth: currentCycleMonth });
+        
         closeNewMonthModal();
         renderAdminView();
-        alert("تمت أرشفة الشهر السابق وبدء دورة التصويت للشهر الجديد بنجاح!");
+        alert(`تمت أرشفة (${archiveCardData.monthName}) بنجاح في بطاقة مستقلة، وبدء دورة ${currentCycleMonth}!`);
       }
     }
 
     function sendApiRequest(payload) {
+      if (!SCRIPT_URL) return;
       fetch(SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
@@ -1451,6 +1576,7 @@
     }
 
     function syncWithGoogleSheet() {
+      if (!SCRIPT_URL) return;
       fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
