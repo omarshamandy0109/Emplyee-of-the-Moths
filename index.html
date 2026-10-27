@@ -589,7 +589,7 @@
   <!-- App Javascript Implementation Logic -->
   <script>
     // تم ربط السكربت بالرابط الجديد الخاص بك بدقة
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR5j0Eovzeo_t8QIPi2hINZtm_azJPtDYq-IH8xXuMwqAKK06eqRr--lNnCxeh6uR-Ow/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZpXyuqlFZhymg2maSaputf-8WgGAFrifvSSAxpuMgMAM2hifvUaYbIO4zfOAp0PevsQ/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
     const SUB_ADMINS = [
@@ -707,7 +707,7 @@
       const idInput = document.getElementById('mgrLoginId').value.trim();
       hideError();
 
-      const manager = defaultManagers.find(m => m.id === idInput);
+      const manager = defaultManagers.find(m => String(m.id).trim() === idInput);
       if (manager) {
         if (manager.isBlocked) {
           showLoginError('تم حجب هذا الحساب من قِبل إدارة الفندق.');
@@ -865,7 +865,7 @@
           card.innerHTML = `
             <div class="flex items-start justify-between">
               <div class="w-14 h-14 rounded-2xl bg-gold-50 text-gold-700 border border-gold-200 font-black flex items-center justify-center text-2xl shadow-sm">
-                ${c.name.charAt(0)}
+                ${(c.name || 'م').charAt(0)}
               </div>
               <div class="flex flex-col items-end">
                 <span class="px-3 py-1 bg-slate-900 text-white rounded-xl text-xs font-black">${counts[c.id]} صوت</span>
@@ -873,9 +873,9 @@
               </div>
             </div>
             <div class="mt-5">
-              <h4 class="font-black text-slate-900 text-xl">${c.name}</h4>
-              <p class="text-sm font-bold text-gold-700 mt-1">${c.title}</p>
-              <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department}</p>
+              <h4 class="font-black text-slate-900 text-xl">${c.name || ''}</h4>
+              <p class="text-sm font-bold text-gold-700 mt-1">${c.title || ''}</p>
+              <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department || ''}</p>
             </div>
           `;
           if (c.group === 'Non Guest Contact') {
@@ -892,7 +892,7 @@
       if (actionContainer) actionContainer.classList.remove('hidden');
       if (instructionTxt) instructionTxt.textContent = "اختر مرشحاً واحداً (1) من مجموعة Guest Contact ومرشحاً واحداً (1) من مجموعة Non Guest Contact.";
 
-      const existingVote = votesList.find(v => v.managerId === currentSessionUser.id);
+      const existingVote = votesList.find(v => String(v.managerId) === String(currentSessionUser.id));
       if (existingVote) {
         const c1 = defaultCandidates.find(c => c.id === existingVote.candidate1);
         const c2 = defaultCandidates.find(c => c.id === existingVote.candidate2);
@@ -923,16 +923,16 @@
           card.innerHTML = `
             <div class="flex items-start justify-between">
               <div class="w-14 h-14 rounded-2xl bg-gold-50 text-gold-700 border border-gold-200 font-black flex items-center justify-center text-2xl shadow-sm">
-                ${c.name.charAt(0)}
+                ${(c.name || 'م').charAt(0)}
               </div>
               <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-gold-600 bg-gold-600 text-slate-900' : 'border-slate-300'} flex items-center justify-center transition-all">
                 <i data-lucide="check" class="w-5 h-5"></i>
               </div>
             </div>
             <div class="mt-5">
-              <h4 class="font-black text-slate-900 text-xl">${c.name}</h4>
-              <p class="text-sm font-bold text-gold-700 mt-1">${c.title}</p>
-              <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department}</p>
+              <h4 class="font-black text-slate-900 text-xl">${c.name || ''}</h4>
+              <p class="text-sm font-bold text-gold-700 mt-1">${c.title || ''}</p>
+              <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department || ''}</p>
             </div>
           `;
           guestGrid.appendChild(card);
@@ -951,16 +951,16 @@
           card.innerHTML = `
             <div class="flex items-start justify-between">
               <div class="w-14 h-14 rounded-2xl bg-slate-900 text-gold-400 border border-slate-800 font-black flex items-center justify-center text-2xl shadow-sm">
-                ${c.name.charAt(0)}
+                ${(c.name || 'م').charAt(0)}
               </div>
               <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-gold-600 bg-gold-600 text-slate-900' : 'border-slate-300'} flex items-center justify-center transition-all">
                 <i data-lucide="check" class="w-5 h-5"></i>
               </div>
             </div>
             <div class="mt-5">
-              <h4 class="font-black text-slate-900 text-xl">${c.name}</h4>
-              <p class="text-sm font-bold text-gold-700 mt-1">${c.title}</p>
-              <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department}</p>
+              <h4 class="font-black text-slate-900 text-xl">${c.name || ''}</h4>
+              <p class="text-sm font-bold text-gold-700 mt-1">${c.title || ''}</p>
+              <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department || ''}</p>
             </div>
           `;
           nonGuestGrid.appendChild(card);
@@ -1000,7 +1000,7 @@
     function submitVotes() {
       if (!isVotingOpen || !selectedGuestId || !selectedNonGuestId || !currentSessionUser) return;
 
-      const existingVoteIdx = votesList.findIndex(v => v.managerId === currentSessionUser.id);
+      const existingVoteIdx = votesList.findIndex(v => String(v.managerId) === String(currentSessionUser.id));
       const voteData = {
         managerId: currentSessionUser.id,
         managerName: currentSessionUser.name,
@@ -1015,7 +1015,7 @@
         votesList.push(voteData);
       }
 
-      const mgr = defaultManagers.find(m => m.id === currentSessionUser.id);
+      const mgr = defaultManagers.find(m => String(m.id) === String(currentSessionUser.id));
       if (mgr) mgr.hasVoted = true;
 
       saveDataLocally();
@@ -1061,7 +1061,7 @@
       const statTot = document.getElementById('statTotalManagers');
       if (statTot) statTot.textContent = totalMgrs;
 
-      const votedCount = defaultManagers.filter(m => m.hasVoted || votesList.some(v => v.managerId === m.id)).length;
+      const votedCount = defaultManagers.filter(m => m.hasVoted || votesList.some(v => String(v.managerId) === String(m.id))).length;
       const statVoted = document.getElementById('statVotedManagers');
       if (statVoted) statVoted.textContent = votedCount;
 
@@ -1103,8 +1103,8 @@
                 ${idx + 1}
               </span>
               <div>
-                <p class="font-black text-slate-900 text-base">${c.name} ${isWinner1 ? '🏆 (المركز الأول)' : (isWinner2 ? '🥈 (المركز الثاني)' : '')}</p>
-                <p class="text-xs text-slate-500 font-semibold">${c.department} <span class="text-[10px] text-gold-700">(${c.group || 'Guest Contact'})</span></p>
+                <p class="font-black text-slate-900 text-base">${c.name || ''} ${isWinner1 ? '🏆 (المركز الأول)' : (isWinner2 ? '🥈 (المركز الثاني)' : '')}</p>
+                <p class="text-xs text-slate-500 font-semibold">${c.department || ''} <span class="text-[10px] text-gold-700">(${c.group || 'Guest Contact'})</span></p>
               </div>
             </div>
             <div class="px-4 py-1.5 bg-gold-50 text-gold-700 border border-gold-200 rounded-xl text-sm font-black">
@@ -1115,7 +1115,7 @@
         });
       }
 
-      renderChart(sortedCandidates.map(c => c.name), sortedCandidates.map(c => counts[c.id]));
+      renderChart(sortedCandidates.map(c => c.name || ''), sortedCandidates.map(c => counts[c.id]));
     }
 
     function renderChart(labels, data) {
@@ -1157,7 +1157,7 @@
       }
 
       defaultManagers.forEach(m => {
-        const hasVoted = m.hasVoted || votesList.some(v => v.managerId === m.id);
+        const hasVoted = m.hasVoted || votesList.some(v => String(v.managerId) === String(m.id));
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-50 transition-colors";
 
@@ -1174,9 +1174,9 @@
         `;
 
         tr.innerHTML = `
-          <td class="p-4 font-bold text-gold-700">${m.id}</td>
-          <td class="p-4 font-black text-slate-900">${m.name}</td>
-          <td class="p-4 text-slate-600 font-semibold">${m.title}</td>
+          <td class="p-4 font-bold text-gold-700">${m.id || ''}</td>
+          <td class="p-4 font-black text-slate-900">${m.name || ''}</td>
+          <td class="p-4 text-slate-600 font-semibold">${m.title || ''}</td>
           <td class="p-4">
             <span class="px-3.5 py-1.5 rounded-full text-xs font-bold ${hasVoted ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">
               ${hasVoted ? 'تم التصويت' : 'لم يصوت'}
@@ -1203,9 +1203,9 @@
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-50 transition-colors";
         tr.innerHTML = `
-          <td class="p-4 font-black text-slate-900">${c.name}</td>
-          <td class="p-4 text-slate-600 font-semibold">${c.title}</td>
-          <td class="p-4 text-slate-600 font-semibold">${c.department}</td>
+          <td class="p-4 font-black text-slate-900">${c.name || ''}</td>
+          <td class="p-4 text-slate-600 font-semibold">${c.title || ''}</td>
+          <td class="p-4 text-slate-600 font-semibold">${c.department || ''}</td>
           <td class="p-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${c.group === 'Non Guest Contact' ? 'bg-slate-900 text-gold-400' : 'bg-gold-100 text-gold-800'}">${c.group || 'Guest Contact'}</span></td>
           <td class="p-4 text-center">
             <button onclick="editCandidate('${c.id}')" class="p-2 text-gold-700 hover:bg-gold-50 rounded-xl" title="تعديل">
@@ -1284,8 +1284,8 @@
             html += `
               <tr class="${isWinner1 ? 'bg-amber-50 font-bold' : (isWinner2 ? 'bg-blue-50 font-bold' : '')}">
                 <td class="border border-slate-300 p-2.5 text-center">${idx + 1}</td>
-                <td class="border border-slate-300 p-2.5">${c.name}</td>
-                <td class="border border-slate-300 p-2.5">${c.title} (${c.group || 'Guest Contact'})</td>
+                <td class="border border-slate-300 p-2.5">${c.name || ''}</td>
+                <td class="border border-slate-300 p-2.5">${c.title || ''} (${c.group || 'Guest Contact'})</td>
                 <td class="border border-slate-300 p-2.5 text-center">${counts[c.id]} صوت</td>
                 <td class="border border-slate-300 p-2.5 text-center">
                   ${isWinner1 ? '<span class="text-amber-700 font-black">🏆 الفائز بالمركز الأول</span>' : ''}
@@ -1323,9 +1323,9 @@
             html += `
               <tr>
                 <td class="border border-slate-300 p-2.5 text-center">${idx + 1}</td>
-                <td class="border border-slate-300 p-2.5 font-bold">${c.name}</td>
-                <td class="border border-slate-300 p-2.5">${c.title}</td>
-                <td class="border border-slate-300 p-2.5">${c.department}</td>
+                <td class="border border-slate-300 p-2.5 font-bold">${c.name || ''}</td>
+                <td class="border border-slate-300 p-2.5">${c.title || ''}</td>
+                <td class="border border-slate-300 p-2.5">${c.department || ''}</td>
                 <td class="border border-slate-300 p-2.5 font-bold">${c.group || 'Guest Contact'}</td>
               </tr>
             `;
@@ -1365,8 +1365,8 @@
                 html += `
                   <tr>
                     <td class="border border-slate-300 p-2 text-center">${wIdx === 0 ? '🏆 الأول' : '🥈 الثاني'}</td>
-                    <td class="border border-slate-300 p-2 font-bold">${w.name}</td>
-                    <td class="border border-slate-300 p-2">${w.title} (${w.group || 'Guest Contact'})</td>
+                    <td class="border border-slate-300 p-2 font-bold">${w.name || ''}</td>
+                    <td class="border border-slate-300 p-2">${w.title || ''} (${w.group || 'Guest Contact'})</td>
                     <td class="border border-slate-300 p-2 text-center">${w.votes} صوت</td>
                   </tr>
                 `;
@@ -1433,8 +1433,8 @@
                         ${wIdx === 0 ? '1' : '2'}
                       </span>
                       <div>
-                        <p class="font-black text-slate-900">${w.name}</p>
-                        <p class="text-[10px] text-slate-500">${w.title} (${w.group || 'Guest Contact'})</p>
+                        <p class="font-black text-slate-900">${w.name || ''}</p>
+                        <p class="text-[10px] text-slate-500">${w.title || ''} (${w.group || 'Guest Contact'})</p>
                       </div>
                     </div>
                     <span class="font-black text-gold-700">${w.votes} صوت</span>
@@ -1464,9 +1464,9 @@
         const c = defaultCandidates.find(x => x.id === candId);
         if (c) {
           document.getElementById('candEditId').value = c.id;
-          document.getElementById('candName').value = c.name;
-          document.getElementById('candTitle').value = c.title;
-          document.getElementById('candDept').value = c.department;
+          document.getElementById('candName').value = c.name || '';
+          document.getElementById('candTitle').value = c.title || '';
+          document.getElementById('candDept').value = c.department || '';
           document.getElementById('candGroup').value = c.group || 'Guest Contact';
           document.getElementById('candidateModalTitle').textContent = "تعديل بيانات المرشح";
         }
@@ -1487,9 +1487,9 @@
     function handleCandidateSubmit(e) {
       e.preventDefault();
       const id = document.getElementById('candEditId').value;
-      const name = document.getElementById('candName').value;
-      const title = document.getElementById('candTitle').value;
-      const department = document.getElementById('candDept').value;
+      const name = document.getElementById('candName').value.trim();
+      const title = document.getElementById('candTitle').value.trim();
+      const department = document.getElementById('candDept').value.trim();
       const group = document.getElementById('candGroup').value;
 
       if (id) {
@@ -1529,9 +1529,9 @@
         const m = defaultManagers.find(x => x.id === mgrId);
         if (m) {
           document.getElementById('mgrOriginalId').value = m.id;
-          document.getElementById('mgrId').value = m.id;
-          document.getElementById('mgrName').value = m.name;
-          document.getElementById('mgrTitle').value = m.title;
+          document.getElementById('mgrId').value = m.id || '';
+          document.getElementById('mgrName').value = m.name || '';
+          document.getElementById('mgrTitle').value = m.title || '';
           document.getElementById('managerModalTitle').textContent = "تعديل بيانات المدير";
         }
       } else {
@@ -1555,9 +1555,9 @@
       const title = document.getElementById('mgrTitle').value.trim();
 
       if (originalId) {
-        const idx = defaultManagers.findIndex(m => m.id === originalId);
+        const idx = defaultManagers.findIndex(m => String(m.id) === String(originalId));
         if (idx > -1) {
-          if (newId !== originalId && defaultManagers.some(m => m.id === newId)) {
+          if (newId !== originalId && defaultManagers.some(m => String(m.id) === String(newId))) {
             alert("الرقم الوظيفي الجديد موجود بالفعل لمدير آخر!");
             return;
           }
@@ -1566,7 +1566,7 @@
           defaultManagers[idx].title = title;
         }
       } else {
-        if (defaultManagers.some(m => m.id === newId)) {
+        if (defaultManagers.some(m => String(m.id) === String(newId))) {
           alert("الرقم الوظيفي موجود بالفعل!");
           return;
         }
@@ -1585,7 +1585,7 @@
     }
 
     function toggleBlockManager(id) {
-      const mgr = defaultManagers.find(m => m.id === id);
+      const mgr = defaultManagers.find(m => String(m.id) === String(id));
       if (mgr) {
         mgr.isBlocked = !mgr.isBlocked;
         saveDataLocally();
@@ -1596,7 +1596,7 @@
 
     function deleteManager(id) {
       if (confirm("هل أنت متأكد من حذف هذا المدير؟")) {
-        defaultManagers = defaultManagers.filter(m => m.id !== id);
+        defaultManagers = defaultManagers.filter(m => String(m.id) !== String(id));
         saveDataLocally();
         sendApiRequest({ action: "SYNC_MANAGERS", data: defaultManagers });
         renderAdminView();
@@ -1644,9 +1644,9 @@
         });
         const sorted = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
         const topWinnersList = sorted.slice(0, 2).map(c => ({
-          name: c.name,
-          title: c.title,
-          department: c.department,
+          name: c.name || '',
+          title: c.title || '',
+          department: c.department || '',
           group: c.group || 'Guest Contact',
           votes: counts[c.id]
         }));
@@ -1654,10 +1654,10 @@
         const archiveCardData = {
           monthName: currentCycleMonth,
           archivedAt: new Date().toLocaleDateString('ar-EG'),
-          totalVoters: defaultManagers.filter(m => m.hasVoted || votesList.some(v => v.managerId === m.id)).length,
+          totalVoters: defaultManagers.filter(m => m.hasVoted || votesList.some(v => String(v.managerId) === String(m.id))).length,
           totalManagers: defaultManagers.length,
           topWinners: topWinnersList,
-          fullResults: sorted.map(c => ({ name: c.name, title: c.title, department: c.department, group: c.group || 'Guest Contact', votes: counts[c.id] }))
+          fullResults: sorted.map(c => ({ name: c.name || '', title: c.title || '', department: c.department || '', group: c.group || 'Guest Contact', votes: counts[c.id] }))
         };
 
         monthlyArchive.push(archiveCardData);
@@ -1712,9 +1712,9 @@
             }
             
             if (data.managers && Array.isArray(data.managers) && data.managers.length > 0) {
-              let remoteMgrs = data.managers.filter(m => m.id !== '1679');
+              let remoteMgrs = data.managers.filter(m => String(m.id) !== '1679');
               remoteMgrs.forEach(sm => {
-                if (sm.id === '3030') sm.name = 'Husam Afram Saba Malki';
+                if (String(sm.id) === '3030') sm.name = 'Husam Afram Saba Malki';
               });
               defaultManagers = remoteMgrs;
             }
