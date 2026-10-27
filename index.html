@@ -555,7 +555,6 @@
 
   <!-- App Javascript Implementation Logic -->
   <script>
-    // تم تحديث الـ SCRIPT_URL بالرابط الجديد بدقة
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYFUCz9tYNkLyk2UIE__28evZV8YpudcHFbSwRn-QNcLNZOqM9RLwaq7shxnrgOavWwg/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
@@ -1650,27 +1649,17 @@
               monthlyArchive = data.monthlyArchive;
             }
             
+            // جعل القائمة القادمة من جوجل شيت هي الأساس المعتمد (ليعمل الحذف والتعديل فورياً)
             if (data.managers && Array.isArray(data.managers) && data.managers.length > 0) {
               let remoteMgrs = data.managers.filter(m => m.id !== '1679');
               remoteMgrs.forEach(sm => {
                 if (sm.id === '3030') sm.name = 'Husam Afram Saba Malki';
-                const existing = defaultManagers.find(m => m.id === sm.id);
-                if (existing) {
-                  existing.name = sm.name;
-                  existing.title = sm.title;
-                  existing.hasVoted = existing.hasVoted || sm.hasVoted;
-                  existing.isBlocked = sm.isBlocked;
-                }
               });
+              defaultManagers = remoteMgrs;
             }
 
-            if (data.candidates && Array.isArray(data.candidates) && data.candidates.length > 0) {
-              data.candidates.forEach(sc => {
-                const existing = defaultCandidates.find(c => c.id === sc.id);
-                if (!existing) {
-                  defaultCandidates.push(sc);
-                }
-              });
+            if (data.candidates && Array.isArray(data.candidates)) {
+              defaultCandidates = data.candidates;
             }
 
             saveDataLocally();
