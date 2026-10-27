@@ -588,8 +588,8 @@
 
   <!-- App Javascript Implementation Logic -->
   <script>
-    // تم تحديث رابط السكربت بالرابط الجديد بدقة
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybaj29bORnFklXhnSRQSQjSYW08Y_YqKcSmkdgr7NTgCKtADXbZftNEf0ybuBT8UcWiw/exec";
+    // تم ربط السكربت بالرابط الجديد الخاص بك بدقة
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR5j0Eovzeo_t8QIPi2hINZtm_azJPtDYq-IH8xXuMwqAKK06eqRr--lNnCxeh6uR-Ow/exec";
 
     const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
     const SUB_ADMINS = [
@@ -597,28 +597,6 @@
       { id: 'Ahmed.Maher', pass: '1995', name: 'أحمد ماهر' },
       { id: 'Mohamed.Abdelnaser', pass: '1999', name: 'محمد عبد الناصر' },
       { id: 'Mohamed.Desouky', pass: '1980', name: 'محمد دسوقي (Admin)' }
-    ];
-
-    let initialManagers = [
-      { id: '3030', name: 'Husam Afram Saba Malki', title: 'General Manager', isBlocked: false, hasVoted: false },
-      { id: '2650', name: 'Mohamed Desouky Abd Elhalim Mohamed', title: 'Human Resources Manager', isBlocked: false, hasVoted: false },
-      { id: '1980', name: 'Mohamed Desouky', title: 'HR Admin', isBlocked: false, hasVoted: false },
-      { id: '2648', name: 'Hamdy Mohamed Mohamed Hassan El Alfy', title: 'Chief Engineer', isBlocked: false, hasVoted: false },
-      { id: '2244', name: 'Ahmed Abd Elmotty Ahmed Mohamed Elraay', title: 'Hotel Financial Controller', isBlocked: false, hasVoted: false },
-      { id: '2965', name: 'Khaled Mohy El Din Abd El Kader', title: 'Food & Beverage Manager', isBlocked: false, hasVoted: false },
-      { id: '3027', name: 'Mohamed Taher Alhgrsy Yousef Abd Alla', title: 'Executive Assistant General Manager', isBlocked: false, hasVoted: false },
-      { id: '2977', name: 'Mohamed Reda El Sayed', title: 'Executive Sous Chef', isBlocked: false, hasVoted: false },
-      { id: '1477', name: 'Hazem Khaled Mohamed Mohamed Elshebasy', title: 'Information & Technology Manager', isBlocked: false, hasVoted: false },
-      { id: '1751', name: 'Mohamed Mahmoud Ibrahim Mahmoud Essawy', title: 'Security Manager', isBlocked: false, hasVoted: false },
-      { id: '2429', name: 'Mohamed Ibrahim Omran Hussain', title: 'Front Office Manager', isBlocked: false, hasVoted: false },
-      { id: '2474', name: 'Essam Ibrahim Mohamed El Anwar', title: 'Assistant Chief Engineer', isBlocked: false, hasVoted: false },
-      { id: '2607', name: 'Mahmoud Fattoh Zakry Abo El Dahab', title: 'Executive Housekeeper', isBlocked: false, hasVoted: false },
-      { id: '2651', name: 'Hamdi Abd Elmonaem Mohamed Abd Elmonaem', title: 'Recreation Manager', isBlocked: false, hasVoted: false },
-      { id: '2666', name: 'Omnia Hussein Yahya Hussein', title: 'Guest Experience Manager', isBlocked: false, hasVoted: false },
-      { id: '2789', name: 'Marwa Hamedalh El Wehidi Awad', title: 'Hygiene Manager', isBlocked: false, hasVoted: false },
-      { id: '2827', name: 'Rana Khaled Mohamed El Sayed Khedr', title: 'Administrative Assistant To General Manager', isBlocked: false, hasVoted: false },
-      { id: '3003', name: 'Monir Ali Megahed Senan', title: 'Spa Manager', isBlocked: false, hasVoted: false },
-      { id: '3004', name: 'Abd Elfatah Hamdi Abd Elfatah Ali', title: 'L&D Manager', isBlocked: false, hasVoted: false }
     ];
 
     let currentSessionUser = null;
@@ -650,21 +628,8 @@
       const storedVotingStatus = localStorage.getItem('app_voting_open');
       const storedArchive = localStorage.getItem('app_monthly_archive');
 
-      const parsedMgrs = storedMgrs ? JSON.parse(storedMgrs) : [];
-      defaultManagers = (parsedMgrs && parsedMgrs.length > 0) ? parsedMgrs : [...initialManagers];
-
-      defaultManagers = defaultManagers.filter(m => m.id !== '1679');
-      const m3030 = defaultManagers.find(m => m.id === '3030');
-      if (m3030) {
-        m3030.name = 'Husam Afram Saba Malki';
-      }
-
-      let parsedCands = storedCands ? JSON.parse(storedCands) : [];
-      parsedCands.forEach(c => {
-        if (!c.group) c.group = 'Guest Contact';
-      });
-      defaultCandidates = parsedCands;
-
+      defaultManagers = storedMgrs ? JSON.parse(storedMgrs) : [];
+      defaultCandidates = storedCands ? JSON.parse(storedCands) : [];
       votesList = storedVotes ? JSON.parse(storedVotes) : [];
       if (storedArchive) monthlyArchive = JSON.parse(storedArchive);
 
@@ -683,7 +648,6 @@
         isVotingOpen = JSON.parse(storedVotingStatus);
       }
       updateVotingStatusUI();
-      saveDataLocally();
     }
 
     function saveDataLocally() {
