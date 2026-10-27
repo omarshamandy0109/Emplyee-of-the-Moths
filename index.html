@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منظومة اختيار العامل المثالي</title>
-  <!-- Google Fonts & Tailwind CSS -->
+  
+  <!-- Fonts & Core Libraries -->
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons & Chart.js -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -18,8 +18,8 @@
           fontFamily: { tajawal: ['Tajawal', 'sans-serif'] },
           colors: {
             brand: {
-              50: '#f0f7ff',
-              100: '#e0effe',
+              50: '#eff6ff',
+              100: '#dbeafe',
               500: '#2563eb',
               600: '#1d4ed8',
               700: '#1e40af',
@@ -40,22 +40,22 @@
       border: 1px solid rgba(226, 232, 240, 0.8);
     }
     .candidate-card {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .candidate-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 24px -10px rgba(37, 99, 235, 0.15);
+      box-shadow: 0 12px 24px -8px rgba(37, 99, 235, 0.2);
     }
     .candidate-card.selected {
       border-color: #2563eb;
       background-color: #eff6ff;
-      box-shadow: 0 0 0 2px #2563eb;
+      box-shadow: 0 0 0 3px #2563eb;
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white pb-20 sm:pb-0">
 
-  <!-- Header -->
+  <!-- Main Header -->
   <header class="bg-slate-900 text-white shadow-xl sticky top-0 z-40 border-b border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex flex-wrap justify-between items-center gap-4">
@@ -65,18 +65,24 @@
           </div>
           <div>
             <h1 class="text-xl sm:text-2xl font-black tracking-tight">منظومة اختيار العامل المثالي</h1>
-            <p class="text-sm text-slate-400 font-semibold flex items-center gap-2 mt-1">
-              <span id="currentMonthBadge" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span id="monthTextDisplay" class="text-xs sm:text-sm">تصويت شهر أكتوبر 2026</span>
+            <p class="text-xs sm:text-sm text-slate-400 font-bold flex items-center gap-2 mt-0.5">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="monthTextDisplay">تصويت شهر أكتوبر 2026</span>
             </p>
           </div>
         </div>
 
+        <!-- User Controls -->
         <div class="flex items-center gap-3">
-          <div id="userBadge" class="hidden flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-800 text-sm font-bold text-slate-200 border border-slate-700">
-            <i data-lucide="user" class="w-5 h-5 text-brand-500"></i>
+          <div id="userBadge" class="hidden flex items-center gap-3 px-4 py-2 rounded-2xl bg-slate-800 text-sm font-bold text-slate-200 border border-slate-700 shadow-sm">
+            <i data-lucide="user-check" class="w-5 h-5 text-brand-500"></i>
             <span id="userBadgeText">غير مسجل</span>
-            <button onclick="logout()" class="mr-3 text-rose-400 hover:text-rose-300 transition-colors" title="تسجيل خروج">
+            
+            <button id="navDashboardBtn" onclick="toggleDashboardNav()" class="hidden px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-all mr-2">
+              لوحة النتائج
+            </button>
+
+            <button onclick="logout()" class="mr-2 text-rose-400 hover:text-rose-300 transition-colors" title="تسجيل الخروج">
               <i data-lucide="log-out" class="w-5 h-5"></i>
             </button>
           </div>
@@ -85,37 +91,37 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Content Container -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
 
-    <!-- 1. Login View -->
-    <section id="loginSection" class="max-w-md mx-auto my-12">
-      <div class="glass-card rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+    <!-- 1. LOGIN SECTION -->
+    <section id="loginSection" class="max-w-md mx-auto my-8 sm:my-14">
+      <div class="glass-card rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden border border-slate-200">
         <div class="absolute top-0 right-0 left-0 h-2 bg-gradient-to-r from-brand-500 to-indigo-600"></div>
         <div class="text-center mb-8">
-          <div class="w-18 h-18 bg-brand-50 text-brand-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+          <div class="w-20 h-20 bg-brand-50 text-brand-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-sm">
             <i data-lucide="shield-check" class="w-10 h-10"></i>
           </div>
           <h2 class="text-2xl sm:text-3xl font-black text-slate-900">تسجيل الدخول</h2>
-          <p class="text-sm sm:text-base text-slate-500 mt-2">أدخل الرقم الوظيفي أو اسم المستخدم الخاص بك</p>
+          <p class="text-sm sm:text-base text-slate-500 font-semibold mt-2">أدخل الرقم الوظيفي الخاص بك لبدء التصويت</p>
         </div>
 
-        <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
+        <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-6">
           <div>
             <label class="block text-sm sm:text-base font-bold text-slate-700 mb-2">الرقم الوظيفي / اسم المستخدم</label>
             <div class="relative">
-              <i data-lucide="user-check" class="w-6 h-6 text-slate-400 absolute right-4 top-3.5"></i>
-              <input type="text" id="loginId" required placeholder="مثال: 3030 أو OMAR"
-                     class="w-full pr-12 pl-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-base font-semibold">
+              <i data-lucide="user" class="w-6 h-6 text-slate-400 absolute right-4 top-3.5"></i>
+              <input type="text" id="loginId" required placeholder="مثال: 3030 أو 2650"
+                     class="w-full pr-12 pl-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-base font-bold">
             </div>
           </div>
 
           <div id="passwordFieldGroup" class="hidden">
-            <label class="block text-sm sm:text-base font-bold text-slate-700 mb-2">كلمة المرور (للأدمن)</label>
+            <label class="block text-sm sm:text-base font-bold text-slate-700 mb-2">كلمة المرور (خاص بالأدمن)</label>
             <div class="relative">
               <i data-lucide="lock" class="w-6 h-6 text-slate-400 absolute right-4 top-3.5"></i>
               <input type="password" id="loginPassword" placeholder="••••••••"
-                     class="w-full pr-12 pl-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-base font-semibold">
+                     class="w-full pr-12 pl-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-base font-bold">
             </div>
           </div>
 
@@ -133,46 +139,48 @@
       </div>
     </section>
 
-    <!-- 2. Voting Interface -->
+    <!-- 2. VOTING SECTION -->
     <section id="votingSection" class="hidden space-y-6">
-      <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 flex flex-wrap justify-between items-center gap-6">
+      
+      <!-- Top Voting Info Bar -->
+      <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 flex flex-wrap justify-between items-center gap-6">
         <div>
-          <h2 class="text-xl sm:text-2xl font-black text-slate-900">مرحباً، <span id="voterNameDisplay" class="text-brand-600">المدير</span></h2>
-          <p class="text-sm sm:text-base text-slate-500 mt-1">اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.</p>
+          <h2 class="text-xl sm:text-3xl font-black text-slate-900">أهلاً بك، <span id="voterNameDisplay" class="text-brand-600">المدير</span></h2>
+          <p class="text-sm sm:text-base text-slate-500 font-bold mt-1">اختر مرشحين (2) كحد أقصى لنيل لقب العامل المثالي لهذا الشهر.</p>
         </div>
 
         <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
-          <div class="px-5 py-3 bg-slate-100 rounded-2xl text-sm font-black text-slate-700 flex items-center gap-3">
+          <div class="px-5 py-3 bg-slate-100 rounded-2xl text-sm sm:text-base font-black text-slate-700 flex items-center gap-3 border border-slate-200">
             <span>الأصوات المحددة:</span>
-            <span id="selectedCountBadge" class="w-7 h-7 bg-brand-600 text-white rounded-full flex items-center justify-center text-sm font-bold">0</span>
+            <span id="selectedCountBadge" class="w-8 h-8 bg-brand-600 text-white rounded-full flex items-center justify-center text-sm font-black shadow-sm">0</span>
             <span class="text-slate-400">/ 2</span>
           </div>
 
           <button id="submitVoteBtn" onclick="submitVotes()" disabled
-                  class="px-6 py-3.5 bg-emerald-600 disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-emerald-700 text-white text-sm sm:text-base font-black rounded-2xl shadow-lg transition-all flex items-center gap-2.5">
+                  class="px-7 py-3.5 bg-emerald-600 disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-emerald-700 text-white text-base font-black rounded-2xl shadow-lg transition-all flex items-center gap-2.5">
             <i data-lucide="send" class="w-5 h-5"></i>
-            <span>تأكيد الإرسال</span>
+            <span>تأكيد وإرسال الأصوات</span>
           </button>
         </div>
       </div>
 
-      <!-- Candidates Grid -->
+      <!-- Candidates Grid List -->
       <div id="candidatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 3. Admin & HR Dashboard -->
+    <!-- 3. ADMIN & HR DASHBOARD -->
     <section id="adminDashboard" class="hidden space-y-8">
       
-      <!-- Sub Navigation Tabs -->
+      <!-- Admin Navigation -->
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
-        <div class="flex items-center gap-2.5 overflow-x-auto pb-2 w-full sm:w-auto">
+        <div class="flex items-center gap-3 overflow-x-auto pb-2 w-full sm:w-auto">
           <button onclick="switchAdminTab('results')" id="tab-results" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-brand-600 text-white shadow-md flex items-center gap-2.5 shrink-0">
             <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-            <span>النتائج والتقارير</span>
+            <span>نتائج وتقارير التصويت</span>
           </button>
           <button onclick="switchAdminTab('managers')" id="tab-managers" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2.5 shrink-0">
             <i data-lucide="users" class="w-5 h-5"></i>
-            <span>إدارة المدراء</span>
+            <span>إدارة قائمة المدراء</span>
           </button>
           <button onclick="switchAdminTab('candidates')" id="tab-candidates" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2.5 shrink-0">
             <i data-lucide="award" class="w-5 h-5"></i>
@@ -192,7 +200,7 @@
         </div>
       </div>
 
-      <!-- Results Tab -->
+      <!-- Tab 1: Reports & Charts -->
       <div id="adminTab-results" class="space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div class="glass-card rounded-3xl p-6 shadow-sm flex items-center gap-5">
@@ -210,7 +218,7 @@
               <i data-lucide="check-circle-2" class="w-7 h-7"></i>
             </div>
             <div>
-              <p class="text-sm font-bold text-slate-500">صوتوا بالفعل</p>
+              <p class="text-sm font-bold text-slate-500">من قاموا بالتصويت</p>
               <h3 id="statVotedManagers" class="text-3xl font-black text-slate-900 mt-1">0</h3>
             </div>
           </div>
@@ -241,7 +249,7 @@
             <div>
               <h3 class="text-lg font-black text-slate-900 mb-6 flex items-center gap-3">
                 <i data-lucide="award" class="w-6 h-6 text-amber-500"></i>
-                <span>جدول الترتيب العام</span>
+                <span>ترتيب المرشحين</span>
               </h3>
               <div id="leaderboardList" class="space-y-3.5 max-h-72 overflow-y-auto pr-1"></div>
             </div>
@@ -249,7 +257,7 @@
         </div>
       </div>
 
-      <!-- Managers Tab -->
+      <!-- Tab 2: Managers Control -->
       <div id="adminTab-managers" class="hidden space-y-6">
         <div class="flex justify-between items-center flex-wrap gap-4 bg-white p-5 rounded-3xl border border-slate-200">
           <h3 class="text-lg font-black text-slate-900">قائمة المدراء</h3>
@@ -277,7 +285,7 @@
         </div>
       </div>
 
-      <!-- Candidates Tab -->
+      <!-- Tab 3: Candidates Control -->
       <div id="adminTab-candidates" class="hidden space-y-6">
         <div class="flex justify-between items-center flex-wrap gap-4 bg-white p-5 rounded-3xl border border-slate-200">
           <h3 class="text-lg font-black text-slate-900">قائمة المرشحين</h3>
@@ -313,8 +321,8 @@
       <h3 class="text-lg font-black text-slate-900">تعديل شهر التصويت</h3>
       <input type="text" id="monthInput" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-base font-semibold outline-none focus:ring-2 focus:ring-brand-500">
       <div class="flex justify-end gap-3 pt-2">
-        <button onclick="closeMonthModal()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
-        <button onclick="saveMonthSetting()" class="px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl text-sm font-bold">حفظ</button>
+        <button onclick="closeMonthModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
+        <button onclick="saveMonthSetting()" class="px-5 py-3 bg-brand-600 text-white rounded-2xl text-sm font-bold">حفظ</button>
       </div>
     </div>
   </div>
@@ -369,11 +377,11 @@
   </div>
 
   <!-- Footer -->
-  <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-center text-sm">
+  <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-center text-sm font-semibold">
     <p>جميع الحقوق محفوظة © منظومة اختيار العامل المثالي 2026</p>
   </footer>
 
-  <!-- Application Logic Code -->
+  <!-- Javascript Implementation Logic -->
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCEGGYwC-313PGW6s3YeXumS7bW5Gy-tW2eSt54BDIiayTuM9vC4Sap2-lCzJiqWWCtA/exec";
 
@@ -382,7 +390,7 @@
       { id: 'Amr.Ragab', pass: '1996', name: 'عمرو رجب' },
       { id: 'Ahmed.Maher', pass: '1995', name: 'أحمد ماهر' },
       { id: 'Mohamed.Abdelnaser', pass: '1999', name: 'محمد عبد الناصر' },
-      { id: 'Mohamed.Desouky', pass: '1980', name: 'محمد دسوقي' }
+      { id: 'Mohamed.Desouky', pass: '1980', name: 'محمد دسوقي (Admin)' }
     ];
 
     let currentSessionUser = null;
@@ -393,6 +401,7 @@
     let defaultManagers = [
       { id: '3030', name: 'Hossam Ephram Saba Malak', title: 'General Manager', isBlocked: false, hasVoted: false },
       { id: '2650', name: 'Mohamed Desouky Abd Elhalim Mohamed', title: 'Human Resources Manager', isBlocked: false, hasVoted: false },
+      { id: '1980', name: 'Mohamed Desouky', title: 'HR Admin', isBlocked: false, hasVoted: false },
       { id: '2648', name: 'Hamdy Mohamed Mohamed Hassan El Alfy', title: 'Chief Engineer', isBlocked: false, hasVoted: false },
       { id: '2244', name: 'Ahmed Abd Elmotty Ahmed Mohamed Elraay', title: 'Hotel Financial Controller', isBlocked: false, hasVoted: false },
       { id: '2965', name: 'Khaled Mohy El Din Abd El Kader', title: 'Food & Beverage Manager', isBlocked: false, hasVoted: false },
@@ -516,8 +525,27 @@
       document.getElementById('userBadgeText').textContent = currentSessionUser.name || currentSessionUser.id;
       document.getElementById('userBadge').classList.remove('hidden');
 
-      // Admin or HR Manager (2650) gets Dashboard access
-      if (currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '2650') {
+      const isHRorAdmin = currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '2650' || currentSessionUser.id === '1980';
+
+      if (isHRorAdmin) {
+        document.getElementById('navDashboardBtn').classList.remove('hidden');
+      } else {
+        document.getElementById('navDashboardBtn').classList.add('hidden');
+      }
+
+      // Default to voting section for managers & HR, Dashboard for pure Super Admin
+      if (currentSessionUser.role === 'SUPER_ADMIN') {
+        showSection('adminDashboard');
+        renderAdminView();
+      } else {
+        showSection('votingSection');
+        renderVotingView();
+      }
+    }
+
+    function toggleDashboardNav() {
+      const dbSec = document.getElementById('adminDashboard');
+      if (dbSec.classList.contains('hidden')) {
         showSection('adminDashboard');
         renderAdminView();
       } else {
@@ -548,8 +576,6 @@
       const existingVote = votesList.find(v => v.managerId === currentSessionUser.id);
       if (existingVote) {
         selectedCandidateIds = [existingVote.candidate1, existingVote.candidate2].filter(Boolean);
-      } else {
-        selectedCandidateIds = [];
       }
 
       updateVoteBadgeAndButton();
@@ -562,17 +588,17 @@
 
         card.innerHTML = `
           <div class="flex items-start justify-between">
-            <div class="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 font-bold flex items-center justify-center text-xl shadow-sm">
+            <div class="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 font-black flex items-center justify-center text-2xl shadow-sm">
               ${c.name.charAt(0)}
             </div>
-            <div class="w-7 h-7 rounded-full border-2 ${isSelected ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300'} flex items-center justify-center transition-all">
-              <i data-lucide="check" class="w-4 h-4"></i>
+            <div class="w-8 h-8 rounded-full border-2 ${isSelected ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300'} flex items-center justify-center transition-all">
+              <i data-lucide="check" class="w-5 h-5"></i>
             </div>
           </div>
           <div class="mt-5">
-            <h4 class="font-black text-slate-900 text-lg">${c.name}</h4>
+            <h4 class="font-black text-slate-900 text-xl">${c.name}</h4>
             <p class="text-sm font-bold text-brand-600 mt-1">${c.title}</p>
-            <p class="text-xs sm:text-sm text-slate-500 mt-1">${c.department}</p>
+            <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${c.department}</p>
           </div>
         `;
         grid.appendChild(card);
@@ -630,7 +656,7 @@
         c2: voteData.candidate2
       });
 
-      alert("تم إرسال وحفظ صوتك بنجاح!");
+      alert("تم إرسال وحفظ صوتك بنجاح في المنظومة!");
       renderVotingView();
     }
 
@@ -681,18 +707,18 @@
 
       sortedCandidates.forEach((c, idx) => {
         const item = document.createElement('div');
-        item.className = "flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-200/60";
+        item.className = "flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200/60";
         item.innerHTML = `
-          <div class="flex items-center gap-3">
-            <span class="w-7 h-7 rounded-full ${idx === 0 ? 'bg-amber-400 text-white' : 'bg-slate-200 text-slate-700'} flex items-center justify-center font-bold text-sm">
+          <div class="flex items-center gap-3.5">
+            <span class="w-8 h-8 rounded-full ${idx === 0 ? 'bg-amber-400 text-white' : 'bg-slate-200 text-slate-700'} flex items-center justify-center font-black text-sm">
               ${idx + 1}
             </span>
             <div>
-              <p class="font-black text-slate-900 text-sm">${c.name}</p>
-              <p class="text-xs text-slate-500">${c.department}</p>
+              <p class="font-black text-slate-900 text-base">${c.name}</p>
+              <p class="text-xs text-slate-500 font-semibold">${c.department}</p>
             </div>
           </div>
-          <div class="px-3.5 py-1.5 bg-brand-50 text-brand-600 rounded-xl text-sm font-bold">
+          <div class="px-4 py-1.5 bg-brand-50 text-brand-600 rounded-xl text-sm font-black">
             ${counts[c.id]} صوت
           </div>
         `;
@@ -752,9 +778,9 @@
         tr.innerHTML = `
           <td class="p-4 font-bold text-brand-600">${m.id}</td>
           <td class="p-4 font-black text-slate-900">${m.name}</td>
-          <td class="p-4 text-slate-600">${m.title}</td>
+          <td class="p-4 text-slate-600 font-semibold">${m.title}</td>
           <td class="p-4">
-            <span class="px-3 py-1.5 rounded-full text-xs font-bold ${hasVoted ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">
+            <span class="px-3.5 py-1.5 rounded-full text-xs font-bold ${hasVoted ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">
               ${hasVoted ? 'تم التصويت' : 'لم يصوت'}
             </span>
           </td>
@@ -774,8 +800,8 @@
         tr.className = "hover:bg-slate-50 transition-colors";
         tr.innerHTML = `
           <td class="p-4 font-black text-slate-900">${c.name}</td>
-          <td class="p-4 text-slate-600">${c.title}</td>
-          <td class="p-4 text-slate-600">${c.department}</td>
+          <td class="p-4 text-slate-600 font-semibold">${c.title}</td>
+          <td class="p-4 text-slate-600 font-semibold">${c.department}</td>
           <td class="p-4 text-center">
             <button onclick="editCandidate('${c.id}')" class="p-2 text-brand-600 hover:bg-brand-50 rounded-xl" title="تعديل">
               <i data-lucide="edit" class="w-5 h-5"></i>
