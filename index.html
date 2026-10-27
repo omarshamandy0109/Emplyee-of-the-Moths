@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منظومة اختيار العامل المثالي</title>
+  <!-- Google Fonts & Tailwind CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons & Chart.js -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { tajawal: ['Tajawal', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#2563eb',
+              600: '#1d4ed8',
+              700: '#1e40af',
+              800: '#1e3a8a',
+              900: '#0f172a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Tajawal', sans-serif; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .candidate-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .candidate-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -10px rgba(37, 99, 235, 0.15);
+    }
+    .candidate-card.selected {
+      border-color: #2563eb;
+      background-color: #eff6ff;
+      box-shadow: 0 0 0 2px #2563eb;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="bg-slate-900 text-white shadow-xl sticky top-0 z-40 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center space-x-3 space-x-reverse">
+          <div class="p-2.5 bg-brand-600 rounded-xl shadow-lg shadow-brand-500/30 flex items-center justify-center">
+            <i data-lucide="award" class="w-7 h-7 text-white"></i>
+          </div>
+          <div>
+            <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">منظومة اختيار العامل المثالي</h1>
+            <p class="text-xs text-slate-400 font-medium flex items-center gap-1.5 mt-0.5">
+              <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="monthTextDisplay">تصويت شهر أكتوبر 2026</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-xs text-slate-300">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>متصل بـ Google Sheets</span>
+          </div>
+          <div id="userBadge" class="hidden flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-700">
+            <i data-lucide="user" class="w-4 h-4 text-brand-500"></i>
+            <span id="userBadgeText">غير مسجل</span>
+            <button onclick="logout()" class="mr-2 text-rose-400 hover:text-rose-300 transition-colors">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+    <!-- Login View -->
+    <section id="loginSection" class="max-w-md mx-auto my-12">
+      <div class="glass-card rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 left-0 h-2 bg-gradient-to-r from-brand-500 to-indigo-600"></div>
+        <div class="text-center mb-8">
+          <div class="w-16 h-16 bg-brand-50 text-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+            <i data-lucide="shield-check" class="w-8 h-8"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-slate-900">تسجيل الدخول</h2>
+          <p class="text-sm text-slate-500 mt-1">أدخل الرقم الوظيفي للمدراء أو اسم المستخدم للأدمن</p>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">اسم المستخدم / الرقم الوظيفي</label>
+            <div class="relative">
+              <i data-lucide="user-check" class="w-5 h-5 text-slate-400 absolute right-3.5 top-3.5"></i>
+              <input type="text" id="loginId" required placeholder="مثال: 3030 أو OMAR"
+                     class="w-full pr-11 pl-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-sm">
+            </div>
+          </div>
+
+          <div id="passwordFieldGroup" class="hidden">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">كلمة المرور (خاص بالأدمن)</label>
+            <div class="relative">
+              <i data-lucide="lock" class="w-5 h-5 text-slate-400 absolute right-3.5 top-3.5"></i>
+              <input type="password" id="loginPassword" placeholder="••••••••"
+                     class="w-full pr-11 pl-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white outline-none transition-all text-sm">
+            </div>
+          </div>
+
+          <div id="loginError" class="hidden p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-xs font-semibold flex items-center gap-2">
+            <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+            <span id="loginErrorText">البيانات المدخلة غير صحيحة!</span>
+          </div>
+
+          <button type="submit"
+                  class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg shadow-brand-500/25 transition-all flex items-center justify-center gap-2 group text-sm">
+            <span>دخول المنظومة</span>
+            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Voting View -->
+    <section id="votingSection" class="hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200/80 flex flex-wrap justify-between items-center gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">مرحباً، <span id="voterNameDisplay" class="text-brand-600">المدير</span></h2>
+          <p class="text-xs text-slate-500 mt-1">يحق لك تصويت لمرشحين (2) كحد أقصى اختيارياً. حدد المرشح واضغط إرسال.</p>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="px-4 py-2 bg-slate-100 rounded-xl text-xs font-bold text-slate-700 flex items-center gap-2">
+            <span>الأصوات المحددة:</span>
+            <span id="selectedCountBadge" class="w-6 h-6 bg-brand-600 text-white rounded-full flex items-center justify-center text-xs">0</span>
+            <span class="text-slate-400">/ 2</span>
+          </div>
+
+          <button id="submitVoteBtn" onclick="submitVotes()" disabled
+                  class="px-6 py-2.5 bg-emerald-600 disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md transition-all flex items-center gap-2">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>تأكيد وإرسال الأصوات</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="candidatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- Admin & HR Dashboard -->
+    <section id="adminDashboard" class="hidden space-y-8">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar">
+          <button onclick="switchAdminTab('results')" id="tab-results" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-600 text-white shadow-sm flex items-center gap-2">
+            <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+            <span>لوحة النتائج والإحصائيات</span>
+          </button>
+          <button onclick="switchAdminTab('managers')" id="tab-managers" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            <span>إدارة المدراء</span>
+          </button>
+          <button onclick="switchAdminTab('candidates')" id="tab-candidates" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2">
+            <i data-lucide="award" class="w-4 h-4"></i>
+            <span>إدارة المرشحين</span>
+          </button>
+        </div>
+
+        <div id="superAdminActions" class="hidden flex items-center gap-2">
+          <button onclick="openMonthSettingsModal()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-sm">
+            <i data-lucide="calendar" class="w-4 h-4 text-emerald-400"></i>
+            <span>تعديل شهر التصويت</span>
+          </button>
+          <button onclick="resetCycleVotes()" class="px-3.5 py-2 bg-rose-50 border border-rose-200 text-rose-600 hover:bg-rose-100 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            <span>تصفير الأصوات</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Tab -->
+      <div id="adminTab-results" class="space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div class="glass-card rounded-2xl p-5 shadow-sm flex items-center gap-4">
+            <div class="p-3.5 bg-blue-50 text-blue-600 rounded-xl">
+              <i data-lucide="users-round" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-500">إجمالي مدراء التصويت</p>
+              <h3 id="statTotalManagers" class="text-2xl font-black text-slate-900 mt-0.5">0</h3>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-5 shadow-sm flex items-center gap-4">
+            <div class="p-3.5 bg-emerald-50 text-emerald-600 rounded-xl">
+              <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-500">المدراء الذين صوتوا</p>
+              <h3 id="statVotedManagers" class="text-2xl font-black text-slate-900 mt-0.5">0</h3>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-5 shadow-sm flex items-center gap-4">
+            <div class="p-3.5 bg-purple-50 text-purple-600 rounded-xl">
+              <i data-lucide="trophy" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-500">المرشح المتصدر</p>
+              <h3 id="statLeaderCandidate" class="text-lg font-extrabold text-slate-900 mt-0.5 truncate max-w-[180px]">لا يوجد أصوات</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 glass-card rounded-2xl p-6 shadow-sm">
+            <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <i data-lucide="pie-chart" class="w-5 h-5 text-brand-600"></i>
+              <span>رسم بياني لنسب تصويت المرشحين</span>
+            </h3>
+            <div class="h-64 sm:h-80 w-full">
+              <canvas id="resultsChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+            <div>
+              <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="award" class="w-5 h-5 text-amber-500"></i>
+                <span>جدول ترتيب الأصوات</span>
+              </h3>
+              <div id="leaderboardList" class="space-y-3 custom-scrollbar max-h-72 overflow-y-auto pr-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Managers Control Tab -->
+      <div id="adminTab-managers" class="hidden space-y-5">
+        <div class="flex justify-between items-center flex-wrap gap-4 bg-white p-4 rounded-2xl border border-slate-200">
+          <h3 class="text-base font-bold text-slate-900">قائمة المدراء المصرح لهم</h3>
+          <button onclick="openAddManagerModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>إضافة مدير جديد</span>
+          </button>
+        </div>
+
+        <div class="glass-card rounded-2xl overflow-hidden shadow-sm border border-slate-200">
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-100 text-slate-600 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="p-3.5">الرقم الوظيفي</th>
+                  <th class="p-3.5">الاسم</th>
+                  <th class="p-3.5">المسمى الوظيفي</th>
+                  <th class="p-3.5">حالة التصويت</th>
+                  <th class="p-3.5 text-center">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="managersTableBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Candidates Control Tab -->
+      <div id="adminTab-candidates" class="hidden space-y-5">
+        <div class="flex justify-between items-center flex-wrap gap-4 bg-white p-4 rounded-2xl border border-slate-200">
+          <h3 class="text-base font-bold text-slate-900">قائمة المرشحين لنيل اللقب</h3>
+          <button onclick="openCandidateModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>إضافة مرشح جديد</span>
+          </button>
+        </div>
+
+        <div class="glass-card rounded-2xl overflow-hidden shadow-sm border border-slate-200">
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-100 text-slate-600 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="p-3.5">المرشح</th>
+                  <th class="p-3.5">المسمى الوظيفي</th>
+                  <th class="p-3.5">القسم</th>
+                  <th class="p-3.5 text-center">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="candidatesTableBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modals -->
+  <div id="monthModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+      <h3 class="text-base font-bold text-slate-900">تعديل شهر التصويت الحالي</h3>
+      <input type="text" id="monthInput" placeholder="مثال: أكتوبر 2026" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeMonthModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold">إلغاء</button>
+        <button onclick="saveMonthSetting()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="candidateModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <h3 id="candidateModalTitle" class="text-base font-bold text-slate-900">إضافة مرشح جديد</h3>
+      <form id="candidateForm" onsubmit="handleCandidateSubmit(event)" class="space-y-3">
+        <input type="hidden" id="candEditId">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الكامل</label>
+          <input type="text" id="candName" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">المسمى الوظيفي</label>
+          <input type="text" id="candTitle" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">القسم</label>
+          <input type="text" id="candDept" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeCandidateModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">إلغاء</button>
+          <button type="submit" class="px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-bold">حفظ البيانات</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="managerModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <h3 id="managerModalTitle" class="text-base font-bold text-slate-900">إضافة مدير جديد</h3>
+      <form id="managerForm" onsubmit="handleManagerSubmit(event)" class="space-y-3">
+        <input type="hidden" id="mgrEditId">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">الرقم الوظيفي (ID)</label>
+          <input type="text" id="mgrId" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">اسم المدير</label>
+          <input type="text" id="mgrName" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">المسمى الوظيفي / الإدارة</label>
+          <input type="text" id="mgrTitle" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeManagerModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">إلغاء</button>
+          <button type="submit" class="px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-bold">حفظ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-center text-xs">
+    <p>جميع الحقوق محفوظة © منظومة اختيار العامل المثالي 2026</p>
+  </footer>
+
+  <!-- Application Logic Code -->
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCEGGYwC-313PGW6s3YeXumS7bW5Gy-tW2eSt54BDIiayTuM9vC4Sap2-lCzJiqWWCtA/exec";
+
+    const SUPER_ADMIN = { id: 'OMAR', pass: '8955', name: 'عمر (السوبر أدمن)' };
+    const SUB_ADMINS = [
+      { id: 'Amr.Ragab', pass: '1996', name: 'عمرو رجب' },
+      { id: 'Ahmed.Maher', pass: '1995', name: 'أحمد ماهر' },
+      { id: 'Mohamed.Abdelnaser', pass: '1999', name: 'محمد عبد الناصر' },
+      { id: 'Mohamed.Desouky', pass: '1980', name: 'محمد دسوقي' }
+    ];
+
+    let currentSessionUser = null;
+    let selectedCandidateIds = [];
+    let chartInstance = null;
+    let currentCycleMonth = "أكتوبر 2026";
+
+    let defaultManagers = [
+      { id: '3030', name: 'Hossam Ephram Saba Malak', title: 'General Manager', isBlocked: false, hasVoted: false },
+      { id: '2650', name: 'Mohamed Desouky Abd Elhalim Mohamed', title: 'Human Resources Manager', isBlocked: false, hasVoted: false },
+      { id: '2648', name: 'Hamdy Mohamed Mohamed Hassan El Alfy', title: 'Chief Engineer', isBlocked: false, hasVoted: false },
+      { id: '2244', name: 'Ahmed Abd Elmotty Ahmed Mohamed Elraay', title: 'Hotel Financial Controller', isBlocked: false, hasVoted: false },
+      { id: '2965', name: 'Khaled Mohy El Din Abd El Kader', title: 'Food & Beverage Manager', isBlocked: false, hasVoted: false },
+      { id: '3027', name: 'Mohamed Taher Alhgrsy Yousef Abd Alla', title: 'Executive Assistant General Manager', isBlocked: false, hasVoted: false },
+      { id: '2977', name: 'Mohamed Reda El Sayed', title: 'Executive Sous Chef', isBlocked: false, hasVoted: false },
+      { id: '1477', name: 'Hazem Khaled Mohamed Mohamed Elshebasy', title: 'Information & Technology Manager', isBlocked: false, hasVoted: false },
+      { id: '1679', name: 'Hany Hesham Abd El Halim Mohamed', title: 'Team Leader Software Developer', isBlocked: false, hasVoted: false },
+      { id: '1751', name: 'Mohamed Mahmoud Ibrahim Mahmoud Essawy', title: 'Security Manager', isBlocked: false, hasVoted: false },
+      { id: '2429', name: 'Mohamed Ibrahim Omran Hussain', title: 'Front Office Manager', isBlocked: false, hasVoted: false },
+      { id: '2474', name: 'Essam Ibrahim Mohamed El Anwar', title: 'Assistant Chief Engineer', isBlocked: false, hasVoted: false },
+      { id: '2607', name: 'Mahmoud Fattoh Zakry Abo El Dahab', title: 'Executive Housekeeper', isBlocked: false, hasVoted: false },
+      { id: '2651', name: 'Hamdi Abd Elmonaem Mohamed Abd Elmonaem', title: 'Recreation Manager', isBlocked: false, hasVoted: false },
+      { id: '2666', name: 'Omnia Hussein Yahya Hussein', title: 'Guest Experience Manager', isBlocked: false, hasVoted: false },
+      { id: '2789', name: 'Marwa Hamedalh El Wehidi Awad', title: 'Hygiene Manager', isBlocked: false, hasVoted: false },
+      { id: '2827', name: 'Rana Khaled Mohamed El Sayed Khedr', title: 'Administrative Assistant To General Manager', isBlocked: false, hasVoted: false },
+      { id: '3003', name: 'Monir Ali Megahed Senan', title: 'Spa Manager', isBlocked: false, hasVoted: false },
+      { id: '3004', name: 'Abd Elfatah Hamdi Abd Elfatah Ali', title: 'L&D Manager', isBlocked: false, hasVoted: false }
+    ];
+
+    let defaultCandidates = [
+      { id: 'C1', name: 'محمود حسن', title: 'مشرف فندقي', department: 'الأغذية والمشروبات' },
+      { id: 'C2', name: 'سارة أحمد', title: 'مهندسة جودة', department: 'الجودة والتطوير' },
+      { id: 'C3', name: 'علي محمود', title: 'أخصائي دعم فني', department: 'تكنولوجيا المعلومات' },
+      { id: 'C4', name: 'منى فاروق', title: 'منسقة مبيعات', department: 'المبيعات' },
+      { id: 'C5', name: 'إبراهيم علي', title: 'مساعد مدير استقبال', department: 'المكاتب الأمامية' }
+    ];
+
+    let votesList = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      loadStoredData();
+      checkLoginStatus();
+      syncWithGoogleSheet();
+    });
+
+    function loadStoredData() {
+      const storedMgrs = localStorage.getItem('app_managers');
+      const storedCands = localStorage.getItem('app_candidates');
+      const storedVotes = localStorage.getItem('app_votes');
+      const storedMonth = localStorage.getItem('app_month');
+
+      if (storedMgrs) defaultManagers = JSON.parse(storedMgrs);
+      if (storedCands) defaultCandidates = JSON.parse(storedCands);
+      if (storedVotes) votesList = JSON.parse(storedVotes);
+      if (storedMonth) {
+        currentCycleMonth = storedMonth;
+        document.getElementById('monthTextDisplay').textContent = "تصويت شهر " + currentCycleMonth;
+      }
+    }
+
+    function saveDataLocally() {
+      localStorage.setItem('app_managers', JSON.stringify(defaultManagers));
+      localStorage.setItem('app_candidates', JSON.stringify(defaultCandidates));
+      localStorage.setItem('app_votes', JSON.stringify(votesList));
+      localStorage.setItem('app_month', currentCycleMonth);
+    }
+
+    document.getElementById('loginId').addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      const pwdGroup = document.getElementById('passwordFieldGroup');
+      const isAdminUser = val === SUPER_ADMIN.id || SUB_ADMINS.some(a => a.id.toLowerCase() === val.toLowerCase());
+      
+      if (isAdminUser) {
+        pwdGroup.classList.remove('hidden');
+      } else {
+        pwdGroup.classList.add('hidden');
+      }
+    });
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const idInput = document.getElementById('loginId').value.trim();
+      const pwdInput = document.getElementById('loginPassword').value.trim();
+      const errBox = document.getElementById('loginError');
+      errBox.classList.add('hidden');
+
+      if (idInput === SUPER_ADMIN.id && pwdInput === SUPER_ADMIN.pass) {
+        currentSessionUser = { role: 'SUPER_ADMIN', ...SUPER_ADMIN };
+        onLoginSuccess();
+        return;
+      }
+
+      const subAdmin = SUB_ADMINS.find(a => a.id.toLowerCase() === idInput.toLowerCase() && a.pass === pwdInput);
+      if (subAdmin) {
+        currentSessionUser = { role: 'SUB_ADMIN', ...subAdmin };
+        onLoginSuccess();
+        return;
+      }
+
+      const manager = defaultManagers.find(m => m.id === idInput);
+      if (manager) {
+        if (manager.isBlocked) {
+          showLoginError('تم حجب هذا الحساب من قِبل إدارة المنظومة.');
+          return;
+        }
+        currentSessionUser = { role: 'MANAGER', ...manager };
+        onLoginSuccess();
+        return;
+      }
+
+      showLoginError('الرقم الوظيفي أو كلمة المرور غير صحيحة!');
+    }
+
+    function showLoginError(msg) {
+      const errBox = document.getElementById('loginError');
+      document.getElementById('loginErrorText').textContent = msg;
+      errBox.classList.remove('hidden');
+    }
+
+    function onLoginSuccess() {
+      sessionStorage.setItem('active_session', JSON.stringify(currentSessionUser));
+      checkLoginStatus();
+    }
+
+    function checkLoginStatus() {
+      const activeSession = sessionStorage.getItem('active_session');
+      if (!activeSession) {
+        showSection('loginSection');
+        document.getElementById('userBadge').classList.add('hidden');
+        return;
+      }
+
+      currentSessionUser = JSON.parse(activeSession);
+      document.getElementById('userBadgeText').textContent = currentSessionUser.name || currentSessionUser.id;
+      document.getElementById('userBadge').classList.remove('hidden');
+
+      if (currentSessionUser.role === 'SUPER_ADMIN' || currentSessionUser.role === 'SUB_ADMIN' || currentSessionUser.id === '2650') {
+        showSection('adminDashboard');
+        renderAdminView();
+      } else {
+        showSection('votingSection');
+        renderVotingView();
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('active_session');
+      currentSessionUser = null;
+      selectedCandidateIds = [];
+      checkLoginStatus();
+    }
+
+    function showSection(id) {
+      ['loginSection', 'votingSection', 'adminDashboard'].forEach(s => {
+        document.getElementById(s).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function renderVotingView() {
+      document.getElementById('voterNameDisplay').textContent = currentSessionUser.name;
+      const grid = document.getElementById('candidatesGrid');
+      grid.innerHTML = '';
+
+      const existingVote = votesList.find(v => v.managerId === currentSessionUser.id);
+      if (existingVote) {
+        selectedCandidateIds = [existingVote.candidate1, existingVote.candidate2].filter(Boolean);
+      } else {
+        selectedCandidateIds = [];
+      }
+
+      updateVoteBadgeAndButton();
+
+      defaultCandidates.forEach(c => {
+        const isSelected = selectedCandidateIds.includes(c.id);
+        const card = document.createElement('div');
+        card.className = `candidate-card glass-card rounded-2xl p-5 cursor-pointer relative border ${isSelected ? 'selected' : 'border-slate-200'}`;
+        card.onclick = () => toggleCandidateSelection(c.id);
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 font-bold flex items-center justify-center text-lg shadow-sm">
+              ${c.name.charAt(0)}
+            </div>
+            <div class="w-6 h-6 rounded-full border-2 ${isSelected ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300'} flex items-center justify-center transition-all">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <h4 class="font-extrabold text-slate-900 text-base">${c.name}</h4>
+            <p class="text-xs font-semibold text-brand-600 mt-0.5">${c.title}</p>
+            <p class="text-xs text-slate-500 mt-1">${c.department}</p>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    function toggleCandidateSelection(candId) {
+      if (selectedCandidateIds.includes(candId)) {
+        selectedCandidateIds = selectedCandidateIds.filter(id => id !== candId);
+      } else {
+        if (selectedCandidateIds.length >= 2) {
+          alert("يمكنك كمدير اختيار (2) مرشحين فقط كحد أقصى.");
+          return;
+        }
+        selectedCandidateIds.push(candId);
+      }
+      renderVotingView();
+    }
+
+    function updateVoteBadgeAndButton() {
+      document.getElementById('selectedCountBadge').textContent = selectedCandidateIds.length;
+      const submitBtn = document.getElementById('submitVoteBtn');
+      submitBtn.disabled = selectedCandidateIds.length === 0;
+    }
+
+    function submitVotes() {
+      if (selectedCandidateIds.length === 0) return;
+
+      const existingVoteIdx = votesList.findIndex(v => v.managerId === currentSessionUser.id);
+      const voteData = {
+        managerId: currentSessionUser.id,
+        managerName: currentSessionUser.name,
+        candidate1: selectedCandidateIds[0] || '',
+        candidate2: selectedCandidateIds[1] || '',
+        timestamp: new Date().toISOString()
+      };
+
+      if (existingVoteIdx > -1) {
+        votesList[existingVoteIdx] = voteData;
+      } else {
+        votesList.push(voteData);
+      }
+
+      const mgr = defaultManagers.find(m => m.id === currentSessionUser.id);
+      if (mgr) mgr.hasVoted = true;
+
+      saveDataLocally();
+
+      sendApiRequest({
+        action: "VOTE",
+        managerId: voteData.managerId,
+        managerName: voteData.managerName,
+        c1: voteData.candidate1,
+        c2: voteData.candidate2
+      });
+
+      alert("تم إرسال وحفظ صوتك بنجاح في المنظومة!");
+      renderVotingView();
+    }
+
+    function switchAdminTab(tabName) {
+      ['results', 'managers', 'candidates'].forEach(t => {
+        document.getElementById(`adminTab-${t}`).classList.add('hidden');
+        document.getElementById(`tab-${t}`).className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2";
+      });
+
+      document.getElementById(`adminTab-${tabName}`).classList.remove('hidden');
+      document.getElementById(`tab-${tabName}`).className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-600 text-white shadow-sm flex items-center gap-2";
+    }
+
+    function renderAdminView() {
+      if (currentSessionUser.role === 'SUPER_ADMIN') {
+        document.getElementById('superAdminActions').classList.remove('hidden');
+      } else {
+        document.getElementById('superAdminActions').classList.add('hidden');
+      }
+
+      renderResultsDashboard();
+      renderManagersTable();
+      renderCandidatesTable();
+    }
+
+    function renderResultsDashboard() {
+      document.getElementById('statTotalManagers').textContent = defaultManagers.length;
+      
+      const votedCount = defaultManagers.filter(m => m.hasVoted || votesList.some(v => v.managerId === m.id)).length;
+      document.getElementById('statVotedManagers').textContent = votedCount;
+
+      const counts = {};
+      defaultCandidates.forEach(c => counts[c.id] = 0);
+
+      votesList.forEach(v => {
+        if (v.candidate1 && counts[v.candidate1] !== undefined) counts[v.candidate1]++;
+        if (v.candidate2 && counts[v.candidate2] !== undefined) counts[v.candidate2]++;
+      });
+
+      const sortedCandidates = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
+      const leaderBoardContainer = document.getElementById('leaderboardList');
+      leaderBoardContainer.innerHTML = '';
+
+      if (sortedCandidates.length > 0 && counts[sortedCandidates[0].id] > 0) {
+        document.getElementById('statLeaderCandidate').textContent = sortedCandidates[0].name;
+      } else {
+        document.getElementById('statLeaderCandidate').textContent = "لا يوجد أصوات";
+      }
+
+      sortedCandidates.forEach((c, idx) => {
+        const item = document.createElement('div');
+        item.className = "flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200/60";
+        item.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full ${idx === 0 ? 'bg-amber-400 text-white' : 'bg-slate-200 text-slate-700'} flex items-center justify-center font-bold text-xs">
+              ${idx + 1}
+            </span>
+            <div>
+              <p class="font-extrabold text-slate-900 text-xs">${c.name}</p>
+              <p class="text-[10px] text-slate-500">${c.department}</p>
+            </div>
+          </div>
+          <div class="px-3 py-1 bg-brand-50 text-brand-600 rounded-lg text-xs font-bold">
+            ${counts[c.id]} صوت
+          </div>
+        `;
+        leaderBoardContainer.appendChild(item);
+      });
+
+      renderChart(sortedCandidates.map(c => c.name), sortedCandidates.map(c => counts[c.id]));
+    }
+
+    function renderChart(labels, data) {
+      const ctx = document.getElementById('resultsChart').getContext('2d');
+      if (chartInstance) chartInstance.destroy();
+
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'عدد الأصوات',
+            data: data,
+            backgroundColor: 'rgba(37, 99, 235, 0.85)',
+            borderColor: '#1d4ed8',
+            borderWidth: 1,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+          }
+        }
+      });
+    }
+
+    function renderManagersTable() {
+      const tbody = document.getElementById('managersTableBody');
+      tbody.innerHTML = '';
+
+      defaultManagers.forEach(m => {
+        const hasVoted = m.hasVoted || votesList.some(v => v.managerId === m.id);
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition-colors";
+
+        let actionBtns = '';
+        if (currentSessionUser.role === 'SUPER_ADMIN') {
+          actionBtns = `
+            <button onclick="toggleBlockManager('${m.id}')" class="p-1.5 ${m.isBlocked ? 'text-emerald-600 hover:bg-emerald-50' : 'text-amber-600 hover:bg-amber-50'} rounded-lg" title="${m.isBlocked ? 'إلغاء الحجب' : 'حجب'}">
+              <i data-lucide="${m.isBlocked ? 'unlock' : 'lock'}" class="w-4 h-4"></i>
+            </button>
+            <button onclick="deleteManager('${m.id}')" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg" title="حذف">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          `;
+        }
+
+        tr.innerHTML = `
+          <td class="p-3.5 font-bold text-brand-600">${m.id}</td>
+          <td class="p-3.5 font-bold text-slate-900">${m.name}</td>
+          <td class="p-3.5 text-slate-600">${m.title}</td>
+          <td class="p-3.5">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${hasVoted ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">
+              ${hasVoted ? 'تم التصويت' : 'لم يصوت'}
+            </span>
+          </td>
+          <td class="p-3.5 text-center flex items-center justify-center gap-1">${actionBtns}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      lucide.createIcons();
+    }
+
+    function renderCandidatesTable() {
+      const tbody = document.getElementById('candidatesTableBody');
+      tbody.innerHTML = '';
+
+      defaultCandidates.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition-colors";
+        tr.innerHTML = `
+          <td class="p-3.5 font-bold text-slate-900">${c.name}</td>
+          <td class="p-3.5 text-slate-600">${c.title}</td>
+          <td class="p-3.5 text-slate-600">${c.department}</td>
+          <td class="p-3.5 text-center">
+            <button onclick="editCandidate('${c.id}')" class="p-1.5 text-brand-600 hover:bg-brand-50 rounded-lg" title="تعديل">
+              <i data-lucide="edit" class="w-4 h-4"></i>
+            </button>
+            <button onclick="deleteCandidate('${c.id}')" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg" title="حذف">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      lucide.createIcons();
+    }
+
+    function openCandidateModal(candId = null) {
+      document.getElementById('candidateModal').classList.remove('hidden');
+      if (candId) {
+        const c = defaultCandidates.find(x => x.id === candId);
+        document.getElementById('candEditId').value = c.id;
+        document.getElementById('candName').value = c.name;
+        document.getElementById('candTitle').value = c.title;
+        document.getElementById('candDept').value = c.department;
+        document.getElementById('candidateModalTitle').textContent = "تعديل بيانات المرشح";
+      } else {
+        document.getElementById('candidateForm').reset();
+        document.getElementById('candEditId').value = '';
+        document.getElementById('candidateModalTitle').textContent = "إضافة مرشح جديد";
+      }
+    }
+
+    function closeCandidateModal() {
+      document.getElementById('candidateModal').classList.add('hidden');
+    }
+
+    function handleCandidateSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('candEditId').value;
+      const name = document.getElementById('candName').value;
+      const title = document.getElementById('candTitle').value;
+      const department = document.getElementById('candDept').value;
+
+      if (id) {
+        const idx = defaultCandidates.findIndex(c => c.id === id);
+        defaultCandidates[idx] = { id, name, title, department };
+      } else {
+        const newId = 'C' + (defaultCandidates.length + 1);
+        defaultCandidates.push({ id: newId, name, title, department });
+      }
+
+      saveDataLocally();
+      sendApiRequest({ action: "SYNC_CANDIDATES", data: defaultCandidates });
+      closeCandidateModal();
+      renderAdminView();
+    }
+
+    function editCandidate(id) { openCandidateModal(id); }
+    function deleteCandidate(id) {
+      if (confirm("هل أنت تأكد من حذف هذا المرشح؟")) {
+        defaultCandidates = defaultCandidates.filter(c => c.id !== id);
+        saveDataLocally();
+        sendApiRequest({ action: "SYNC_CANDIDATES", data: defaultCandidates });
+        renderAdminView();
+      }
+    }
+
+    function openAddManagerModal() {
+      document.getElementById('managerModal').classList.remove('hidden');
+      document.getElementById('managerForm').reset();
+    }
+
+    function closeManagerModal() {
+      document.getElementById('managerModal').classList.add('hidden');
+    }
+
+    function handleManagerSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('mgrId').value.trim();
+      const name = document.getElementById('mgrName').value.trim();
+      const title = document.getElementById('mgrTitle').value.trim();
+
+      if (defaultManagers.some(m => m.id === id)) {
+        alert("الرقم الوظيفي موجود بالفعل!");
+        return;
+      }
+
+      defaultManagers.push({ id, name, title, isBlocked: false, hasVoted: false });
+      saveDataLocally();
+      sendApiRequest({ action: "SYNC_MANAGERS", data: defaultManagers });
+      closeManagerModal();
+      renderAdminView();
+    }
+
+    function toggleBlockManager(id) {
+      const mgr = defaultManagers.find(m => m.id === id);
+      if (mgr) {
+        mgr.isBlocked = !mgr.isBlocked;
+        saveDataLocally();
+        sendApiRequest({ action: "SYNC_MANAGERS", data: defaultManagers });
+        renderAdminView();
+      }
+    }
+
+    function deleteManager(id) {
+      if (confirm("هل أنت تأكد من حذف هذا المدير؟")) {
+        defaultManagers = defaultManagers.filter(m => m.id !== id);
+        saveDataLocally();
+        sendApiRequest({ action: "SYNC_MANAGERS", data: defaultManagers });
+        renderAdminView();
+      }
+    }
+
+    function openMonthSettingsModal() {
+      document.getElementById('monthModal').classList.remove('hidden');
+      document.getElementById('monthInput').value = currentCycleMonth;
+    }
+
+    function closeMonthModal() {
+      document.getElementById('monthModal').classList.add('hidden');
+    }
+
+    function saveMonthSetting() {
+      const val = document.getElementById('monthInput').value.trim();
+      if (val) {
+        currentCycleMonth = val;
+        document.getElementById('monthTextDisplay').textContent = "تصويت شهر " + currentCycleMonth;
+        saveDataLocally();
+        closeMonthModal();
+      }
+    }
+
+    function resetCycleVotes() {
+      if (confirm("تنبيه: هل أنت متأكد من تصفير جميع الأصوات وإعداد دورة جديدة لشهر جديد؟")) {
+        votesList = [];
+        defaultManagers.forEach(m => m.hasVoted = false);
+        saveDataLocally();
+        sendApiRequest({ action: "RESET_VOTES" });
+        renderAdminView();
+        alert("تم تصفير جميع الأصوات بنجاح!");
+      }
+    }
+
+    function sendApiRequest(payload) {
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      }).catch(err => console.log("Sync Error: ", err));
+    }
+
+    function syncWithGoogleSheet() {
+      fetch(SCRIPT_URL)
+        .then(res => res.json())
+        .then(data => {
+          if (data.votes && data.votes.length > 0) votesList = data.votes;
+          if (data.candidates && data.candidates.length > 0) defaultCandidates = data.candidates;
+          if (data.managers && data.managers.length > 0) defaultManagers = data.managers;
+          saveDataLocally();
+          if (currentSessionUser) checkLoginStatus();
+        })
+        .catch(err => console.log("Direct Load Sync Exception: ", err));
+    }
+  </script>
+</body>
+</html>
