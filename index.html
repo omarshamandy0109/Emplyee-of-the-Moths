@@ -517,7 +517,6 @@
       const actionContainer = document.getElementById('votingActionContainer');
       const instructionTxt = document.getElementById('votingInstructionText');
 
-      // دالة محسنة لاحتساب الأصوات بمطابقة الـ ID أو الاسم بدقة
       const counts = {};
       defaultCandidates.forEach(c => counts[c.id] = 0);
       
@@ -726,6 +725,9 @@
       if (activeBtn) {
         activeBtn.className = "px-5 py-3 rounded-2xl text-sm font-black transition-all bg-gold-600 text-slate-900 shadow-md flex items-center gap-2.5 shrink-0";
       }
+      if (tabName === 'results') {
+        renderResultsDashboard();
+      }
     }
 
     function renderAdminView() {
@@ -761,7 +763,7 @@
         }
       });
 
-      const sortedCandidates = [...defaultCandidates].sort((a, b) => counts[b.id] - counts[a.id]);
+      const sortedCandidates = [...defaultCandidates].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0));
       const leaderBoardContainer = document.getElementById('leaderboardList');
       if (!leaderBoardContainer) return;
       leaderBoardContainer.innerHTML = '';
@@ -777,8 +779,9 @@
         leaderBoardContainer.innerHTML = `<p class="text-slate-400 text-xs text-center">لا توجد مرشحين مسجلين.</p>`;
       } else {
         sortedCandidates.forEach((c, idx) => {
-          const isWinner1 = idx === 0 && counts[c.id] > 0;
-          const isWinner2 = idx === 1 && counts[c.id] > 0;
+          const voteCount = counts[c.id] || 0;
+          const isWinner1 = idx === 0 && voteCount > 0;
+          const isWinner2 = idx === 1 && voteCount > 0;
           const item = document.createElement('div');
           item.className = `flex items-center justify-between p-4 rounded-2xl border ${isWinner1 ? 'bg-amber-50 border-amber-300' : (isWinner2 ? 'bg-blue-50 border-blue-300' : 'bg-slate-50 border-slate-200/60')}`;
           item.innerHTML = `
@@ -789,13 +792,54 @@
                 <p class="text-xs text-slate-500 font-semibold">${c.department || ''} <span class="text-[10px] text-gold-700">(${c.group || 'Guest Contact'})</span></p>
               </div>
             </div>
-            <div class="px-4 py-1.5 bg-gold-50 text-gold-700 border border-gold-200 rounded-xl text-sm font-black">${counts[c.id]} صوت</div>
+            <div class="px-4 py-1.5 bg-gold-50 text-gold-700 border border-gold-200 rounded-xl text-sm font-black">${voteCount} صوت</div>
           `;
           leaderBoardContainer.appendChild(item);
         });
       }
 
-      renderChart(sortedCandidates.map(c => c.name || ''), sortedCandidates.map(c => counts[c.id]));
+      renderChart(sortedCandidates.map(c => c.name || ''), sortedCandidates.map(c => counts[c.id] || 0));
+      
+      // تعبئة محتوى تقرير الطباعة الرسمي
+      renderReportContent(sortedCandidates, counts, votedCount, totalMgrs);
+    }
+
+    function renderReportContent(sortedCandidates, counts, votedCount, totalMgrs) {
+      const container = document.getElementById('reportContentContainer');
+      if (!container) return;
+
+      let html = `
+        <div class="space-y-4 text-slate-800">
+          <div class="grid grid-cols-3 gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-200 text-center font-bold">
+            <div><span class="text-slate-500 block text-xs">إجمالي المدراء</span><span class="text-lg">${totalMgrs}</span></div>
+            <div><span class="text-slate-500 block text-xs">المشاركون</span><span class="text-lg text-emerald-600">${votedCount}</span></div>
+            <div><span class="text-slate-500 block text-xs">نسبة المشاركة</span><span class="text-lg text-gold-700">${totalMgrs > 0 ? Math.round((votedCount/totalMgrs)*100) : 0}%</span></div>
+          </div>
+          <h4 class="font-black text-slate-900 text-lg mt-4">ترتيب النتائج النهائية:</h4>
+          <div class="space-y-2">
+      `;
+
+      if (sortedCandidates.length === 0) {
+        html += `<p class="text-slate-400 text-center py-4">لا توجد مرشحين مضافين.</p>`;
+      } else {
+        sortedCandidates.forEach((c, idx) => {
+          const vCount = counts[c.id] || 0;
+          html += `
+            <div class="flex justify-between items-center p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <div class="flex items-center gap-3">
+                <span class="font-black text-sm text-gold-700">#${idx + 1}</span>
+                <div>
+                  <p class="font-black text-slate-900">${c.name}</p>
+                  <p class="text-xs text-slate-500">${c.title} - ${c.department} (${c.group})</p>
+                </div>
+              </div>
+              <span class="px-3 py-1 bg-slate-900 text-white rounded-lg text-xs font-black">${vCount} صوت</span>
+            </div>
+          `;
+        });
+      }
+      html += `</div></div>`;
+      container.innerHTML = html;
     }
 
     function renderChart(labels, data) {
@@ -1042,16 +1086,6 @@
         renderAdminView();
         alert("تم الحذف بنجاح.");
       }
-    }
-
-    function openNewMonthModal() {
-      const modal = document.getElementById('newMonthModal');
-      if (modal) modal.classList.remove('hidden');
-    }
-
-    function closeNewMonthModal() {
-      const modal = document.getElementById('newMonthModal');
-      if (modal) modal.classList.add('hidden');
     }
 
     function sendApiRequest(payload) {
