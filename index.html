@@ -203,13 +203,10 @@
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 no-print">
         <div class="flex items-center gap-3 overflow-x-auto pb-2 w-full sm:w-auto">
           <button onclick="switchAdminTab('results')" id="tab-results" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-gold-600 text-slate-900 shadow-md flex items-center gap-2.5 shrink-0">
-            <i data-lucide="bar-chart-3" class="w-5 h-5"></i><span>نتائج وتقارير الشهر الحالي</span>
+            <i data-lucide="bar-chart-3" class="w-5 h-5"></i><span>التقرير الشهري</span>
           </button>
           <button onclick="switchAdminTab('annual')" id="tab-annual" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2.5 shrink-0">
-            <i data-lucide="trophy" class="w-5 h-5"></i><span>أعلى اثنين سنويّاً</span>
-          </button>
-          <button onclick="switchAdminTab('managersLog')" id="tab-managersLog" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2.5 shrink-0">
-            <i data-lucide="clipboard-list" class="w-5 h-5"></i><span>تقرير تصويت المدراء</span>
+            <i data-lucide="trophy" class="w-5 h-5"></i><span>التقرير السنوي (أعلى اثنين)</span>
           </button>
           <button onclick="switchAdminTab('managers')" id="tab-managers" class="px-5 py-3 rounded-2xl text-sm font-black transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 flex items-center gap-2.5 shrink-0">
             <i data-lucide="users" class="w-5 h-5"></i><span>إدارة قائمة المدراء</span>
@@ -226,13 +223,16 @@
           <button onclick="openReportModal()" class="px-4 py-3 bg-gold-600 hover:bg-gold-700 text-slate-900 font-bold text-sm rounded-2xl transition-all flex items-center gap-2 shadow-sm">
             <i data-lucide="file-text" class="w-5 h-5"></i><span>سحب تقرير رسمي للطباعة</span>
           </button>
+          <button onclick="openArchiveModal()" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
+            <i data-lucide="calendar-plus" class="w-5 h-5"></i><span>بدء شهر جديد وأرشفة القديم</span>
+          </button>
           <button onclick="resetAndReopenVoting()" class="px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-2xl transition-all flex items-center gap-2 shadow-sm">
             <i data-lucide="rotate-ccw" class="w-5 h-5"></i><span>إعادة التصويت والتصفير</span>
           </button>
         </div>
       </div>
 
-      <!-- تبويب نتائج الشهر الحالي -->
+      <!-- تبويب التقرير الشهري -->
       <div id="adminTab-results" class="space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 no-print">
           <div class="glass-card rounded-3xl p-6 shadow-sm flex items-center gap-5">
@@ -267,49 +267,19 @@
         </div>
       </div>
 
-      <!-- تبويب أعلى اثنين سنوياً -->
+      <!-- تبويب التقرير السنوي -->
       <div id="adminTab-annual" class="hidden space-y-6 no-print">
         <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
           <div class="flex justify-between items-center flex-wrap gap-4 border-b border-slate-200 pb-4">
             <div>
-              <h3 class="text-xl font-black text-slate-900">تقرير أعلى اثنين (2) فائزين من كل شهر على مستوى السنة</h3>
-              <p class="text-sm text-slate-500 font-semibold mt-1">سجل أرشيف الفائزين للأشهر المختلفة خلال السنة الحالية 2026</p>
+              <h3 class="text-xl font-black text-slate-900">التقرير السنوي - أعلى اثنين (2) فائزين من كل شهر</h3>
+              <p class="text-sm text-slate-500 font-semibold mt-1">سجل الأرشيف السنوي لعاملين الشهر المثالي طوال السنة</p>
             </div>
             <button onclick="openArchiveModal()" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-2xl shadow-md transition-all flex items-center gap-2">
-              <i data-lucide="plus-circle" class="w-5 h-5"></i><span>ترحيل وتسجيل شهر جديد للأرشيف</span>
+              <i data-lucide="plus-circle" class="w-5 h-5"></i><span>بدء شهر جديد وأرشفة الحالي</span>
             </button>
           </div>
           <div id="annualArchiveContainer" class="space-y-6"></div>
-        </div>
-      </div>
-
-      <!-- تبويب تقرير تصويت المدراء -->
-      <div id="adminTab-managersLog" class="hidden space-y-6 no-print">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-          <div class="flex justify-between items-center flex-wrap gap-4 border-b border-slate-200 pb-4">
-            <div>
-              <h3 class="text-xl font-black text-slate-900">تقرير متابعة تصويت المدراء</h3>
-              <p class="text-sm text-slate-500 font-semibold mt-1">موقف المدراء من التصويت مع معرفة من اختاروه بالتفصيل</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <span id="managerVotedCountBadge" class="px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl text-sm font-bold border border-emerald-200">تم التصويت: 0 / 0</span>
-            </div>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-right text-sm">
-              <thead class="bg-slate-100 text-slate-700 font-black border-b border-slate-200">
-                <tr>
-                  <th class="p-4">الرقم الوظيفي</th>
-                  <th class="p-4">اسم المدير</th>
-                  <th class="p-4">المسمى الوظيفي</th>
-                  <th class="p-4">حالة التصويت</th>
-                  <th class="p-4">المرشح المختار (Guest Contact)</th>
-                  <th class="p-4">المرشح المختار (Non Guest Contact)</th>
-                </tr>
-              </thead>
-              <tbody id="managersLogTableBody" class="divide-y divide-slate-100"></tbody>
-            </table>
-          </div>
         </div>
       </div>
 
@@ -351,19 +321,19 @@
     </section>
   </main>
 
-  <!-- مودال ترحيل الشهر للأرشيف -->
+  <!-- مودال قلب الشهر وأرشفة القديم -->
   <div id="archiveModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
-      <h3 class="text-lg font-black text-slate-900">ترحيل الشهر الحالي للأرشيف السنوي</h3>
+      <h3 class="text-lg font-black text-slate-900">أرشفة الشهر الحالي والبدء بشهر جديد</h3>
       <form onsubmit="handleArchiveSubmit(event)" class="space-y-4">
         <div>
-          <label class="block text-sm font-bold text-slate-700 mb-1.5">اسم الشهر (مثل: أكتوبر 2026)</label>
-          <input type="text" id="archiveMonthName" required value="أكتوبر 2026" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-gold-500">
+          <label class="block text-sm font-bold text-slate-700 mb-1.5">اسم الشهر الجديد (مثل: نوفمبر 2026)</label>
+          <input type="text" id="newMonthNameInput" required value="نوفمبر 2026" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-gold-500">
         </div>
-        <p class="text-xs text-slate-500 font-semibold">سيقوم النظام تلقائياً بتحديد أعلى مرشحين (2) من أصوات هذا الشهر وحفظهما في تقرير أعلى اثنين سنوياً.</p>
+        <p class="text-xs text-slate-500 font-semibold leading-relaxed">سيقوم النظام بأرشفة أعلى مرشحين (2) من الشهر الحالي في التقرير السنوي، ثم تصفير أصوات المدراء وبدء دورة الشهر الجديد تلقائياً.</p>
         <div class="flex justify-end gap-3 pt-3">
           <button type="button" onclick="closeArchiveModal()" class="px-5 py-3 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold">إلغاء</button>
-          <button type="submit" class="px-5 py-3 bg-emerald-600 text-white font-bold rounded-2xl text-sm">ترحيل وحفظ</button>
+          <button type="submit" class="px-5 py-3 bg-emerald-600 text-white font-bold rounded-2xl text-sm">بدء الشهر الجديد</button>
         </div>
       </form>
     </div>
@@ -780,7 +750,7 @@
     }
 
     function switchAdminTab(tabName) {
-      ['results', 'annual', 'managersLog', 'managers', 'candidates'].forEach(t => {
+      ['results', 'annual', 'managers', 'candidates'].forEach(t => {
         const tabSec = document.getElementById(`adminTab-${t}`);
         const tabBtn = document.getElementById(`tab-${t}`);
         if (tabSec) tabSec.classList.add('hidden');
@@ -798,13 +768,11 @@
 
       if (tabName === 'results') renderResultsDashboard();
       if (tabName === 'annual') renderAnnualArchiveView();
-      if (tabName === 'managersLog') renderManagersLogView();
     }
 
     function renderAdminView() {
       renderResultsDashboard();
       renderAnnualArchiveView();
-      renderManagersLogView();
       renderManagersTable();
       renderCandidatesTable();
     }
@@ -878,52 +846,13 @@
       renderReportContent(sortedCandidates, counts, votedCount, totalMgrs);
     }
 
-    function renderManagersLogView() {
-      const tbody = document.getElementById('managersLogTableBody');
-      const countBadge = document.getElementById('managerVotedCountBadge');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-
-      let votedTotal = 0;
-      defaultManagers.forEach(m => {
-        const vote = votesList.find(v => String(v.managerId) === String(m.id));
-        const hasVoted = m.hasVoted || !!vote;
-        if (hasVoted) votedTotal++;
-
-        let c1Name = "-";
-        let c2Name = "-";
-        if (vote) {
-          const matchC1 = defaultCandidates.find(c => String(c.id) === String(vote.candidate1) || String(c.name).trim() === String(vote.candidate1).trim());
-          const matchC2 = defaultCandidates.find(c => String(c.id) === String(vote.candidate2) || String(c.name).trim() === String(vote.candidate2).trim());
-          c1Name = matchC1 ? matchC1.name : (vote.candidate1 || "-");
-          c2Name = matchC2 ? matchC2.name : (vote.candidate2 || "-");
-        }
-
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-50 transition-colors";
-        tr.innerHTML = `
-          <td class="p-4 font-bold text-gold-700">${m.id || ''}</td>
-          <td class="p-4 font-black text-slate-900">${m.name || ''}</td>
-          <td class="p-4 text-slate-600 font-semibold">${m.title || ''}</td>
-          <td class="p-4"><span class="px-3.5 py-1.5 rounded-full text-xs font-bold ${hasVoted ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">${hasVoted ? 'تم التصويت' : 'لم يصوت'}</span></td>
-          <td class="p-4 font-semibold text-slate-800">${c1Name}</td>
-          <td class="p-4 font-semibold text-slate-800">${c2Name}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      if (countBadge) {
-        countBadge.textContent = `تم التصويت: ${votedTotal} / ${defaultManagers.length}`;
-      }
-    }
-
     function renderAnnualArchiveView() {
       const container = document.getElementById('annualArchiveContainer');
       if (!container) return;
       container.innerHTML = '';
 
       if (!monthlyArchive || monthlyArchive.length === 0) {
-        container.innerHTML = `<div class="text-center py-10 text-slate-400 font-bold">لا توجد شهور مؤرشفة بعد. يمكنك ترحيل الشهر الحالي للأرشيف.</div>`;
+        container.innerHTML = `<div class="text-center py-10 text-slate-400 font-bold">لا توجد شهور مؤرشفة بعد. يمكنك أرشفة الشهر الحالي.</div>`;
         return;
       }
 
@@ -975,7 +904,7 @@
 
     function handleArchiveSubmit(e) {
       e.preventDefault();
-      const monthName = document.getElementById('archiveMonthName').value.trim();
+      const newMonthName = document.getElementById('newMonthNameInput').value.trim();
       
       const counts = {};
       defaultCandidates.forEach(c => counts[c.id] = 0);
@@ -1003,21 +932,26 @@
 
       if (!monthlyArchive) monthlyArchive = [];
       monthlyArchive.push({
-        monthName: monthName,
+        monthName: currentCycleMonth,
         votedCount: votedCount,
         winners: topTwo
       });
+
+      currentCycleMonth = newMonthName;
+      votesList = [];
+      defaultManagers.forEach(m => m.hasVoted = false);
+      isVotingOpen = true;
 
       saveDataLocally();
       sendApiRequest({
         action: "RESET_VOTES",
         archive: monthlyArchive,
-        newMonth: monthName
+        newMonth: currentCycleMonth
       });
 
       closeArchiveModal();
-      alert("تم ترحيل الشهر وحفظ أعلى اثنين في الأرشيف السنوي بنجاح!");
-      renderAnnualArchiveView();
+      alert("تم أرشفة الشهر القديم وبدء دورة شهر " + currentCycleMonth + " بنجاح!");
+      renderAdminView();
     }
 
     function renderReportContent(sortedCandidates, counts, votedCount, totalMgrs) {
@@ -1031,7 +965,7 @@
             <div><span class="text-slate-500 block text-xs">المشاركون</span><span class="text-lg text-emerald-600">${votedCount}</span></div>
             <div><span class="text-slate-500 block text-xs">نسبة المشاركة</span><span class="text-lg text-gold-700">${totalMgrs > 0 ? Math.round((votedCount/totalMgrs)*100) : 0}%</span></div>
           </div>
-          <h4 class="font-black text-slate-900 text-lg mt-4">ترتيب النتائج النهائية:</h4>
+          <h4 class="font-black text-slate-900 text-lg mt-4">ترتيب النتائج النهائية لشهر ${currentCycleMonth}:</h4>
           <div class="space-y-2">
       `;
 
